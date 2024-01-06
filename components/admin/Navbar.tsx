@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { cookies } from "next/headers";
 import ProfileDropDownMenu from "./ProfileDropDown";
 
@@ -34,7 +34,7 @@ export default async function Navbar() {
       active: false,
     },
     {
-      href: `/academies`,
+      href: `/admin/academies`,
       label: "Academies",
       active: false,
     },

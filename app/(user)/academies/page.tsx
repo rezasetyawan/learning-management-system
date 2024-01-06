@@ -1,4 +1,4 @@
-import Navbar from "@/components/admin/Navbar";
+import Navbar from "@/components/Navbar";
 import Link from "next/link";
 
 const fetchAcadmies = async () => {
@@ -16,6 +16,7 @@ type Academy = {
   updatedAt: string;
   description: string;
 };
+
 export default async function Academies() {
   const academies = (await fetchAcadmies()) as Academy[];
   return (
@@ -23,7 +24,7 @@ export default async function Academies() {
       <Navbar />
       {academies.map((academy) => {
         return (
-          <Link key={academy.id} href={"/admin/academies/" + academy.id}>
+          <Link key={academy.id} href={"/academies/" + academy.id}>
             <h2>{academy.name}</h2>
             <div>{academy.description}</div>
           </Link>
