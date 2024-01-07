@@ -8,8 +8,6 @@ import { Loader2, PlusCircle } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-// import { Chapter, Course } from "@prisma/client";
-
 import {
   Form,
   FormControl,
@@ -21,13 +19,14 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { ModuleGroupList } from "./module-group-list";
+import { axiosInstance } from "@/lib/axios";
 
 interface ModuleGroupFormProps {
   initialData: {
-    moduleGroups: ModuleGroup[]
+    moduleGroups: ModuleGroup[];
   };
   academyId: string;
-};
+}
 
 const formSchema = z.object({
   title: z.string().min(1),
@@ -35,15 +34,14 @@ const formSchema = z.object({
 
 export const ModuleGroupForm = ({
   initialData,
-  academyId
+  academyId,
 }: ModuleGroupFormProps) => {
-    console.log(initialData)
   const [isCreating, setIsCreating] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
 
   const toggleCreating = () => {
     setIsCreating((current) => !current);
-  }
+  };
 
   const router = useRouter();
 
@@ -58,34 +56,33 @@ export const ModuleGroupForm = ({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-    //   await axios.post(`/api/courses/${academyId}/chapters`, values);
-    //   toast.success("Chapter created");
-    //   toggleCreating();
-    //   router.refresh();
+      //   toggleCreating();
+      //   router.refresh();
     } catch {
       toast.error("Something went wrong");
     }
-  }
+  };
 
-  const onReorder = async (updateData: { id: string; position: number }[]) => {
+  const onReorder = async (updateData: { id: string; order: number }[]) => {
     try {
       setIsUpdating(true);
-
-    //   await axios.put(`/api/courses/${academyId}/chapters/reorder`, {
-    //     list: updateData
-    //   });
-      toast.success("Chapters reordered");
-      router.refresh();
+      updateData.forEach(async (data) => {
+        await axiosInstance.patch(`/academies/${academyId}/module-groups/${data.id}`, {
+          order: data.order,
+        });
+      });
+      toast.success("Module Group reordered");
+      router.refresh()
     } catch {
       toast.error("Something went wrong");
     } finally {
       setIsUpdating(false);
     }
-  }
+  };
 
   const onEdit = (id: string) => {
-    router.push(`/teacher/courses/${academyId}/chapters/${id}`);
-  }
+    // router.push(`/teacher/courses/${academyId}/chapters/${id}`);
+  };
 
   return (
     <div className="relative mt-6 border bg-slate-100 rounded-md p-4">
@@ -129,20 +126,19 @@ export const ModuleGroupForm = ({
                 </FormItem>
               )}
             />
-            <Button
-              disabled={!isValid || isSubmitting}
-              type="submit"
-            >
+            <Button disabled={!isValid || isSubmitting} type="submit">
               Create
             </Button>
           </form>
         </Form>
       )}
       {!isCreating && (
-        <div className={cn(
-          "text-sm mt-2",
-          !initialData.moduleGroups.length && "text-slate-500 italic"
-        )}>
+        <div
+          className={cn(
+            "text-sm mt-2",
+            !initialData.moduleGroups.length && "text-slate-500 italic"
+          )}
+        >
           {!initialData.moduleGroups.length && "No module groups"}
           <ModuleGroupList
             onEdit={onEdit}
@@ -157,5 +153,5 @@ export const ModuleGroupForm = ({
         </p>
       )}
     </div>
-  )
-}
+  );
+};

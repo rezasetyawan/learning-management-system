@@ -1,19 +1,18 @@
 "use client";
-import { useEffect, useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 import {
   DragDropContext,
-  Droppable,
   Draggable,
   DropResult,
+  Droppable,
 } from "@hello-pangea/dnd";
 import { Grip, Pencil } from "lucide-react";
-
-import { cn } from "@/lib/utils";
-import { Badge } from "@/components/ui/badge";
+import { useEffect, useState } from "react";
 
 interface ModuleGroupListProps {
   items: ModuleGroup[];
-  onReorder: (updateData: { id: string; position: number }[]) => void;
+  onReorder: (updateData: { id: string; order: number }[]) => void;
   onEdit: (id: string) => void;
 };
 
@@ -22,7 +21,6 @@ export const ModuleGroupList = ({
   onReorder,
   onEdit
 }: ModuleGroupListProps) => {
-  console.log(items)
   const [isMounted, setIsMounted] = useState(false);
   const [moduleGroups, setModuleGroups] = useState(items);
 
@@ -50,7 +48,7 @@ export const ModuleGroupList = ({
 
     const bulkUpdateData = updatedModuleGroups.map((moduleGroup) => ({
       id: moduleGroup.id,
-      position: items.findIndex((item) => item.id === moduleGroup.id)
+      order: items.findIndex((item) => item.id === moduleGroup.id)
     }));
 
     onReorder(bulkUpdateData);

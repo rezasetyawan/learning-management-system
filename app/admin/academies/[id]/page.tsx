@@ -1,8 +1,11 @@
+/* eslint-disable @next/next/no-async-client-component */
+/* eslint-disable @next/next/no-assign-module-variable */
 import Navbar from "@/components/admin/Navbar";
 import NameForm from "./component/name-form";
 import { DescriptionForm } from "./component/description-form";
 import { ModuleGroupForm } from "./component/module-group-form";
 import ModuleForm from "./component/module-form";
+import { Toaster } from "react-hot-toast";
 export default async function Academy({ params }: { params: { id: string } }) {
   const data = await fetch(
     (process.env.NEXT_PUBLIC_API_BASE_URL as string) + "/academies/" + params.id
@@ -10,11 +13,12 @@ export default async function Academy({ params }: { params: { id: string } }) {
 
   const academyResponse = await data.json();
   const academy = academyResponse.data as Academy
-  console.log(academyResponse)
 
+  
   return (
     <>
       <Navbar />
+      <Toaster position="top-center" reverseOrder={false} />
       {/* <NameForm initialData={academy} academyId={params.id}/>
       <DescriptionForm initialData={academy} academyId={params.id}/> */}
       <div className="p-6">
@@ -53,9 +57,15 @@ export default async function Academy({ params }: { params: { id: string } }) {
             /> */}
           </div>
           <div className="space-y-6">
-            <ModuleGroupForm initialData={academy} academyId={params.id} />
+            <ModuleGroupForm
+              initialData={academy}
+              academyId={params.id}
+            />
 
-            <ModuleForm initalData={academy} academyId={params.id} />
+            <ModuleForm
+              initalData={academy}
+              academyId={params.id}
+            />
 
             {/* <ChaptersForm
                 initialData={course}
