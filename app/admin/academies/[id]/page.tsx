@@ -1,10 +1,7 @@
-/* eslint-disable @next/next/no-async-client-component */
 /* eslint-disable @next/next/no-assign-module-variable */
-import Navbar from "@/components/admin/Navbar";
+import Navbar from "@/components/admin/navbar";
 import NameForm from "./component/name-form";
 import { DescriptionForm } from "./component/description-form";
-import { ModuleGroupForm } from "./component/module-group-form";
-import ModuleForm from "./component/module-form";
 import ModuleContainer from "./component/module-container";
 import { Toaster } from "react-hot-toast";
 import { ImageForm } from "./component/image-form";
@@ -20,7 +17,6 @@ export default async function Academy({ params }: { params: { id: string } }) {
 
   return (
     <>
-      <Navbar />
       <Toaster position="top-center" reverseOrder={false} />
       {/* <NameForm initialData={academy} academyId={params.id}/>
       <DescriptionForm initialData={academy} academyId={params.id}/> */}

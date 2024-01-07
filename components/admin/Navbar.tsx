@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Button } from "../ui/button";
 import { cookies } from "next/headers";
 import ProfileDropDownMenu from "./ProfileDropDown";
+import MobileSidebar from "./mobile-sidebar";
 
 async function getData(accessToken: string) {
   try {
@@ -40,8 +41,10 @@ export default async function Navbar() {
     },
   ];
   return (
-    <header className="flex items-center p-3 font-rubik border-b max-md:h-14 lg:px-8 w-full justify-between sticky top-0 z-[1000] bg-white">
-      <div className="flex gap-2 lg:gap-10">
+    <>
+      <header className="flex items-center p-3 font-rubik border-b max-md:h-14 lg:px-8 w-full justify-between sticky top-0 z-[1000] bg-white md:justify-end">
+        <MobileSidebar />
+        {/* <div className="flex gap-2 lg:gap-10">
         <h1 className="text-lg lg:text-2xl font-semibold">
           <Link href={"/"}>LMS</Link>
         </h1>
@@ -60,18 +63,19 @@ export default async function Navbar() {
             })}
           </div>
         </nav>
-      </div>
-      {!user && (
-        <div className="flex gap-2">
-          <Button variant="outline">
-            <Link href={"/login"}>Login</Link>
-          </Button>
-          <Button variant="default">
-            <Link href={"/register"}>Register</Link>
-          </Button>
-        </div>
-      )}
-      {user && <ProfileDropDownMenu user={user} />}
-    </header>
+      </div> */}
+        {!user && (
+          <div className="flex gap-2">
+            <Button variant="outline">
+              <Link href={"/login"}>Login</Link>
+            </Button>
+            <Button variant="default">
+              <Link href={"/register"}>Register</Link>
+            </Button>
+          </div>
+        )}
+        {user && <ProfileDropDownMenu user={user} />}
+      </header>
+    </>
   );
 }
