@@ -1,30 +1,31 @@
 "use client";
 
-import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import { Pencil } from "lucide-react";
-import { useState } from "react";
-import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import * as z from "zod";
 
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormMessage,
+} from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
+import { axiosInstance } from "@/lib/axios";
+import { cn } from "@/lib/utils";
 
 interface DescriptionFormProps {
   initialData: {
-    description: string
+    description: string;
   };
   academyId: string;
-};
+}
 
 const formSchema = z.object({
   description: z.string().min(1, {
@@ -34,9 +35,10 @@ const formSchema = z.object({
 
 export const DescriptionForm = ({
   initialData,
-  academyId
+  academyId,
 }: DescriptionFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
+  const [description, setDescription] = useState(initialData.description);
 
   const toggleEdit = () => setIsEditing((current) => !current);
 
@@ -45,7 +47,7 @@ export const DescriptionForm = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      description: initialData?.description || ""
+      description: initialData?.description || "",
     },
   });
 
@@ -53,20 +55,19 @@ export const DescriptionForm = ({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-        console.log(values)
-    //   await axios.patch(`/api/courses/${academyId}`, values);
-    //   toast.success("Course updated");
-    //   toggleEdit();
-    //   router.refresh();
+      await axiosInstance.patch(`/academies/${academyId}`, values);
+      setDescription(values.description);
+      toast.success("Description updated");
+      toggleEdit();
     } catch {
       toast.error("Something went wrong");
     }
-  }
+  };
 
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        Course description
+        Academy description
         <Button onClick={toggleEdit} variant="ghost">
           {isEditing ? (
             <>Cancel</>
@@ -79,11 +80,13 @@ export const DescriptionForm = ({
         </Button>
       </div>
       {!isEditing && (
-        <p className={cn(
-          "text-sm mt-2",
-          !initialData.description && "text-slate-500 italic"
-        )}>
-          {initialData.description || "No description"}
+        <p
+          className={cn(
+            "text-sm mt-2",
+            !initialData.description && "text-slate-500 italic"
+          )}
+        >
+          {description || "No description"}
         </p>
       )}
       {isEditing && (
@@ -102,6 +105,7 @@ export const DescriptionForm = ({
                       disabled={isSubmitting}
                       placeholder="e.g. 'This course is about...'"
                       {...field}
+                      rows={7}
                     />
                   </FormControl>
                   <FormMessage />
@@ -109,10 +113,7 @@ export const DescriptionForm = ({
               )}
             />
             <div className="flex items-center gap-x-2">
-              <Button
-                disabled={!isValid || isSubmitting}
-                type="submit"
-              >
+              <Button disabled={!isValid || isSubmitting} type="submit">
                 Save
               </Button>
             </div>
@@ -120,5 +121,5 @@ export const DescriptionForm = ({
         </Form>
       )}
     </div>
-  )
-}
+  );
+};

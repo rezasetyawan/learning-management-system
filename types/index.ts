@@ -21,4 +21,5 @@ type Academy = {
     updatedAt: string;
     description: string;
     moduleGroups: ModuleGroup[];
+    coverImageUrl: string;
 };

@@ -75,3 +75,11 @@
     @apply bg-background text-foreground;
   }
 }
+
+textarea::-webkit-scrollbar {
+  display: none;
+}
+
+textarea {
+  scrollbar-width: none;
+}

@@ -7,6 +7,9 @@ import { ModuleGroupForm } from "./component/module-group-form";
 import ModuleForm from "./component/module-form";
 import ModuleContainer from "./component/module-container";
 import { Toaster } from "react-hot-toast";
+import { ImageForm } from "./component/image-form";
+import { IconBadge } from "@/components/ui/icon-badge";
+import { LayoutDashboard } from "lucide-react";
 export default async function Academy({ params }: { params: { id: string } }) {
   const data = await fetch(
     (process.env.NEXT_PUBLIC_API_BASE_URL as string) + "/academies/" + params.id
@@ -38,15 +41,16 @@ export default async function Academy({ params }: { params: { id: string } }) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">
           <div>
             <div className="flex items-center gap-x-2">
-              {/* <IconBadge icon={LayoutDashboard} /> */}
+              <IconBadge icon={LayoutDashboard} />
               <h2 className="text-xl">Customize your course</h2>
             </div>
             <NameForm initialData={academy} academyId={params.id} />
             <DescriptionForm initialData={academy} academyId={params.id} />
-            {/* <ImageForm
-              initialData={course}
-              courseId={course.id}
+            <ImageForm
+              initialData={academy}
+              academyId={params.id}
             />
+            {/*
             <CategoryForm
               initialData={course}
               courseId={course.id}
@@ -58,21 +62,6 @@ export default async function Academy({ params }: { params: { id: string } }) {
           </div>
           <div className="space-y-6">
             <ModuleContainer initialData={academy} academyId={params.id} />
-            {/* <ModuleGroupForm
-              initialData={academy}
-              academyId={params.id}
-            />
-
-            <ModuleForm
-              initalData={academy}
-              academyId={params.id}
-            /> */}
-
-            {/* <ChaptersForm
-                initialData={course}
-                courseId={course.id}
-              />
-           */}
           </div>
         </div>
       </div>
