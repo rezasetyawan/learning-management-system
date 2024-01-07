@@ -5,6 +5,7 @@ import NameForm from "./component/name-form";
 import { DescriptionForm } from "./component/description-form";
 import { ModuleGroupForm } from "./component/module-group-form";
 import ModuleForm from "./component/module-form";
+import ModuleContainer from "./component/module-container";
 import { Toaster } from "react-hot-toast";
 export default async function Academy({ params }: { params: { id: string } }) {
   const data = await fetch(
@@ -12,9 +13,8 @@ export default async function Academy({ params }: { params: { id: string } }) {
   );
 
   const academyResponse = await data.json();
-  const academy = academyResponse.data as Academy
+  const academy = academyResponse.data as Academy;
 
-  
   return (
     <>
       <Navbar />
@@ -57,7 +57,8 @@ export default async function Academy({ params }: { params: { id: string } }) {
             /> */}
           </div>
           <div className="space-y-6">
-            <ModuleGroupForm
+            <ModuleContainer initialData={academy} academyId={params.id} />
+            {/* <ModuleGroupForm
               initialData={academy}
               academyId={params.id}
             />
@@ -65,7 +66,7 @@ export default async function Academy({ params }: { params: { id: string } }) {
             <ModuleForm
               initalData={academy}
               academyId={params.id}
-            />
+            /> */}
 
             {/* <ChaptersForm
                 initialData={course}

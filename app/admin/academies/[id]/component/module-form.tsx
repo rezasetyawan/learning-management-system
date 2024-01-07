@@ -2,28 +2,35 @@
 /* eslint-disable @next/next/no-assign-module-variable */
 "use client";
 import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Badge } from "@/components/ui/badge";
-import { axiosInstance } from "@/lib/axios";
-import { cn } from "@/lib/utils";
-import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
-import { Grip, Pencil } from "lucide-react";
-import { useRouter } from "next/navigation";
 import {
-    JSXElementConstructor,
-    Key,
-    PromiseLikeOfReactNode,
-    ReactElement,
-    ReactNode,
-    ReactPortal,
-    useEffect,
-    useState,
+  JSXElementConstructor,
+  Key,
+  PromiseLikeOfReactNode,
+  ReactElement,
+  ReactNode,
+  ReactPortal,
+  useEffect,
+  useRef,
+  useState,
 } from "react";
 import toast from "react-hot-toast";
+import * as z from "zod";
+import { useRouter } from "next/navigation";
+import {
+  DragDropContext,
+  Draggable,
+  DropResult,
+  Droppable,
+} from "@hello-pangea/dnd";
+import { Grip, Pencil } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
+import { axiosInstance } from "@/lib/axios";
 
 interface ModuleFormProps {
   initalData: {
@@ -120,6 +127,8 @@ export default function ModuleForm({ initalData, academyId }: ModuleFormProps) {
   const [isCreating, setIsCreating] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const router = useRouter();
+  const [isInitialRender, setIsInitialRender] = useState(true);
+
   const [updateData, setUpdateData] = useState<
     {
       moduleId: string;
@@ -128,7 +137,6 @@ export default function ModuleForm({ initalData, academyId }: ModuleFormProps) {
     }[]
   >();
 
-  const initialData = getInitalData(initalData.moduleGroups);
   const onSubmit = async () => {
     try {
     } catch {
@@ -144,9 +152,9 @@ export default function ModuleForm({ initalData, academyId }: ModuleFormProps) {
     .sort((a, b) => a.order - b.order)
     .map((moduleGroup) => moduleGroup.id);
 
-  const [state, setState] = useState(initialData);
+  const [state, setState] = useState(getInitalData(initalData.moduleGroups));
 
-  const onDragEnd = (result: any) => {
+  const onDragEnd = (result: DropResult) => {
     const { destination, source, type } = result;
 
     if (type === "module") {
@@ -180,7 +188,7 @@ export default function ModuleForm({ initalData, academyId }: ModuleFormProps) {
           },
         };
         setState(newState);
-        console.log(initialData);
+
         return;
       }
 
@@ -209,20 +217,26 @@ export default function ModuleForm({ initalData, academyId }: ModuleFormProps) {
       };
 
       setState(newState);
-
-      console.log(updateData);
     }
   };
 
   useEffect(() => {
+    if (isInitialRender) {
+      // After the initial render, set isInitialRender to false
+      return setIsInitialRender(false);
+    }
+    console.log("use effect 1");
     setUpdateData(getUpdateData(state));
   }, [state]);
 
   useEffect(() => {
     // TODO: ONLY UPDATE THE NEW ORDER
-    setIsUpdating(true);
+    if (isInitialRender) {
+      return;
+    }
     try {
       if (updateData) {
+        setIsUpdating(true);
         updateData.map(async (d) => {
           axiosInstance.patch(
             `/academies/${academyId}/module-groups/${d.academyModuleGroupId}/modules/${d.moduleId}`,
@@ -232,14 +246,16 @@ export default function ModuleForm({ initalData, academyId }: ModuleFormProps) {
             }
           );
         });
+        console.log(updateData);
+        toast.success("Modules reordered");
       }
-      toast.success("Modules reordered");
     } catch {
       toast.error("Something went wrong");
     } finally {
       setIsUpdating(false);
     }
-  }, [updateData, state]);
+  }, [updateData]);
+
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div className="flex flex-col min-h-screen w-full">
@@ -342,6 +358,7 @@ const Column = ({ column, modules }: { column: Column; modules: Module[] }) => {
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
+            {droppableProvided.placeholder}
           </div>
         )}
       </Droppable>

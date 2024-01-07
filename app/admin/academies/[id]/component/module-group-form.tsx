@@ -25,6 +25,7 @@ interface ModuleGroupFormProps {
   initialData: {
     moduleGroups: ModuleGroup[];
   };
+  sortModuleGroups: (updateData: { id: string; order: number }[]) => void;
   academyId: string;
 }
 
@@ -35,6 +36,7 @@ const formSchema = z.object({
 export const ModuleGroupForm = ({
   initialData,
   academyId,
+  sortModuleGroups,
 }: ModuleGroupFormProps) => {
   const [isCreating, setIsCreating] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
@@ -67,12 +69,16 @@ export const ModuleGroupForm = ({
     try {
       setIsUpdating(true);
       updateData.forEach(async (data) => {
-        await axiosInstance.patch(`/academies/${academyId}/module-groups/${data.id}`, {
-          order: data.order,
-        });
+        await axiosInstance.patch(
+          `/academies/${academyId}/module-groups/${data.id}`,
+          {
+            order: data.order,
+          }
+        );
       });
+      sortModuleGroups(updateData);
       toast.success("Module Group reordered");
-      router.refresh()
+      //   router.refresh();
     } catch {
       toast.error("Something went wrong");
     } finally {

@@ -39,18 +39,19 @@ export const ModuleGroupList = ({
     const [reorderedItem] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItem);
 
-    const startIndex = Math.min(result.source.index, result.destination.index);
-    const endIndex = Math.max(result.source.index, result.destination.index);
+    // const startIndex = Math.min(result.source.index, result.destination.index);
+    // const endIndex = Math.max(result.source.index, result.destination.index);
 
-    const updatedModuleGroups = items.slice(startIndex, endIndex + 1);
+    // const updatedModuleGroups = items.slice(startIndex, endIndex + 1);
 
     setModuleGroups(items);
 
-    const bulkUpdateData = updatedModuleGroups.map((moduleGroup) => ({
+    const bulkUpdateData = items.map((moduleGroup) => ({
       id: moduleGroup.id,
-      order: items.findIndex((item) => item.id === moduleGroup.id)
+      order: items.findIndex((item) => item.id === moduleGroup.id) + 1
     }));
 
+    console.log(items.length)
     onReorder(bulkUpdateData);
   }
 
