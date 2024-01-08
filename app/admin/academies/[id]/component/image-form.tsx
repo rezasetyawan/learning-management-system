@@ -45,11 +45,12 @@ export const ImageForm = ({ initialData, academyId }: ImageFormProps) => {
       if (image) {
         const formData = new FormData();
         formData.append("academyCoverPicture", image);
+        formData.append("updatedAt", Date.now().toString());
         await axiosInstance.patch(`/academies/${academyId}`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-          timeout: 10000
+          timeout: 10000,
         });
         setImage(null);
         toast.success("Cover image updated");
@@ -65,7 +66,7 @@ export const ImageForm = ({ initialData, academyId }: ImageFormProps) => {
     console.log(image);
   }, [image]);
 
-  console.log(initialData)
+  console.log(initialData);
   const previewImageUrl = useMemo(() => {
     if (image) return URL.createObjectURL(image);
   }, [image]);
@@ -111,8 +112,7 @@ export const ImageForm = ({ initialData, academyId }: ImageFormProps) => {
             <label
               //   for="dropzone-file"
               className={`flex flex-col items-center justify-center w-full min-h-[16rem] border-2 border-gray-300 border-dashed rounded-lg cursor-pointer hover:bg-gray-100 ${
-                image &&
-                "absolute inset-0 h-full border-0 hover:bg-transparent"
+                image && "absolute inset-0 h-full border-0 hover:bg-transparent"
               }`}
             >
               <div className="flex flex-col items-center justify-center pt-5 pb-6">

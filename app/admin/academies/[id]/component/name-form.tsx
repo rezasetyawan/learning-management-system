@@ -49,7 +49,11 @@ const NameForm = ({ initialData, academyId }: TitleFormProps) => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axiosInstance.patch(`/academies/${academyId}`, values);
+      const updatedAt = Date.now().toString();
+      await axiosInstance.patch(`/academies/${academyId}`, {
+        ...values,
+        updatedAt,
+      });
       setName(values.name);
       toast.success("Name updated");
       toggleEdit();

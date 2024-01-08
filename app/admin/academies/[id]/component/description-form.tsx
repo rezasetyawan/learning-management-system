@@ -10,11 +10,11 @@ import * as z from "zod";
 
 import { Button } from "@/components/ui/button";
 import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormMessage,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import { axiosInstance } from "@/lib/axios";
@@ -55,7 +55,11 @@ export const DescriptionForm = ({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axiosInstance.patch(`/academies/${academyId}`, values);
+      const updatedAt = Date.now().toString();
+      await axiosInstance.patch(`/academies/${academyId}`, {
+        ...values,
+        updatedAt,
+      });
       setDescription(values.description);
       toast.success("Description updated");
       toggleEdit();
