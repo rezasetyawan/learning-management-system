@@ -36,9 +36,14 @@ export default function ModuleContainer({
     setModuleGroups(updatedModuleGroups);
   };
 
-  const addModuleGroups = (moduleGroup: ModuleGroup) => {
-    
-  }
+  const addModuleGroups = (newModuleGroup: ModuleGroup) => {
+    console.log(newModuleGroup);
+    const currentModuleGroups = [...moduleGroups];
+    currentModuleGroups.push(newModuleGroup);
+    console.log(moduleGroups);
+    console.log(currentModuleGroups);
+    setModuleGroups(currentModuleGroups);
+  };
   return (
     <>
       <div className="flex items-center gap-x-2">
@@ -48,12 +53,13 @@ export default function ModuleContainer({
         <h2 className="text-lg font-semibold">Academy module section</h2>
       </div>
       <ModuleGroupForm
-        initialData={initialData}
+        initialData={{ moduleGroups }}
         academyId={academyId}
         sortModuleGroups={sortModuleGroups}
+        addModuleGroups={addModuleGroups}
       />
 
-      <ModuleForm initalData={{ moduleGroups }} academyId={academyId} />
+      <ModuleForm initialData={{ moduleGroups }} academyId={academyId} />
     </>
   );
 }

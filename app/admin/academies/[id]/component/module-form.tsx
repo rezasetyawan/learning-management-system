@@ -15,6 +15,7 @@ import {
   ReactNode,
   ReactPortal,
   useEffect,
+  useReducer,
   useRef,
   useState,
 } from "react";
@@ -45,7 +46,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Module, ModuleGroup } from "@/types";
 
 interface ModuleFormProps {
-  initalData: {
+  initialData: {
     moduleGroups: ModuleGroup[];
   };
   academyId: string;
@@ -60,6 +61,7 @@ interface Column {
 interface Data {
   modules: Record<string, Module>;
   columns: Record<string, Column>;
+  columnOrder: string[];
 }
 
 const reorderColumnList = (
@@ -77,27 +79,6 @@ const reorderColumnList = (
   };
 
   return newColumn;
-};
-
-const getInitalData = (moduleGroups: ModuleGroup[]) => {
-  const initialData: Data = {
-    modules: {},
-    columns: {},
-  };
-
-  moduleGroups.forEach((moduleGroup) => {
-    moduleGroup.modules.forEach((module) => {
-      initialData.modules[module.id] = module;
-    });
-
-    initialData.columns[moduleGroup.id] = {
-      id: moduleGroup.id,
-      title: moduleGroup.name,
-      moduleIds: moduleGroup.modules.map((module) => module.id),
-    };
-  });
-
-  return initialData;
 };
 
 const getUpdateData = (initialData: Data) => {
@@ -135,10 +116,14 @@ const getUpdateData = (initialData: Data) => {
   return updateData;
 };
 
-export default function ModuleForm({ initalData, academyId }: ModuleFormProps) {
+export default function ModuleForm({
+  initialData,
+  academyId,
+}: ModuleFormProps) {
   const [isUpdating, setIsUpdating] = useState(false);
   const router = useRouter();
   const [isInitialRender, setIsInitialRender] = useState(true);
+  const oldModuleGroups = initialData.moduleGroups;
 
   const [updateData, setUpdateData] = useState<
     {
@@ -159,11 +144,36 @@ export default function ModuleForm({ initalData, academyId }: ModuleFormProps) {
     // router.push(`/teacher/courses/${academyId}/chapters/${id}`);
   };
 
-  const columnOrder = initalData.moduleGroups
-    .sort((a, b) => a.order - b.order)
-    .map((moduleGroup) => moduleGroup.id);
+  const [ignored, forceUpdate] = useReducer((x) => x + 1, 0);
 
-  const [state, setState] = useState(getInitalData(initalData.moduleGroups));
+  const getInitialData = (moduleGroups: ModuleGroup[]) => {
+    const initialData: Data = {
+      modules: {},
+      columns: {},
+      columnOrder: [],
+    };
+
+    moduleGroups.forEach((moduleGroup) => {
+      moduleGroup.modules.forEach((module) => {
+        initialData.modules[module.id] = module;
+      });
+
+      initialData.columns[moduleGroup.id] = {
+        id: moduleGroup.id,
+        title: moduleGroup.name,
+        moduleIds: moduleGroup.modules.map((module) => module.id),
+      };
+    });
+
+    initialData.columnOrder = moduleGroups
+      .sort((a, b) => a.order - b.order)
+      .map((moduleGroup) => moduleGroup.id);
+    // forceUpdate();
+
+    return initialData;
+  };
+
+  const [state, setState] = useState(getInitialData(initialData.moduleGroups));
 
   const onDragEnd = (result: DropResult) => {
     const { destination, source, type } = result;
@@ -232,11 +242,15 @@ export default function ModuleForm({ initalData, academyId }: ModuleFormProps) {
   };
 
   useEffect(() => {
+    // Update state whenever the initialData prop changes
+    setState(getInitialData(initialData.moduleGroups));
+  }, [initialData.moduleGroups]);
+
+  useEffect(() => {
     if (isInitialRender) {
       // After the initial render, set isInitialRender to false
       return setIsInitialRender(false);
     }
-    console.log("use effect 1");
     setUpdateData(getUpdateData(state));
   }, [state]);
 
@@ -257,8 +271,8 @@ export default function ModuleForm({ initalData, academyId }: ModuleFormProps) {
             }
           );
         });
-        console.log(updateData);
-        toast.success("Modules reordered");
+
+        // toast.success("Modules reordered");
       }
     } catch {
       toast.error("Something went wrong");
@@ -275,7 +289,7 @@ export default function ModuleForm({ initalData, academyId }: ModuleFormProps) {
             <div className="font-medium flex items-center justify-between">
               Academy modules
             </div>
-            {columnOrder.map((columnId) => {
+            {state.columnOrder.map((columnId) => {
               const column = state.columns[columnId];
               const module = column.moduleIds.map((id) => state.modules[id]);
 

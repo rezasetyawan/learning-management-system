@@ -1,11 +1,10 @@
 "use client";
 
 import * as z from "zod";
-import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Loader2, PlusCircle } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import {
@@ -13,6 +12,7 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
@@ -21,24 +21,27 @@ import { Input } from "@/components/ui/input";
 import { ModuleGroupList } from "./module-group-list";
 import { axiosInstance } from "@/lib/axios";
 import { ModuleGroup, createModuleGroup } from "@/types";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface ModuleGroupFormProps {
   initialData: {
     moduleGroups: ModuleGroup[];
   };
   sortModuleGroups: (updateData: { id: string; order: number }[]) => void;
+  addModuleGroups: (newModuleGroup: ModuleGroup) => void;
   academyId: string;
 }
 
 const formSchema = z.object({
   name: z.string().min(1),
+  isPublished: z.boolean(),
 });
-
 
 export const ModuleGroupForm = ({
   initialData,
   academyId,
   sortModuleGroups,
+  addModuleGroups,
 }: ModuleGroupFormProps) => {
   const [isCreating, setIsCreating] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
@@ -60,6 +63,7 @@ export const ModuleGroupForm = ({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
+      isPublished: false,
     },
   });
 
@@ -70,24 +74,36 @@ export const ModuleGroupForm = ({
   //   },
   // });
 
-
   const { isSubmitting, isValid } = form.formState;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-
-      const timestamp = Date.now().toString()
+      const timestamp = Date.now().toString();
       const payload: createModuleGroup = {
         name: values.name,
         academyId: academyId,
         createdAt: timestamp,
         updatedAt: timestamp,
-        order: 1,
-        isPublished:true
-      }
+        order: initialData.moduleGroups.length + 1,
+        isPublished: values.isPublished,
+      };
 
-      await axiosInstance.post(`/academies/${academyId}/module-groups`, payload)
-      //   toggleCreating();
+      const response = await axiosInstance.post(
+        `/academies/${academyId}/module-groups`,
+        payload
+      );
+      
+      addModuleGroups({
+        id: Date.now().toString(),
+        name: payload.name,
+        order: payload.order,
+        modules: [],
+        isPublished: payload.isPublished,
+      });
+
+      toast.success("New group module added");
+      form.reset();
+      toggleCreating();
       //   router.refresh();
     } catch {
       toast.error("Something went wrong");
@@ -153,11 +169,28 @@ export const ModuleGroupForm = ({
                   <FormControl>
                     <Input
                       disabled={isSubmitting}
-                      placeholder="e.g. 'Introduction to the course'"
+                      placeholder="Module group name"
                       {...field}
                     />
                   </FormControl>
                   <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="isPublished"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <div className="space-y-1 leading-none">
+                    <FormLabel>Publish</FormLabel>
+                  </div>
                 </FormItem>
               )}
             />
