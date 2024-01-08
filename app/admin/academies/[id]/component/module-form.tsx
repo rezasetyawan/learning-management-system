@@ -331,7 +331,7 @@ const Row = ({ column, modules }: { column: Column; modules: Module[] }) => {
               type="single"
               collapsible
               key={column.id}
-              className="p-4 rounded-md mb-2"
+              className="p-1 rounded-md mb-2"
             >
               <AccordionItem value={"item" + column.id}>
                 <AccordionTrigger>{column.title}</AccordionTrigger>
