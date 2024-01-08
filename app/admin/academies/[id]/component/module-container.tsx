@@ -34,6 +34,10 @@ export default function ModuleContainer({
     updatedModuleGroups.sort((a, b) => a.order - b.order);
     setModuleGroups(updatedModuleGroups);
   };
+
+  const addModuleGroups = (moduleGroup: ModuleGroup) => {
+    
+  }
   return (
     <>
       <div className="flex items-center gap-x-2">

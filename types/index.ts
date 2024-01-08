@@ -24,3 +24,12 @@ type Academy = {
     coverImageUrl: string;
     isPublished: boolean;
 };
+
+export type createModuleGroup = {
+    name: string;
+    createdAt: string;
+    updatedAt: string;
+    academyId: string;
+    isPublished: boolean;
+    order: number;
+}

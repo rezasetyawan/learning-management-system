@@ -1,5 +1,6 @@
 "use client";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import {
   DragDropContext,
@@ -14,13 +15,9 @@ interface ModuleGroupListProps {
   items: ModuleGroup[];
   onReorder: (updateData: { id: string; order: number }[]) => void;
   onEdit: (id: string) => void;
-};
+}
 
-export const ModuleGroupList = ({
-  items,
-  onReorder,
-  onEdit
-}: ModuleGroupListProps) => {
+export const ModuleGroupList = ({ items, onReorder }: ModuleGroupListProps) => {
   const [isMounted, setIsMounted] = useState(false);
   const [moduleGroups, setModuleGroups] = useState(items);
 
@@ -48,12 +45,12 @@ export const ModuleGroupList = ({
 
     const bulkUpdateData = items.map((moduleGroup) => ({
       id: moduleGroup.id,
-      order: items.findIndex((item) => item.id === moduleGroup.id) + 1
+      order: items.findIndex((item) => item.id === moduleGroup.id) + 1,
     }));
 
-    console.log(items.length)
+    console.log(items.length);
     onReorder(bulkUpdateData);
-  }
+  };
 
   if (!isMounted) {
     return null;
@@ -65,16 +62,17 @@ export const ModuleGroupList = ({
         {(provided) => (
           <div {...provided.droppableProps} ref={provided.innerRef}>
             {moduleGroups.map((moduleGroup, index) => (
-              <Draggable 
-                key={moduleGroup.id} 
-                draggableId={moduleGroup.id} 
+              <Draggable
+                key={moduleGroup.id}
+                draggableId={moduleGroup.id}
                 index={index}
               >
                 {(provided) => (
                   <div
                     className={cn(
                       "flex items-center gap-x-2 bg-slate-200 border-slate-200 border text-slate-700 rounded-md mb-4 text-sm",
-                      moduleGroup.isPublished && "bg-sky-100 border-sky-200 text-sky-700"
+                      moduleGroup.isPublished &&
+                        "bg-sky-100 border-sky-200 text-sky-700"
                     )}
                     ref={provided.innerRef}
                     {...provided.draggableProps}
@@ -82,13 +80,12 @@ export const ModuleGroupList = ({
                     <div
                       className={cn(
                         "px-2 py-3 border-r border-r-slate-200 hover:bg-slate-300 rounded-l-md transition",
-                        moduleGroup.isPublished && "border-r-sky-200 hover:bg-sky-200"
+                        moduleGroup.isPublished &&
+                          "border-r-sky-200 hover:bg-sky-200"
                       )}
                       {...provided.dragHandleProps}
                     >
-                      <Grip
-                        className="h-5 w-5"
-                      />
+                      <Grip className="h-5 w-5" />
                     </div>
                     {moduleGroup.name}
                     <div className="ml-auto pr-2 flex items-center gap-x-2">
@@ -105,10 +102,7 @@ export const ModuleGroupList = ({
                       >
                         {moduleGroup.isPublished ? "Published" : "Draft"}
                       </Badge>
-                      <Pencil
-                        onClick={() => onEdit(moduleGroup.id)}
-                        className="w-4 h-4 cursor-pointer hover:opacity-75 transition"
-                      />
+                      <Pencil className="w-4 h-4 cursor-pointer hover:opacity-75 transition" />
                     </div>
                   </div>
                 )}
@@ -119,5 +113,5 @@ export const ModuleGroupList = ({
         )}
       </Droppable>
     </DragDropContext>
-  )
-}
+  );
+};

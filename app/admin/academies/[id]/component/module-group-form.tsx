@@ -20,6 +20,7 @@ import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { ModuleGroupList } from "./module-group-list";
 import { axiosInstance } from "@/lib/axios";
+import { createModuleGroup } from "@/types";
 
 interface ModuleGroupFormProps {
   initialData: {
@@ -30,8 +31,9 @@ interface ModuleGroupFormProps {
 }
 
 const formSchema = z.object({
-  title: z.string().min(1),
+  name: z.string().min(1),
 });
+
 
 export const ModuleGroupForm = ({
   initialData,
@@ -40,6 +42,13 @@ export const ModuleGroupForm = ({
 }: ModuleGroupFormProps) => {
   const [isCreating, setIsCreating] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
+  // const [isEditing, setIsEditing] = useState(false);
+  // const [currentEditModuleGroup, setCurrentEditModuleGroup] = useState<ModuleGroup | null>(null)
+
+  // const toggleEdit = () => {
+  //   console.log("test");
+  //   setIsEditing((current) => !current);
+  // };
 
   const toggleCreating = () => {
     setIsCreating((current) => !current);
@@ -50,14 +59,34 @@ export const ModuleGroupForm = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: "",
+      name: "",
     },
   });
+
+  // const editForm =  useForm<z.infer<typeof formSchema>>({
+  //   resolver: zodResolver(formSchema),
+  //   defaultValues: {
+  //     moduleGroup: currentEditModuleGroup
+  //   },
+  // });
+
 
   const { isSubmitting, isValid } = form.formState;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
+
+      const timestamp = Date.now().toString()
+      const payload: createModuleGroup = {
+        name: values.name,
+        academyId: academyId,
+        createdAt: timestamp,
+        updatedAt: timestamp,
+        order: 1,
+        isPublished:true
+      }
+
+      await axiosInstance.post(`/academies/${academyId}/module-groups`, payload)
       //   toggleCreating();
       //   router.refresh();
     } catch {
@@ -118,7 +147,7 @@ export const ModuleGroupForm = ({
           >
             <FormField
               control={form.control}
-              name="title"
+              name="name"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
