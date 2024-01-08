@@ -22,4 +22,5 @@ type Academy = {
     description: string;
     moduleGroups: ModuleGroup[];
     coverImageUrl: string;
+    isPublished: boolean;
 };

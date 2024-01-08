@@ -27,10 +27,21 @@ import {
   DropResult,
   Droppable,
 } from "@hello-pangea/dnd";
-import { Grip, Pencil } from "lucide-react";
+import { Grip, Pencil, PlusCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { axiosInstance } from "@/lib/axios";
+import { Button } from "@/components/ui/button";
+import { useForm } from "react-hook-form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 interface ModuleFormProps {
   initalData: {
@@ -124,7 +135,6 @@ const getUpdateData = (initialData: Data) => {
 };
 
 export default function ModuleForm({ initalData, academyId }: ModuleFormProps) {
-  const [isCreating, setIsCreating] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const router = useRouter();
   const [isInitialRender, setIsInitialRender] = useState(true);
@@ -257,22 +267,57 @@ export default function ModuleForm({ initalData, academyId }: ModuleFormProps) {
   }, [updateData]);
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <div className="flex flex-col min-h-screen w-full">
-        <div className="flex flex-col">
-          {columnOrder.map((columnId) => {
-            const column = state.columns[columnId];
-            const module = column.moduleIds.map((id) => state.modules[id]);
+    <>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <div className="flex flex-col w-full bg-slate-100 rounded-md p-4 border">
+          <div className="flex flex-col">
+            <div className="font-medium flex items-center justify-between">
+              Course Module Groups
+            </div>
+            {columnOrder.map((columnId) => {
+              const column = state.columns[columnId];
+              const module = column.moduleIds.map((id) => state.modules[id]);
 
-            return <Column key={column.id} column={column} modules={module} />;
-          })}
+              return (
+                <>
+                  <Row key={column.id} column={column} modules={module} />
+                </>
+              );
+            })}
+            <p className="text-xs text-muted-foreground mt-4"></p>
+          </div>
         </div>
-      </div>
-    </DragDropContext>
+      </DragDropContext>
+    </>
   );
 }
 
-const Column = ({ column, modules }: { column: Column; modules: Module[] }) => {
+const Row = ({ column, modules }: { column: Column; modules: Module[] }) => {
+  const [isCreating, setIsCreating] = useState(false);
+  const toggleCreating = () => {
+    setIsCreating((current) => !current);
+  };
+  const formSchema = z.object({
+    name: z.string().min(1),
+  });
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: "",
+    },
+  });
+
+  const { isSubmitting, isValid } = form.formState;
+
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      //   toggleCreating();
+      //   router.refresh();
+    } catch {
+      toast.error("Something went wrong");
+    }
+  };
   return (
     <div className="flex flex-col">
       <Droppable droppableId={column.id} type="module">
@@ -290,71 +335,128 @@ const Column = ({ column, modules }: { column: Column; modules: Module[] }) => {
             >
               <AccordionItem value={"item" + column.id}>
                 <AccordionTrigger>{column.title}</AccordionTrigger>
-                <AccordionContent key={module.id}>
-                  {modules.map(
-                    (
-                      module: {
-                        id: Key | null | undefined;
-                        isPublished: any;
-                        name:
-                          | string
-                          | number
-                          | boolean
-                          | ReactElement<
-                              any,
-                              string | JSXElementConstructor<any>
-                            >
-                          | Iterable<ReactNode>
-                          | ReactPortal
-                          | PromiseLikeOfReactNode
-                          | null
-                          | undefined;
-                      },
-                      index: number
-                    ) => (
-                      <Draggable
-                        key={module.id}
-                        draggableId={`${module.id}`}
-                        index={index}
+                <AccordionContent
+                  key={module.id}
+                  className="bg-slate-200 p-3 rounded-md"
+                >
+                  <div className="flex justify-end mb-2">
+                    <Button onClick={toggleCreating} variant="ghost">
+                      {isCreating ? (
+                        <>Cancel</>
+                      ) : (
+                        <>
+                          <PlusCircle className="h-4 w-4 mr-2" />
+                          Add a module
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                  {isCreating && (
+                    <Form {...form}>
+                      <form
+                        onSubmit={form.handleSubmit(onSubmit)}
+                        className="space-y-4 mt-4"
                       >
-                        {(draggableProvided, draggableSnapshot) => (
-                          <div
-                            className={cn(
-                              "flex items-center gap-x-2 bg-slate-200 border-slate-200 border text-slate-700 rounded-md mb-4 text-sm",
-                              module.isPublished &&
-                                "bg-sky-100 border-sky-200 text-sky-700"
-                            )}
-                            ref={draggableProvided.innerRef}
-                            {...draggableProvided.draggableProps}
-                            {...draggableProvided.dragHandleProps}
-                          >
-                            <div
-                              className={cn(
-                                "px-2 py-3 border-r border-r-slate-200 hover:bg-slate-300 rounded-l-md transition",
-                                module.isPublished &&
-                                  "border-r-sky-200 hover:bg-sky-200"
-                              )}
-                              {...draggableProvided.dragHandleProps}
-                            >
-                              <Grip className="h-5 w-5" />
-                            </div>
-                            {module.name}
-                            <div className="ml-auto pr-2 flex items-center gap-x-2">
-                              <Badge
-                                className={cn(
-                                  "bg-slate-500",
-                                  module.isPublished && "bg-sky-700"
-                                )}
-                              >
-                                {module.isPublished ? "Published" : "Draft"}
-                              </Badge>
-                              <Pencil className="w-4 h-4 cursor-pointer hover:opacity-75 transition" />
-                            </div>
-                          </div>
-                        )}
-                      </Draggable>
-                    )
+                        <FormField
+                          control={form.control}
+                          name="name"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormControl>
+                                <Input
+                                  disabled={isSubmitting}
+                                  placeholder="e.g. 'Introduction to the course'"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <Button
+                          disabled={!isValid || isSubmitting}
+                          type="submit"
+                        >
+                          Create
+                        </Button>
+                      </form>
+                    </Form>
                   )}
+                  {!isCreating && !modules.length ? (
+                    <p className="font-medium text-center">No module groups</p>
+                  ) : null}
+                  {!isCreating && modules.length
+                    ? modules.map(
+                        (
+                          module: {
+                            id: Key | null | undefined;
+                            isPublished: any;
+                            name:
+                              | string
+                              | number
+                              | boolean
+                              | ReactElement<
+                                  any,
+                                  string | JSXElementConstructor<any>
+                                >
+                              | Iterable<ReactNode>
+                              | ReactPortal
+                              | PromiseLikeOfReactNode
+                              | null
+                              | undefined;
+                          },
+                          index: number
+                        ) => (
+                          <Draggable
+                            key={module.id}
+                            draggableId={`${module.id}`}
+                            index={index}
+                          >
+                            {(draggableProvided, draggableSnapshot) => (
+                              <div
+                                className={cn(
+                                  "flex items-center gap-x-2 bg-slate-200 border-slate-200 border text-slate-700 rounded-md mb-4 text-sm",
+                                  module.isPublished &&
+                                    "bg-sky-100 border-sky-200 text-sky-700"
+                                )}
+                                ref={draggableProvided.innerRef}
+                                {...draggableProvided.draggableProps}
+                                {...draggableProvided.dragHandleProps}
+                              >
+                                <div
+                                  className={cn(
+                                    "px-2 py-3 border-r border-r-slate-200 hover:bg-slate-300 rounded-l-md transition",
+                                    module.isPublished &&
+                                      "border-r-sky-200 hover:bg-sky-200"
+                                  )}
+                                  {...draggableProvided.dragHandleProps}
+                                >
+                                  <Grip className="h-5 w-5" />
+                                </div>
+                                {module.name}
+                                <div className="ml-auto pr-2 flex items-center gap-x-2">
+                                  <Badge
+                                    className={cn(
+                                      "bg-slate-500",
+                                      module.isPublished && "bg-sky-700"
+                                    )}
+                                  >
+                                    {module.isPublished ? "Published" : "Draft"}
+                                  </Badge>
+                                  <Pencil className="w-4 h-4 cursor-pointer hover:opacity-75 transition" />
+                                </div>
+                              </div>
+                            )}
+                          </Draggable>
+                        )
+                      )
+                    : null}
+                  <p className="text-xs text-muted-foreground mt-4">
+                    {modules.length} modules
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-4">
+                    Drag and drop to reorder the module groups
+                  </p>
                 </AccordionContent>
               </AccordionItem>
             </Accordion>

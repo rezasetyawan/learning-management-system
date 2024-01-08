@@ -7,9 +7,13 @@ import { Toaster } from "react-hot-toast";
 import { ImageForm } from "./component/image-form";
 import { IconBadge } from "@/components/ui/icon-badge";
 import { LayoutDashboard } from "lucide-react";
+import { Actions } from "./component/actions";
 export default async function Academy({ params }: { params: { id: string } }) {
   const data = await fetch(
-    (process.env.NEXT_PUBLIC_API_BASE_URL as string) + "/academies/" + params.id
+    (process.env.NEXT_PUBLIC_API_BASE_URL as string) +
+      "/academies/" +
+      params.id,
+    { cache: "no-store" }
   );
 
   const academyResponse = await data.json();
@@ -23,29 +27,24 @@ export default async function Academy({ params }: { params: { id: string } }) {
       <div className="p-6">
         <div className="flex items-center justify-between">
           <div className="flex flex-col gap-y-2">
-            <h1 className="text-2xl font-medium">Course setup</h1>
+            <h1 className="text-2xl font-semibold">Academy setup</h1>
             <span className="text-sm text-slate-700">
               {/* Complete all fields {completionText} */}
             </span>
           </div>
-          {/* <Actions
-            disabled={!isComplete}
-            courseId={params.courseId}
-            isPublished={course.isPublished}
-          /> */}
+          <Actions academyId={params.id} isPublished={academy.isPublished}/>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">
           <div>
             <div className="flex items-center gap-x-2">
-              <IconBadge icon={LayoutDashboard} />
-              <h2 className="text-xl">Customize your course</h2>
+              <div className="rounded-full flex items-center justify-center bg-sky-100 text-sky-700 p-1.5">
+                <LayoutDashboard className="w-6 h-6" />
+              </div>
+              <h2 className="text-lg font-semibold">Customize your academy</h2>
             </div>
             <NameForm initialData={academy} academyId={params.id} />
             <DescriptionForm initialData={academy} academyId={params.id} />
-            <ImageForm
-              initialData={academy}
-              academyId={params.id}
-            />
+            <ImageForm initialData={academy} academyId={params.id} />
             {/*
             <CategoryForm
               initialData={course}

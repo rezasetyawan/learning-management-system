@@ -3,6 +3,8 @@
 import { useState } from "react";
 import ModuleForm from "./module-form";
 import { ModuleGroupForm } from "./module-group-form";
+import { IconBadge } from "@/components/ui/icon-badge";
+import { ListChecks } from "lucide-react";
 
 interface ModuleContainerProps {
   initialData: {
@@ -30,13 +32,23 @@ export default function ModuleContainer({
     });
 
     updatedModuleGroups.sort((a, b) => a.order - b.order);
-    setModuleGroups(updatedModuleGroups)
+    setModuleGroups(updatedModuleGroups);
   };
   return (
     <>
-      <ModuleGroupForm initialData={initialData} academyId={academyId} sortModuleGroups={sortModuleGroups}/>
+      <div className="flex items-center gap-x-2">
+        <div className="rounded-full flex items-center justify-center bg-sky-100 text-sky-700 p-1.5">
+          <ListChecks className="w-6 h-6" />
+        </div>
+        <h2 className="text-lg font-semibold">Academy Modules</h2>
+      </div>
+      <ModuleGroupForm
+        initialData={initialData}
+        academyId={academyId}
+        sortModuleGroups={sortModuleGroups}
+      />
 
-      <ModuleForm initalData={{moduleGroups}} academyId={academyId} />
+      <ModuleForm initalData={{ moduleGroups }} academyId={academyId} />
     </>
   );
 }
