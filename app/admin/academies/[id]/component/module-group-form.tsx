@@ -20,7 +20,7 @@ import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { ModuleGroupList } from "./module-group-list";
 import { axiosInstance } from "@/lib/axios";
-import { createModuleGroup } from "@/types";
+import { ModuleGroup, createModuleGroup } from "@/types";
 
 interface ModuleGroupFormProps {
   initialData: {

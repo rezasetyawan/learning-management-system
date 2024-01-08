@@ -8,6 +8,7 @@ import { ImageForm } from "./component/image-form";
 import { IconBadge } from "@/components/ui/icon-badge";
 import { LayoutDashboard } from "lucide-react";
 import { Actions } from "./component/actions";
+import { Academy } from "@/types";
 export default async function Academy({ params }: { params: { id: string } }) {
   const data = await fetch(
     (process.env.NEXT_PUBLIC_API_BASE_URL as string) +

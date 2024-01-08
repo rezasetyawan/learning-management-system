@@ -10,6 +10,7 @@ import * as z from "zod";
 
 import { Button } from "@/components/ui/button";
 import { axiosInstance } from "@/lib/axios";
+import { Academy } from "@/types";
 
 interface ImageFormProps {
   initialData: Academy;

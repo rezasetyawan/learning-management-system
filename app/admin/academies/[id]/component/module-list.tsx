@@ -10,6 +10,7 @@ import { Grip, Pencil } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
+import { Module } from "@/types";
 
 interface ModuleListProps {
   items: Module[];

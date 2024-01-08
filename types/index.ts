@@ -1,4 +1,4 @@
-type Module = {
+export type Module = {
     id: string;
     name: string;
     order: number;
@@ -7,14 +7,15 @@ type Module = {
     isPublished: boolean;
 };
 
-type ModuleGroup = {
+export type ModuleGroup = {
     id: string;
     name: string;
     order: number;
     modules: Module[];
     isPublished: boolean;
 };
-type Academy = {
+
+export type Academy = {
     id: string;
     name: string;
     createdAt: string;

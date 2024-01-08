@@ -2,6 +2,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { ModuleGroup } from "@/types";
 import {
   DragDropContext,
   Draggable,

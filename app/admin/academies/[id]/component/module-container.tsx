@@ -5,6 +5,7 @@ import ModuleForm from "./module-form";
 import { ModuleGroupForm } from "./module-group-form";
 import { IconBadge } from "@/components/ui/icon-badge";
 import { ListChecks } from "lucide-react";
+import { ModuleGroup } from "@/types";
 
 interface ModuleContainerProps {
   initialData: {
