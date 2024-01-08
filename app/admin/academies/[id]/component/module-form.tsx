@@ -272,7 +272,7 @@ export default function ModuleForm({ initalData, academyId }: ModuleFormProps) {
         <div className="flex flex-col w-full bg-slate-100 rounded-md p-4 border">
           <div className="flex flex-col">
             <div className="font-medium flex items-center justify-between">
-              Course Module Groups
+              Academy modules
             </div>
             {columnOrder.map((columnId) => {
               const column = state.columns[columnId];

@@ -98,7 +98,7 @@ export const ModuleGroupForm = ({
         </div>
       )}
       <div className="font-medium flex items-center justify-between">
-        Course Module Groups
+        Academy module groups
         <Button onClick={toggleCreating} variant="ghost">
           {isCreating ? (
             <>Cancel</>

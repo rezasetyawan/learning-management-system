@@ -40,7 +40,7 @@ export default function ModuleContainer({
         <div className="rounded-full flex items-center justify-center bg-sky-100 text-sky-700 p-1.5">
           <ListChecks className="w-6 h-6" />
         </div>
-        <h2 className="text-lg font-semibold">Academy Modules</h2>
+        <h2 className="text-lg font-semibold">Academy module section</h2>
       </div>
       <ModuleGroupForm
         initialData={initialData}
