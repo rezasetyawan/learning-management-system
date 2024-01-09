@@ -92,9 +92,9 @@ export const ModuleGroupForm = ({
         `/academies/${academyId}/module-groups`,
         payload
       );
-      
+
       addModuleGroups({
-        id: Date.now().toString(),
+        id: response.data.moduleGroupId,
         name: payload.name,
         order: payload.order,
         modules: [],
