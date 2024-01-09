@@ -3,9 +3,8 @@
 import { useState } from "react";
 import ModuleForm from "./module-form";
 import { ModuleGroupForm } from "./module-group-form";
-import { IconBadge } from "@/components/ui/icon-badge";
 import { ListChecks } from "lucide-react";
-import { ModuleGroup } from "@/types";
+import { ModuleGroup, Module } from "@/types";
 
 interface ModuleContainerProps {
   initialData: {
@@ -37,12 +36,20 @@ export default function ModuleContainer({
   };
 
   const addModuleGroups = (newModuleGroup: ModuleGroup) => {
-    console.log(newModuleGroup);
     const currentModuleGroups = [...moduleGroups];
     currentModuleGroups.push(newModuleGroup);
-    console.log(moduleGroups);
-    console.log(currentModuleGroups);
     setModuleGroups(currentModuleGroups);
+  };
+
+  const addModule = (newModule: Module, moduleGroupId: string) => {
+    const currentModuleGroups = [...moduleGroups];
+    const index = currentModuleGroups.findIndex(
+      (group) => group.id === moduleGroupId
+    );
+
+    currentModuleGroups[index].modules.push(newModule);
+
+    setModuleGroups(currentModuleGroups)
   };
   return (
     <>
@@ -59,7 +66,7 @@ export default function ModuleContainer({
         addModuleGroups={addModuleGroups}
       />
 
-      <ModuleForm initialData={{ moduleGroups }} academyId={academyId} />
+      <ModuleForm initialData={{ moduleGroups }} academyId={academyId} addModule={addModule} />
     </>
   );
 }

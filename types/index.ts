@@ -34,3 +34,15 @@ export type createModuleGroup = {
     isPublished: boolean;
     order: number;
 }
+
+export type createModule = {
+    name: string;
+    createdAt: string;
+    updatedAt: string;
+    academyId: string;
+    isPublished: boolean;
+    order: number;
+    // using default value ("LESSON") from the database 
+    // type:"LESSON" | "QUIZZ" | "SUBMISSION"
+    academyModuleGroupId: string
+}

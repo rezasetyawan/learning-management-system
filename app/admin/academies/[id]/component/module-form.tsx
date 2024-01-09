@@ -7,52 +7,44 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
-  JSXElementConstructor,
-  Key,
-  PromiseLikeOfReactNode,
-  ReactElement,
-  ReactNode,
-  ReactPortal,
-  useEffect,
-  useReducer,
-  useRef,
-  useState,
-} from "react";
-import toast from "react-hot-toast";
-import * as z from "zod";
-import { useRouter } from "next/navigation";
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { axiosInstance } from "@/lib/axios";
+import { cn } from "@/lib/utils";
+import { Module, ModuleGroup, createModule } from "@/types";
 import {
   DragDropContext,
   Draggable,
   DropResult,
   Droppable,
 } from "@hello-pangea/dnd";
-import { Grip, Pencil, PlusCircle } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
-import { axiosInstance } from "@/lib/axios";
-import { Button } from "@/components/ui/button";
-import { useForm } from "react-hook-form";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Module, ModuleGroup } from "@/types";
+import { Grip, Pencil, PlusCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useEffect, useReducer, useState } from "react";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import * as z from "zod";
 
 interface ModuleFormProps {
   initialData: {
     moduleGroups: ModuleGroup[];
   };
+  addModule: (newModule: Module, moduleGroupId: string) => void;
   academyId: string;
 }
 
-interface Column {
+interface Row {
   id: string;
   title: string;
   moduleIds: string[];
@@ -60,12 +52,12 @@ interface Column {
 
 interface Data {
   modules: Record<string, Module>;
-  columns: Record<string, Column>;
-  columnOrder: string[];
+  rows: Record<string, Row>;
+  rowOrder: string[];
 }
 
-const reorderColumnList = (
-  sourceCol: Column,
+const reorderRowList = (
+  sourceCol: Row,
   startIndex: number,
   endIndex: number
 ) => {
@@ -73,12 +65,12 @@ const reorderColumnList = (
   const [removed] = newModuleIds.splice(startIndex, 1);
   newModuleIds.splice(endIndex, 0, removed);
 
-  const newColumn = {
+  const newRow = {
     ...sourceCol,
     moduleIds: newModuleIds,
   };
 
-  return newColumn;
+  return newRow;
 };
 
 const getUpdateData = (initialData: Data) => {
@@ -88,9 +80,9 @@ const getUpdateData = (initialData: Data) => {
     order: number;
   }[] = [];
 
-  for (const columnId in initialData.columns) {
-    const column = initialData.columns[columnId];
-    column.moduleIds.sort((a, b) => {
+  for (const rowId in initialData.rows) {
+    const row = initialData.rows[rowId];
+    row.moduleIds.sort((a, b) => {
       const orderDiff =
         initialData.modules[a].order - initialData.modules[b].order;
       if (orderDiff !== 0) {
@@ -100,14 +92,14 @@ const getUpdateData = (initialData: Data) => {
       }
     });
 
-    column.moduleIds.forEach((moduleId) => {
+    row.moduleIds.forEach((moduleId) => {
       if (!updateData.some((item) => item.moduleId === moduleId)) {
         const module = initialData.modules[moduleId];
 
         updateData.push({
           moduleId,
-          academyModuleGroupId: columnId,
-          order: column.moduleIds.findIndex((id) => id === moduleId) + 1,
+          academyModuleGroupId: rowId,
+          order: row.moduleIds.findIndex((id) => id === moduleId) + 1,
         });
       }
     });
@@ -119,6 +111,7 @@ const getUpdateData = (initialData: Data) => {
 export default function ModuleForm({
   initialData,
   academyId,
+  addModule,
 }: ModuleFormProps) {
   const [isUpdating, setIsUpdating] = useState(false);
   const router = useRouter();
@@ -144,13 +137,11 @@ export default function ModuleForm({
     // router.push(`/teacher/courses/${academyId}/chapters/${id}`);
   };
 
-  const [ignored, forceUpdate] = useReducer((x) => x + 1, 0);
-
   const getInitialData = (moduleGroups: ModuleGroup[]) => {
     const initialData: Data = {
       modules: {},
-      columns: {},
-      columnOrder: [],
+      rows: {},
+      rowOrder: [],
     };
 
     moduleGroups.forEach((moduleGroup) => {
@@ -158,14 +149,14 @@ export default function ModuleForm({
         initialData.modules[module.id] = module;
       });
 
-      initialData.columns[moduleGroup.id] = {
+      initialData.rows[moduleGroup.id] = {
         id: moduleGroup.id,
         title: moduleGroup.name,
         moduleIds: moduleGroup.modules.map((module) => module.id),
       };
     });
 
-    initialData.columnOrder = moduleGroups
+    initialData.rowOrder = moduleGroups
       .sort((a, b) => a.order - b.order)
       .map((moduleGroup) => moduleGroup.id);
     // forceUpdate();
@@ -190,12 +181,12 @@ export default function ModuleForm({
         return;
       }
 
-      // If the user drops within the same column but in a different positoin
-      const sourceCol = state.columns[source.droppableId];
-      const destinationCol = state.columns[destination.droppableId];
+      // If the user drops within the same row but in a different positoin
+      const sourceCol = state.rows[source.droppableId];
+      const destinationCol = state.rows[destination.droppableId];
 
       if (sourceCol.id === destinationCol.id) {
-        const newColumn = reorderColumnList(
+        const newRow = reorderRowList(
           sourceCol,
           source.index,
           destination.index
@@ -203,9 +194,9 @@ export default function ModuleForm({
 
         const newState = {
           ...state,
-          columns: {
-            ...state.columns,
-            [newColumn.id]: newColumn,
+          rows: {
+            ...state.rows,
+            [newRow.id]: newRow,
           },
         };
         setState(newState);
@@ -213,7 +204,7 @@ export default function ModuleForm({
         return;
       }
 
-      // If the user moves from one column to another
+      // If the user moves from one row to another
       const startModuleIds = Array.from(sourceCol.moduleIds);
       const [removed] = startModuleIds.splice(source.index, 1);
       const newStartCol = {
@@ -230,8 +221,8 @@ export default function ModuleForm({
 
       const newState = {
         ...state,
-        columns: {
-          ...state.columns,
+        rows: {
+          ...state.rows,
           [newStartCol.id]: newStartCol,
           [newEndCol.id]: newEndCol,
         },
@@ -289,17 +280,21 @@ export default function ModuleForm({
             <div className="font-medium flex items-center justify-between">
               Academy modules
             </div>
-            {state.columnOrder.map((columnId) => {
-              const column = state.columns[columnId];
-              const module = column.moduleIds.map((id) => state.modules[id]);
+            {state.rowOrder.map((rowId) => {
+              const row = state.rows[rowId];
+              const module = row.moduleIds.map((id) => state.modules[id]);
 
               return (
-                <>
-                  <Row key={column.id} column={column} modules={module} />
-                </>
+                <Row
+                  key={row.id}
+                  row={row}
+                  modules={module}
+                  academyId={academyId}
+                  moduleGroupId={rowId}
+                  addModule={addModule}
+                />
               );
             })}
-            <p className="text-xs text-muted-foreground mt-4"></p>
           </div>
         </div>
       </DragDropContext>
@@ -307,35 +302,76 @@ export default function ModuleForm({
   );
 }
 
-const Row = ({ column, modules }: { column: Column; modules: Module[] }) => {
+const Row = ({
+  row,
+  modules,
+  academyId,
+  moduleGroupId,
+  addModule,
+}: {
+  row: Row;
+  modules: Module[];
+  academyId: string;
+  moduleGroupId: string;
+  addModule: (newModule: Module, moduleGroupId: string) => void;
+}) => {
   const [isCreating, setIsCreating] = useState(false);
   const toggleCreating = () => {
     setIsCreating((current) => !current);
   };
   const formSchema = z.object({
     name: z.string().min(1),
+    isPublished: z.boolean(),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
+      isPublished: false,
     },
   });
 
   const { isSubmitting, isValid } = form.formState;
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onCreateModule = async (values: z.infer<typeof formSchema>) => {
     try {
-      //   toggleCreating();
+      const timestamp = Date.now().toString();
+      const payload: createModule = {
+        name: values.name,
+        academyId: academyId,
+        createdAt: timestamp,
+        updatedAt: timestamp,
+        order: row.moduleIds.length + 1,
+        isPublished: values.isPublished,
+        academyModuleGroupId: moduleGroupId,
+      };
+
       //   router.refresh();
+      const response = await axiosInstance.post(
+        `/academies/${academyId}/module-groups/${moduleGroupId}/modules`,
+        payload
+      );
+      addModule(
+        {
+          id: response.data.data.moduleId,
+          name: payload.name,
+          order: payload.order,
+          type: "LESSON",
+          content: "",
+          isPublished: payload.isPublished,
+        },
+        moduleGroupId
+      );
+      toggleCreating();
+      toast.success("New module added");
     } catch {
       toast.error("Something went wrong");
     }
   };
   return (
     <div className="flex flex-col">
-      <Droppable droppableId={column.id} type="module">
+      <Droppable droppableId={row.id} type="module">
         {(droppableProvided, droppableSnapshot) => (
           <div
             className="flex flex-col"
@@ -345,15 +381,12 @@ const Row = ({ column, modules }: { column: Column; modules: Module[] }) => {
             <Accordion
               type="single"
               collapsible
-              key={column.id}
+              key={row.id}
               className="p-1 rounded-md mb-2"
             >
-              <AccordionItem value={"item" + column.id}>
-                <AccordionTrigger>{column.title}</AccordionTrigger>
-                <AccordionContent
-                  key={module.id}
-                  className="bg-slate-200 p-3 rounded-md"
-                >
+              <AccordionItem value={"item" + row.id}>
+                <AccordionTrigger>{row.title}</AccordionTrigger>
+                <AccordionContent key={row.id} className="">
                   <div className="flex justify-end mb-2">
                     <Button onClick={toggleCreating} variant="ghost">
                       {isCreating ? (
@@ -369,8 +402,8 @@ const Row = ({ column, modules }: { column: Column; modules: Module[] }) => {
                   {isCreating && (
                     <Form {...form}>
                       <form
-                        onSubmit={form.handleSubmit(onSubmit)}
-                        className="space-y-4 mt-4"
+                        onSubmit={form.handleSubmit(onCreateModule)}
+                        className="space-y-4 mt-4 p-3 rounded-md"
                       >
                         <FormField
                           control={form.control}
@@ -380,11 +413,28 @@ const Row = ({ column, modules }: { column: Column; modules: Module[] }) => {
                               <FormControl>
                                 <Input
                                   disabled={isSubmitting}
-                                  placeholder="e.g. 'Introduction to the course'"
+                                  placeholder="Module name"
                                   {...field}
                                 />
                               </FormControl>
                               <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="isPublished"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                              <FormControl>
+                                <Checkbox
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                />
+                              </FormControl>
+                              <div className="space-y-1 leading-none">
+                                <FormLabel>Publish</FormLabel>
+                              </div>
                             </FormItem>
                           )}
                         />
@@ -397,81 +447,70 @@ const Row = ({ column, modules }: { column: Column; modules: Module[] }) => {
                       </form>
                     </Form>
                   )}
-                  {!isCreating && !modules.length ? (
-                    <p className="font-medium text-center">No module groups</p>
-                  ) : null}
-                  {!isCreating && modules.length
-                    ? modules.map(
-                        (
-                          module: {
-                            id: Key | null | undefined;
-                            isPublished: any;
-                            name:
-                              | string
-                              | number
-                              | boolean
-                              | ReactElement<
-                                  any,
-                                  string | JSXElementConstructor<any>
-                                >
-                              | Iterable<ReactNode>
-                              | ReactPortal
-                              | PromiseLikeOfReactNode
-                              | null
-                              | undefined;
-                          },
-                          index: number
-                        ) => (
-                          <Draggable
-                            key={module.id}
-                            draggableId={`${module.id}`}
-                            index={index}
-                          >
-                            {(draggableProvided, draggableSnapshot) => (
-                              <div
-                                className={cn(
-                                  "flex items-center gap-x-2 bg-slate-200 border-slate-200 border text-slate-700 rounded-md mb-4 text-sm",
-                                  module.isPublished &&
-                                    "bg-sky-100 border-sky-200 text-sky-700"
-                                )}
-                                ref={draggableProvided.innerRef}
-                                {...draggableProvided.draggableProps}
-                                {...draggableProvided.dragHandleProps}
-                              >
+
+                  {!isCreating && (
+                    <div className="bg-slate-200 p-4 rounded-md">
+                      {!modules.length ? (
+                        <p className="font-medium text-center">
+                          No module groups
+                        </p>
+                      ) : null}
+                      {modules.length
+                        ? modules.map((module, index) => (
+                            <Draggable
+                              key={module.id}
+                              draggableId={`${module.id}`}
+                              index={index}
+                            >
+                              {(draggableProvided, draggableSnapshot) => (
                                 <div
                                   className={cn(
-                                    "px-2 py-3 border-r border-r-slate-200 hover:bg-slate-300 rounded-l-md transition",
+                                    "flex items-center gap-x-2 bg-slate-200 border-slate-200 border text-slate-700 rounded-md mb-4 text-sm",
                                     module.isPublished &&
-                                      "border-r-sky-200 hover:bg-sky-200"
+                                      "bg-sky-100 border-sky-200 text-sky-700"
                                   )}
+                                  key={module.id}
+                                  ref={draggableProvided.innerRef}
+                                  {...draggableProvided.draggableProps}
                                   {...draggableProvided.dragHandleProps}
                                 >
-                                  <Grip className="h-5 w-5" />
-                                </div>
-                                {module.name}
-                                <div className="ml-auto pr-2 flex items-center gap-x-2">
-                                  <Badge
+                                  <div
                                     className={cn(
-                                      "bg-slate-500",
-                                      module.isPublished && "bg-sky-700"
+                                      "px-2 py-3 border-r border-r-slate-200 hover:bg-slate-300 rounded-l-md transition",
+                                      module.isPublished &&
+                                        "border-r-sky-200 hover:bg-sky-200"
                                     )}
+                                    {...draggableProvided.dragHandleProps}
                                   >
-                                    {module.isPublished ? "Published" : "Draft"}
-                                  </Badge>
-                                  <Pencil className="w-4 h-4 cursor-pointer hover:opacity-75 transition" />
+                                    <Grip className="h-5 w-5" />
+                                  </div>
+                                  {module.name}
+                                  <div className="ml-auto pr-2 flex items-center gap-x-2">
+                                    <Badge
+                                      className={cn(
+                                        "bg-slate-500",
+                                        module.isPublished && "bg-sky-700"
+                                      )}
+                                    >
+                                      {module.isPublished
+                                        ? "Published"
+                                        : "Draft"}
+                                    </Badge>
+                                    <Pencil className="w-4 h-4 cursor-pointer hover:opacity-75 transition" />
+                                  </div>
                                 </div>
-                              </div>
-                            )}
-                          </Draggable>
-                        )
-                      )
-                    : null}
-                  <p className="text-xs text-muted-foreground mt-4">
-                    {modules.length} modules
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-4">
-                    Drag and drop to reorder the module groups
-                  </p>
+                              )}
+                            </Draggable>
+                          ))
+                        : null}
+                      <p className="text-xs text-muted-foreground mt-4">
+                        {modules.length} modules
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-4">
+                        Drag and drop to reorder the module groups
+                      </p>
+                    </div>
+                  )}
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
