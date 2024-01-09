@@ -449,7 +449,7 @@ const Row = ({
                   )}
 
                   {!isCreating && (
-                    <div className="bg-slate-200 p-4 rounded-md">
+                    <div className="bg-blue-200 p-4 rounded-md">
                       {!modules.length ? (
                         <p className="font-medium text-center">
                           No module groups
@@ -503,12 +503,16 @@ const Row = ({
                             </Draggable>
                           ))
                         : null}
-                      <p className="text-xs text-muted-foreground mt-4">
-                        {modules.length} modules
-                      </p>
-                      <p className="text-xs text-muted-foreground mt-4">
-                        Drag and drop to reorder the module groups
-                      </p>
+                      {!!modules.length && (
+                        <div>
+                          <p className="text-xs text-muted-foreground mt-4">
+                            {modules.length} modules
+                          </p>
+                          <p className="text-xs text-muted-foreground mt-4">
+                            Drag and drop to reorder the module groups
+                          </p>
+                        </div>
+                      )}
                     </div>
                   )}
                 </AccordionContent>
