@@ -15,10 +15,16 @@ import { useEffect, useState } from "react";
 interface ModuleGroupListProps {
   items: ModuleGroup[];
   onReorder: (updateData: { id: string; order: number }[]) => void;
-  onEdit: (id: string) => void;
+  toggleEdit: () => void;
+  setCurrentEditModuleGroup: (data: ModuleGroup) => void;
 }
 
-export const ModuleGroupList = ({ items, onReorder }: ModuleGroupListProps) => {
+export const ModuleGroupList = ({
+  items,
+  onReorder,
+  toggleEdit,
+  setCurrentEditModuleGroup,
+}: ModuleGroupListProps) => {
   const [isMounted, setIsMounted] = useState(false);
   const [moduleGroups, setModuleGroups] = useState(items);
 
@@ -37,11 +43,6 @@ export const ModuleGroupList = ({ items, onReorder }: ModuleGroupListProps) => {
     const [reorderedItem] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItem);
 
-    // const startIndex = Math.min(result.source.index, result.destination.index);
-    // const endIndex = Math.max(result.source.index, result.destination.index);
-
-    // const updatedModuleGroups = items.slice(startIndex, endIndex + 1);
-
     setModuleGroups(items);
 
     const bulkUpdateData = items.map((moduleGroup) => ({
@@ -49,7 +50,6 @@ export const ModuleGroupList = ({ items, onReorder }: ModuleGroupListProps) => {
       order: items.findIndex((item) => item.id === moduleGroup.id) + 1,
     }));
 
-    console.log(items.length);
     onReorder(bulkUpdateData);
   };
 
@@ -103,7 +103,15 @@ export const ModuleGroupList = ({ items, onReorder }: ModuleGroupListProps) => {
                       >
                         {moduleGroup.isPublished ? "Published" : "Draft"}
                       </Badge>
-                      <Pencil className="w-4 h-4 cursor-pointer hover:opacity-75 transition" />
+                      <Button
+                        type="button"
+                        variant={"ghost"}
+                        onClick={() => {                          
+                          setCurrentEditModuleGroup(moduleGroup);
+                        }}
+                      >
+                        <Pencil className="w-4 h-4 cursor-pointer hover:opacity-75 transition" />
+                      </Button>
                     </div>
                   </div>
                 )}

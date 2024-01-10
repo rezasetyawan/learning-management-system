@@ -45,7 +45,7 @@ export default async function Academy({ params }: { params: { id: string } }) {
             </div>
             <NameForm initialData={academy} academyId={params.id} />
             <DescriptionForm initialData={academy} academyId={params.id} />
-            <ImageForm initialData={academy} academyId={params.id} />
+            {/* <ImageForm initialData={academy} academyId={params.id} /> */}
             {/*
             <CategoryForm
               initialData={course}

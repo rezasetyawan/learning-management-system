@@ -51,6 +51,17 @@ export default function ModuleContainer({
 
     setModuleGroups(currentModuleGroups)
   };
+
+  const updateModuleGroup = (newModuleGroup: ModuleGroup, moduleGroupId: string) => {
+    const currentModuleGroups = [...moduleGroups]
+    const index = currentModuleGroups.findIndex(
+      (group) => group.id === moduleGroupId
+    );
+
+    currentModuleGroups[index] = newModuleGroup
+
+    setModuleGroups(currentModuleGroups)
+  }
   return (
     <>
       <div className="flex items-center gap-x-2">
@@ -64,6 +75,7 @@ export default function ModuleContainer({
         academyId={academyId}
         sortModuleGroups={sortModuleGroups}
         addModuleGroups={addModuleGroups}
+        updateModuleGroup={updateModuleGroup}
       />
 
       <ModuleForm initialData={{ moduleGroups }} academyId={academyId} addModule={addModule} />

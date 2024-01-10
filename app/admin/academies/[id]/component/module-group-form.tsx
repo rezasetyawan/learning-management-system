@@ -4,7 +4,7 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Loader2, PlusCircle } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import {
@@ -29,10 +29,19 @@ interface ModuleGroupFormProps {
   };
   sortModuleGroups: (updateData: { id: string; order: number }[]) => void;
   addModuleGroups: (newModuleGroup: ModuleGroup) => void;
+  updateModuleGroup: (
+    newModuleGroup: ModuleGroup,
+    moduleGroupId: string
+  ) => void;
   academyId: string;
 }
 
 const formSchema = z.object({
+  name: z.string().min(1),
+  isPublished: z.boolean(),
+});
+
+const editFormSchema = z.object({
   name: z.string().min(1),
   isPublished: z.boolean(),
 });
@@ -42,16 +51,17 @@ export const ModuleGroupForm = ({
   academyId,
   sortModuleGroups,
   addModuleGroups,
+  updateModuleGroup,
 }: ModuleGroupFormProps) => {
   const [isCreating, setIsCreating] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
-  // const [isEditing, setIsEditing] = useState(false);
-  // const [currentEditModuleGroup, setCurrentEditModuleGroup] = useState<ModuleGroup | null>(null)
+  const [isEditing, setIsEditing] = useState(false);
+  const [currentEditModuleGroup, setCurrentEditModuleGroup] =
+    useState<ModuleGroup | null>(null);
 
-  // const toggleEdit = () => {
-  //   console.log("test");
-  //   setIsEditing((current) => !current);
-  // };
+  const toggleEdit = useCallback(() => {
+    setIsEditing((current) => !current);
+  },[]);
 
   const toggleCreating = () => {
     setIsCreating((current) => !current);
@@ -66,15 +76,25 @@ export const ModuleGroupForm = ({
       isPublished: false,
     },
   });
+  const editForm = useForm<z.infer<typeof editFormSchema>>({
+    resolver: zodResolver(editFormSchema),
+    defaultValues: {
+      name: "",
+      isPublished: false,
+    },
+  });
 
-  // const editForm =  useForm<z.infer<typeof formSchema>>({
-  //   resolver: zodResolver(formSchema),
-  //   defaultValues: {
-  //     moduleGroup: currentEditModuleGroup
-  //   },
-  // });
-
+  useEffect(() => {
+    toggleEdit();
+    if (currentEditModuleGroup) {
+      editForm.setValue("name", currentEditModuleGroup.name);
+      editForm.setValue("isPublished", currentEditModuleGroup.isPublished);
+    }
+  }, [currentEditModuleGroup, toggleEdit, editForm]);
+  
   const { isSubmitting, isValid } = form.formState;
+  const { isSubmitting: editIsSubmitting, isValid: editIsValid } =
+    editForm.formState;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
@@ -110,6 +130,31 @@ export const ModuleGroupForm = ({
     }
   };
 
+  const onSubmitEdit = async (values: z.infer<typeof editFormSchema>) => {
+    if (!currentEditModuleGroup) return;
+
+    const payload = {
+      ...values,
+      updatedAt: Date.now().toString(),
+    };
+
+    await axiosInstance.patch(
+      `/academies/${academyId}/module-groups/${currentEditModuleGroup.id}`,
+      payload
+    );
+
+    updateModuleGroup(
+      {
+        ...currentEditModuleGroup,
+        ...values,
+      },
+      currentEditModuleGroup.id
+    );
+
+    toast.success("Module group updated");
+    editForm.reset();
+    toggleEdit();
+  };
   const onReorder = async (updateData: { id: string; order: number }[]) => {
     try {
       setIsUpdating(true);
@@ -144,17 +189,69 @@ export const ModuleGroupForm = ({
       )}
       <div className="font-medium flex items-center justify-between">
         Academy module groups
-        <Button onClick={toggleCreating} variant="ghost">
-          {isCreating ? (
-            <>Cancel</>
-          ) : (
-            <>
-              <PlusCircle className="h-4 w-4 mr-2" />
-              Add a module group
-            </>
-          )}
-        </Button>
+        {!isEditing && (
+          <Button onClick={toggleCreating} variant="ghost">
+            {isCreating ? (
+              <>Cancel</>
+            ) : (
+              <>
+                <PlusCircle className="h-4 w-4 mr-2" />
+                Add a module group
+              </>
+            )}
+          </Button>
+        )}
+        {!isCreating && isEditing ? (
+          <Button onClick={toggleEdit} variant="ghost">
+            Cancel
+          </Button>
+        ) : null}
       </div>
+      {isEditing && (
+        <Form {...editForm}>
+          <form
+            onSubmit={editForm.handleSubmit(onSubmitEdit)}
+            className="space-y-4 mt-4"
+          >
+            <FormField
+              control={editForm.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      disabled={editIsSubmitting}
+                      placeholder="Module group name"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={editForm.control}
+              name="isPublished"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <div className="space-y-1 leading-none">
+                    <FormLabel>Publish</FormLabel>
+                  </div>
+                </FormItem>
+              )}
+            />
+            <Button disabled={!editIsValid || editIsSubmitting} type="submit">
+              Update
+            </Button>
+          </form>
+        </Form>
+      )}
       {isCreating && (
         <Form {...form}>
           <form
@@ -200,26 +297,27 @@ export const ModuleGroupForm = ({
           </form>
         </Form>
       )}
-      {!isCreating && (
-        <div
-          className={cn(
-            "text-sm mt-2",
-            !initialData.moduleGroups.length && "text-slate-500 italic"
-          )}
-        >
-          {!initialData.moduleGroups.length && "No module groups"}
-          <ModuleGroupList
-            onEdit={onEdit}
-            onReorder={onReorder}
-            items={initialData.moduleGroups || []}
-          />
+      {!isCreating && !isEditing ? (
+        <div>
+          <div
+            className={cn(
+              "text-sm mt-2",
+              !initialData.moduleGroups.length && "text-slate-500 italic"
+            )}
+          >
+            {!initialData.moduleGroups.length && "No module groups"}
+            <ModuleGroupList
+              onReorder={onReorder}
+              items={initialData.moduleGroups || []}
+              toggleEdit={toggleEdit}
+              setCurrentEditModuleGroup={setCurrentEditModuleGroup}
+            />
+          </div>
+          <p className="text-xs text-muted-foreground mt-4">
+            Drag and drop to reorder the module groups
+          </p>
         </div>
-      )}
-      {!isCreating && (
-        <p className="text-xs text-muted-foreground mt-4">
-          Drag and drop to reorder the module groups
-        </p>
-      )}
+      ) : null}
     </div>
   );
 };
