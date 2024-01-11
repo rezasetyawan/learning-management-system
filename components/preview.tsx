@@ -13,7 +13,7 @@ export const Preview = ({
   value,
 }: PreviewProps) => {
   const ReactQuill = useMemo(() => dynamic(() => import("react-quill"), { ssr: false }), []);
-
+console.log(value)
   return (
     <ReactQuill
       theme="bubble"

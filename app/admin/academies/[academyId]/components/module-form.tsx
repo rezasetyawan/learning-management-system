@@ -133,8 +133,8 @@ export default function ModuleForm({
     }
   };
 
-  const onEdit = (id: string) => {
-    // router.push(`/teacher/courses/${academyId}/chapters/${id}`);
+  const onEdit = (moduleGroupId: string, moduleId: string) => {
+    router.push(`/admin/academies/${academyId}/module-groups/${moduleGroupId}/modules/${moduleId}`);
   };
 
   const getInitialData = (moduleGroups: ModuleGroup[]) => {
@@ -292,6 +292,7 @@ export default function ModuleForm({
                   academyId={academyId}
                   moduleGroupId={rowId}
                   addModule={addModule}
+                  onEdit={onEdit}
                 />
               );
             })}
@@ -308,12 +309,14 @@ const Row = ({
   academyId,
   moduleGroupId,
   addModule,
+  onEdit
 }: {
   row: Row;
   modules: Module[];
   academyId: string;
   moduleGroupId: string;
   addModule: (newModule: Module, moduleGroupId: string) => void;
+  onEdit: (moduleGroupId: string, moduleId: string) => void;
 }) => {
   const [isCreating, setIsCreating] = useState(false);
   const toggleCreating = () => {
@@ -496,7 +499,9 @@ const Row = ({
                                         ? "Published"
                                         : "Draft"}
                                     </Badge>
+                                    <button onClick={() => onEdit(row.id, module.id)}>
                                     <Pencil className="w-4 h-4 cursor-pointer hover:opacity-75 transition" />
+                                    </button>
                                   </div>
                                 </div>
                               )}

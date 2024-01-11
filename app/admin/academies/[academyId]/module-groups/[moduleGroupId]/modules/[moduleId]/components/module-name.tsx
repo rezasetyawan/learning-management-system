@@ -19,26 +19,31 @@ import { Input } from "@/components/ui/input";
 import { axiosInstance } from "@/lib/axios";
 import { useForm } from "react-hook-form";
 
-interface TitleFormProps {
+interface NameFormProps {
   initialData: {
     name: string;
   };
   academyId: string;
+  moduleGroupId: string;
+  moduleId: string;
 }
 
 const formSchema = z.object({
   name: z.string().min(1, {
-    message: "Title is required",
+    message: "Name is required",
   }),
 });
 
-const NameForm = ({ initialData, academyId }: TitleFormProps) => {
+const NameForm = ({
+  initialData,
+  academyId,
+  moduleGroupId,
+  moduleId,
+}: NameFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState(initialData.name);
 
   const toggleEdit = () => setIsEditing((current) => !current);
-
-  const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -49,13 +54,15 @@ const NameForm = ({ initialData, academyId }: TitleFormProps) => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const updatedAt = Date.now().toString();
-      await axiosInstance.patch(`/academies/${academyId}`, {
-        ...values,
-        updatedAt,
-      });
+      await axiosInstance.patch(
+        `/academies/${academyId}/module-groups/${moduleGroupId}/modules/${moduleId}`,
+        {
+          name: values.name,
+          updatedAt: Date.now().toString(),
+        }
+      );
       setName(values.name);
-      toast.success("Name updated");
+      toast.success("Module name updated");
       toggleEdit();
     } catch {
       toast.error("Something went wrong");
@@ -63,7 +70,7 @@ const NameForm = ({ initialData, academyId }: TitleFormProps) => {
   };
 
   return (
-    <div className="mt-6 border bg-slate-100 rounded-md p-4">
+    <div className="mt-6 border bg-white-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
         Academy name
         <Button onClick={toggleEdit} variant="ghost">
@@ -72,7 +79,7 @@ const NameForm = ({ initialData, academyId }: TitleFormProps) => {
           ) : (
             <>
               <Pencil className="h-4 w-4 mr-2" />
-              Edit title
+              Edit Name
             </>
           )}
         </Button>

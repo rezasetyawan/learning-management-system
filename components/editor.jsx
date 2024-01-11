@@ -33,6 +33,7 @@ const CustomUndo = () => (
 );
 
 export default function Editor({
+  value,
   academyId,
   moduleGroupId,
   moduleId,
@@ -158,6 +159,7 @@ export default function Editor({
       </div>
       <ReactQuill
         theme="snow"
+        value={value ? value : ""}
         modules={modules}
         formats={formats}
         onChange={onChangeHandler}
