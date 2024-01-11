@@ -1,19 +1,18 @@
 /* eslint-disable @next/next/no-assign-module-variable */
-import Navbar from "@/components/admin/navbar";
-import NameForm from "./component/name-form";
-import { DescriptionForm } from "./component/description-form";
-import ModuleContainer from "./component/module-container";
+import NameForm from "./components/name-form";
+import { DescriptionForm } from "./components/description-form";
+import ModuleContainer from "./components/module-container";
 import { Toaster } from "react-hot-toast";
-import { ImageForm } from "./component/image-form";
+import { ImageForm } from "./components/image-form";
 import { IconBadge } from "@/components/ui/icon-badge";
 import { LayoutDashboard } from "lucide-react";
-import { Actions } from "./component/actions";
+import { Actions } from "./components/actions";
 import { Academy } from "@/types";
-export default async function Academy({ params }: { params: { id: string } }) {
+export default async function Academy({ params }: { params: { academyId: string } }) {
   const data = await fetch(
     (process.env.NEXT_PUBLIC_API_BASE_URL as string) +
       "/academies/" +
-      params.id,
+      params.academyId,
     { cache: "no-store" }
   );
 
@@ -33,7 +32,7 @@ export default async function Academy({ params }: { params: { id: string } }) {
               {/* Complete all fields {completionText} */}
             </span>
           </div>
-          <Actions academyId={params.id} isPublished={academy.isPublished}/>
+          <Actions academyId={params.academyId} isPublished={academy.isPublished}/>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">
           <div>
@@ -43,8 +42,8 @@ export default async function Academy({ params }: { params: { id: string } }) {
               </div>
               <h2 className="text-lg font-semibold">Customize your academy</h2>
             </div>
-            <NameForm initialData={academy} academyId={params.id} />
-            <DescriptionForm initialData={academy} academyId={params.id} />
+            <NameForm initialData={academy} academyId={params.academyId} />
+            <DescriptionForm initialData={academy} academyId={params.academyId} />
             {/* <ImageForm initialData={academy} academyId={params.id} /> */}
             {/*
             <CategoryForm
@@ -57,7 +56,7 @@ export default async function Academy({ params }: { params: { id: string } }) {
             /> */}
           </div>
           <div className="space-y-6">
-            <ModuleContainer initialData={academy} academyId={params.id} />
+            <ModuleContainer initialData={academy} academyId={params.academyId} />
           </div>
         </div>
       </div>
