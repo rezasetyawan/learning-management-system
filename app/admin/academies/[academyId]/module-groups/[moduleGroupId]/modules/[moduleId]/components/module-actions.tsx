@@ -1,6 +1,5 @@
 "use client";
 
-import axios from "axios";
 import { Trash } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -40,7 +39,7 @@ export const Actions = ({
             updatedAt: Date.now().toString(),
           }
         );
-        toast.success("Academy unpublished");
+        toast.success("Module unpublished");
       } else {
         await axiosInstance.patch(
           `/academies/${academyId}/module-groups/${moduleGroupId}/modules/${moduleId}`,
@@ -49,10 +48,8 @@ export const Actions = ({
             updatedAt: Date.now().toString(),
           }
         );
-        toast.success("Academy published");
+        toast.success("Module published");
       }
-
-      router.refresh();
     } catch {
       toast.error("Something went wrong");
     } finally {
@@ -64,11 +61,15 @@ export const Actions = ({
     try {
       setIsLoading(true);
 
-      //   await axios.delete(`/api/courses/${academyId}`);
+      await axiosInstance.patch(
+        `/academies/${academyId}/module-groups/${moduleGroupId}/modules/${moduleId}`,
+        {
+          isDeleted: true,
+        }
+      );
 
-      toast.success("Academy deleted");
-      router.refresh();
-      //   router.push(`/teacher/courses`);
+      toast.success("Module deleted");
+      router.push(`/admin/academies/${academyId}`);
     } catch {
       toast.error("Something went wrong");
     } finally {

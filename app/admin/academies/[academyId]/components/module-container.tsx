@@ -49,19 +49,44 @@ export default function ModuleContainer({
 
     currentModuleGroups[index].modules.push(newModule);
 
-    setModuleGroups(currentModuleGroups)
+    setModuleGroups(currentModuleGroups);
   };
 
-  const updateModuleGroup = (newModuleGroup: ModuleGroup, moduleGroupId: string) => {
-    const currentModuleGroups = [...moduleGroups]
+  const updateModuleGroup = (
+    newModuleGroup: ModuleGroup,
+    moduleGroupId: string
+  ) => {
+    const currentModuleGroups = [...moduleGroups];
     const index = currentModuleGroups.findIndex(
       (group) => group.id === moduleGroupId
     );
 
-    currentModuleGroups[index] = newModuleGroup
+    currentModuleGroups[index] = newModuleGroup;
 
-    setModuleGroups(currentModuleGroups)
-  }
+    setModuleGroups(currentModuleGroups);
+  };
+
+  const deleteModuleGroup = (moduleGroupId: string) => {
+    const currentModuleGroups = [...moduleGroups];
+    const index = currentModuleGroups.findIndex(
+      (group) => group.id === moduleGroupId
+    );
+
+    currentModuleGroups.splice(index, 1);
+    setModuleGroups(currentModuleGroups);
+  };
+
+  // const deleteModule = (moduleGroupId: string, moduleId: string) => {
+  //   const currentModuleGroups = [...moduleGroups];
+  //   const index = currentModuleGroups.findIndex(
+  //     (group) => group.id === moduleGroupId
+  //   );
+
+  //   const moduleIndex = currentModuleGroups[index].modules.findIndex(
+  //     (module) => module.id === moduleId
+  //   );
+  //   currentModuleGroups[index].modules.slice(1, moduleIndex);
+  // };
   return (
     <>
       <div className="flex items-center gap-x-2">
@@ -76,9 +101,14 @@ export default function ModuleContainer({
         sortModuleGroups={sortModuleGroups}
         addModuleGroups={addModuleGroups}
         updateModuleGroup={updateModuleGroup}
+        deleteModuleGroup={deleteModuleGroup}
       />
 
-      <ModuleForm initialData={{ moduleGroups }} academyId={academyId} addModule={addModule} />
+      <ModuleForm
+        initialData={{ moduleGroups }}
+        academyId={academyId}
+        addModule={addModule}
+      />
     </>
   );
 }

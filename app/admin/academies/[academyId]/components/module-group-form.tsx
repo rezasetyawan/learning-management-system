@@ -3,7 +3,7 @@
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Loader2, PlusCircle } from "lucide-react";
+import { Loader2, PlusCircle, Trash } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
@@ -22,6 +22,7 @@ import { ModuleGroupList } from "./module-group-list";
 import { axiosInstance } from "@/lib/axios";
 import { ModuleGroup, createModuleGroup } from "@/types";
 import { Checkbox } from "@/components/ui/checkbox";
+import { ConfirmModal } from "@/components/modals/confirmation-modal";
 
 interface ModuleGroupFormProps {
   initialData: {
@@ -33,6 +34,7 @@ interface ModuleGroupFormProps {
     newModuleGroup: ModuleGroup,
     moduleGroupId: string
   ) => void;
+  deleteModuleGroup: (moduleGroupId:string) => void;
   academyId: string;
 }
 
@@ -52,16 +54,18 @@ export const ModuleGroupForm = ({
   sortModuleGroups,
   addModuleGroups,
   updateModuleGroup,
+  deleteModuleGroup
 }: ModuleGroupFormProps) => {
   const [isCreating, setIsCreating] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [currentEditModuleGroup, setCurrentEditModuleGroup] =
     useState<ModuleGroup | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const toggleEdit = useCallback(() => {
     setIsEditing((current) => !current);
-  },[]);
+  }, []);
 
   const toggleCreating = () => {
     setIsCreating((current) => !current);
@@ -91,7 +95,7 @@ export const ModuleGroupForm = ({
       editForm.setValue("isPublished", currentEditModuleGroup.isPublished);
     }
   }, [currentEditModuleGroup, toggleEdit, editForm]);
-  
+
   const { isSubmitting, isValid } = form.formState;
   const { isSubmitting: editIsSubmitting, isValid: editIsValid } =
     editForm.formState;
@@ -176,8 +180,24 @@ export const ModuleGroupForm = ({
     }
   };
 
-  const onEdit = (id: string) => {
-    // router.push(`/teacher/courses/${academyId}/chapters/${id}`);
+  const onDelete = async (moduleGroupId: string) => {
+    try {
+      setIsLoading(true);
+      await axiosInstance.patch(
+        `/academies/${academyId}/module-groups/${moduleGroupId}`,
+        {
+          isDeleted: true,
+        }
+      );
+      
+      toast.success("Module group deleted");
+      deleteModuleGroup(moduleGroupId)
+      toggleEdit()
+    } catch {
+      toast.error("Something went wrong");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -207,7 +227,7 @@ export const ModuleGroupForm = ({
           </Button>
         ) : null}
       </div>
-      {isEditing && (
+      {isEditing && currentEditModuleGroup ? (
         <Form {...editForm}>
           <form
             onSubmit={editForm.handleSubmit(onSubmitEdit)}
@@ -246,12 +266,22 @@ export const ModuleGroupForm = ({
                 </FormItem>
               )}
             />
-            <Button disabled={!editIsValid || editIsSubmitting} type="submit">
-              Update
-            </Button>
+            <div className="flex justify-between items-center">
+              <Button disabled={!editIsValid || editIsSubmitting} type="submit">
+                Update
+              </Button>
+              <ConfirmModal
+                onConfirm={() => onDelete(currentEditModuleGroup.id)}
+                message="Are you want to delete this module group?"
+              >
+                <Button size="sm" disabled={isLoading}>
+                  <Trash className="h-4 w-4" />
+                </Button>
+              </ConfirmModal>
+            </div>
           </form>
         </Form>
-      )}
+      ) : null}
       {isCreating && (
         <Form {...form}>
           <form
