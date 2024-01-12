@@ -208,15 +208,15 @@ export const ModuleGroupForm = ({
         </div>
       )}
       <div className="font-medium flex items-center justify-between">
-        Academy module groups
+        <p className="text-sm font-medium lg:text-base">Academy module groups</p>
         {!isEditing && (
-          <Button onClick={toggleCreating} variant="ghost">
+          <Button onClick={toggleCreating} variant="ghost" className="mr-2">
             {isCreating ? (
               <>Cancel</>
             ) : (
               <>
                 <PlusCircle className="h-4 w-4 mr-2" />
-                Add a module group
+                Add
               </>
             )}
           </Button>

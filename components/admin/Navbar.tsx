@@ -43,7 +43,7 @@ export default async function Navbar() {
   ];
   return (
     <>
-      <header className="flex items-center p-3 font-rubik border-b max-md:h-14 lg:px-8 w-full justify-between sticky top-0 z-[1000] bg-white md:justify-end">
+      <header className="flex items-center p-3 font-rubik border-b max-md:h-14 lg:px-8 w-full justify-between sticky top-0 z-[1000] bg-white lg:justify-end">
         <MobileSidebar />
         {/* <div className="flex gap-2 lg:gap-10">
         <h1 className="text-lg lg:text-2xl font-semibold">

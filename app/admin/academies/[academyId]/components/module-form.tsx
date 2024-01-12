@@ -19,6 +19,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { axiosInstance } from "@/lib/axios";
 import { cn } from "@/lib/utils";
 import { Module, ModuleGroup, createModule } from "@/types";
@@ -134,7 +135,9 @@ export default function ModuleForm({
   };
 
   const onEdit = (moduleGroupId: string, moduleId: string) => {
-    router.push(`/admin/academies/${academyId}/module-groups/${moduleGroupId}/modules/${moduleId}`);
+    router.push(
+      `/admin/academies/${academyId}/module-groups/${moduleGroupId}/modules/${moduleId}`
+    );
   };
 
   const getInitialData = (moduleGroups: ModuleGroup[]) => {
@@ -277,8 +280,10 @@ export default function ModuleForm({
       <DragDropContext onDragEnd={onDragEnd}>
         <div className="flex flex-col w-full bg-slate-100 rounded-md p-4 border">
           <div className="flex flex-col">
-            <div className="font-medium flex items-center justify-between">
-              Academy modules
+            <div className="font-medium flex items-center justify-between mb-2">
+              <p className="text-sm font-medium lg:text-base">
+                Academy modules
+              </p>
             </div>
             {state.rowOrder.map((rowId) => {
               const row = state.rows[rowId];
@@ -309,7 +314,7 @@ const Row = ({
   academyId,
   moduleGroupId,
   addModule,
-  onEdit
+  onEdit,
 }: {
   row: Row;
   modules: Module[];
@@ -385,19 +390,25 @@ const Row = ({
               type="single"
               collapsible
               key={row.id}
-              className="p-1 rounded-md mb-2"
+              className="rounded-md mb-2 bg-blue-100"
             >
               <AccordionItem value={"item" + row.id}>
-                <AccordionTrigger>{row.title}</AccordionTrigger>
-                <AccordionContent key={row.id} className="">
-                  <div className="flex justify-end mb-2">
-                    <Button onClick={toggleCreating} variant="ghost">
+                <AccordionTrigger className="hover:no-underline bg-sky-100 p-3 rounded-md">
+                  <p className="font-medium text-xs lg:text-sm">{row.title}</p>
+                </AccordionTrigger>
+                <AccordionContent key={row.id}>
+                  <div className="flex justify-end mb-2 p-2">
+                    <Button
+                      onClick={toggleCreating}
+                      variant="ghost"
+                      className="text-xs lg:text-sm"
+                    >
                       {isCreating ? (
                         <>Cancel</>
                       ) : (
                         <>
                           <PlusCircle className="h-4 w-4 mr-2" />
-                          Add a module
+                          Add
                         </>
                       )}
                     </Button>
@@ -452,62 +463,72 @@ const Row = ({
                   )}
 
                   {!isCreating && (
-                    <div className="bg-blue-200 p-4 rounded-md">
-                      {!modules.length ? (
-                        <p className="font-medium text-center">
+                    <div className="p-4 rounded-md">
+                      {!modules.length && (
+                        <p className="font-medium text-center text-xs lg:text-sm">
                           No module groups
                         </p>
-                      ) : null}
-                      {modules.length
-                        ? modules.map((module, index) => (
-                            <Draggable
-                              key={module.id}
-                              draggableId={`${module.id}`}
-                              index={index}
-                            >
-                              {(draggableProvided, draggableSnapshot) => (
-                                <div
-                                  className={cn(
-                                    "flex items-center gap-x-2 bg-slate-200 border-slate-200 border text-slate-700 rounded-md mb-4 text-sm",
-                                    module.isPublished &&
-                                      "bg-sky-100 border-sky-200 text-sky-700"
-                                  )}
-                                  key={module.id}
-                                  ref={draggableProvided.innerRef}
-                                  {...draggableProvided.draggableProps}
-                                  {...draggableProvided.dragHandleProps}
-                                >
+                      )}
+                      <div className="max-h-[300px] overflow-y-scroll w-full lg:pr-4 modules-container">
+                        {modules.length
+                          ? modules.map((module, index) => (
+                              <Draggable
+                                key={module.id}
+                                draggableId={`${module.id}`}
+                                index={index}
+                              >
+                                {(draggableProvided, draggableSnapshot) => (
                                   <div
                                     className={cn(
-                                      "px-2 py-3 border-r border-r-slate-200 hover:bg-slate-300 rounded-l-md transition",
+                                      "flex items-center gap-x-2 bg-slate-200 border-slate-200 border text-slate-700 rounded-md mb-4 text-sm",
                                       module.isPublished &&
-                                        "border-r-sky-200 hover:bg-sky-200"
+                                        "bg-sky-100 border-sky-200 text-sky-700"
                                     )}
+                                    key={module.id}
+                                    ref={draggableProvided.innerRef}
+                                    {...draggableProvided.draggableProps}
                                     {...draggableProvided.dragHandleProps}
                                   >
-                                    <Grip className="h-5 w-5" />
-                                  </div>
-                                  {module.name}
-                                  <div className="ml-auto pr-2 flex items-center gap-x-2">
-                                    <Badge
+                                    <div
                                       className={cn(
-                                        "bg-slate-500",
-                                        module.isPublished && "bg-sky-700"
+                                        "px-2 py-3 border-r border-r-slate-200 hover:bg-slate-300 rounded-l-md transition",
+                                        module.isPublished &&
+                                          "border-r-sky-200 hover:bg-sky-200"
                                       )}
+                                      {...draggableProvided.dragHandleProps}
                                     >
-                                      {module.isPublished
-                                        ? "Published"
-                                        : "Draft"}
-                                    </Badge>
-                                    <button onClick={() => onEdit(row.id, module.id)}>
-                                    <Pencil className="w-4 h-4 cursor-pointer hover:opacity-75 transition" />
-                                    </button>
+                                      <Grip className="h-5 w-5" />
+                                    </div>
+                                    <p className="text-xs lg:text-sm">
+                                      {module.name}
+                                    </p>
+                                    <div className="ml-auto pr-2 flex items-center gap-x-2">
+                                      <Badge
+                                        className={cn(
+                                          "bg-slate-500",
+                                          module.isPublished && "bg-sky-700"
+                                        )}
+                                      >
+                                        <span className="text-xs">
+                                          {module.isPublished
+                                            ? "Published"
+                                            : "Draft"}
+                                        </span>
+                                      </Badge>
+                                      <button
+                                        onClick={() =>
+                                          onEdit(row.id, module.id)
+                                        }
+                                      >
+                                        <Pencil className="w-4 h-4 cursor-pointer hover:opacity-75 transition" />
+                                      </button>
+                                    </div>
                                   </div>
-                                </div>
-                              )}
-                            </Draggable>
-                          ))
-                        : null}
+                                )}
+                              </Draggable>
+                            ))
+                          : null}
+                      </div>
                       {!!modules.length && (
                         <div>
                           <p className="text-xs text-muted-foreground mt-4">

@@ -1,6 +1,7 @@
 "use client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import { ModuleGroup } from "@/types";
 import {
@@ -58,6 +59,7 @@ export const ModuleGroupList = ({
   }
 
   return (
+    <div className="max-h-[300px] w-full lg:pr-4 module-groups-container overflow-y-scroll">
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="moduleGroups">
         {(provided) => (
@@ -88,20 +90,15 @@ export const ModuleGroupList = ({
                     >
                       <Grip className="h-5 w-5" />
                     </div>
-                    {moduleGroup.name}
+                    <p className="text-xs lg:text-sm">{moduleGroup.name}</p>
                     <div className="ml-auto pr-2 flex items-center gap-x-2">
-                      {/* {moduleGroup.isFree && (
-                        <Badge>
-                          Free
-                        </Badge>
-                      )} */}
                       <Badge
                         className={cn(
                           "bg-slate-500",
                           moduleGroup.isPublished && "bg-sky-700"
                         )}
                       >
-                        {moduleGroup.isPublished ? "Published" : "Draft"}
+                        <span className="text-xs">{moduleGroup.isPublished ? "Published" : "Draft"}</span>
                       </Badge>
                       <Button
                         type="button"
@@ -122,5 +119,6 @@ export const ModuleGroupList = ({
         )}
       </Droppable>
     </DragDropContext>
+    </div>
   );
 };

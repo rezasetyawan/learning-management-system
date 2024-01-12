@@ -98,3 +98,30 @@ textarea {
   aspect-ratio: 16 / 9;
   object-fit: cover;
 }
+
+/* Width */
+.modules-container::-webkit-scrollbar,
+.module-groups-container::-webkit-scrollbar {
+  width: 6px;
+  border-radius: 10px;
+}
+
+/* Track */
+.modules-container::-webkit-scrollbar-track,
+.module-groups-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+.modules-container::-webkit-scrollbar-thumb,
+.module-groups-container::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 8px;
+  height: 1rem;
+}
+
+/* Handle on hover */
+.modules-containerlbar-thumb:hover,
+.module-groups-container::-webkit-scrollbar-thumb:hover {
+  background: #cbd5e1;
+}

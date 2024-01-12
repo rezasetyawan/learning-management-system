@@ -22,25 +22,20 @@ export default async function Academy({ params }: { params: { academyId: string 
   return (
     <>
       <Toaster position="top-center" reverseOrder={false} />
-      {/* <NameForm initialData={academy} academyId={params.id}/>
-      <DescriptionForm initialData={academy} academyId={params.id}/> */}
-      <div className="p-6">
+      <div className="p-4 lg:p-6">
         <div className="flex items-center justify-between">
           <div className="flex flex-col gap-y-2">
-            <h1 className="text-2xl font-semibold">Academy setup</h1>
-            <span className="text-sm text-slate-700">
-              {/* Complete all fields {completionText} */}
-            </span>
+            <h1 className="text-lg font-semibold lg:text-2xl">Academy setup</h1>
           </div>
           <Actions academyId={params.academyId} isPublished={academy.isPublished}/>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-10 lg:mt-16">
           <div>
             <div className="flex items-center gap-x-2">
               <div className="rounded-full flex items-center justify-center bg-sky-100 text-sky-700 p-1.5">
                 <LayoutDashboard className="w-6 h-6" />
               </div>
-              <h2 className="text-lg font-semibold">Customize your academy</h2>
+              <h2 className="text-base font-semibold lg:text-lg">Customize your academy</h2>
             </div>
             <NameForm initialData={academy} academyId={params.academyId} />
             <DescriptionForm initialData={academy} academyId={params.academyId} />

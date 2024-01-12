@@ -65,14 +65,14 @@ const NameForm = ({ initialData, academyId }: TitleFormProps) => {
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        Academy name
+        <p className="text-sm font-medium lg:text-base">Academy name</p>
         <Button onClick={toggleEdit} variant="ghost">
           {isEditing ? (
             <>Cancel</>
           ) : (
             <>
               <Pencil className="h-4 w-4 mr-2" />
-              Edit title
+              Edit
             </>
           )}
         </Button>
