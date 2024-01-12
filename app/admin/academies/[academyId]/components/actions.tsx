@@ -13,9 +13,14 @@ import { axiosInstance } from "@/lib/axios";
 interface ActionsProps {
   academyId: string;
   isPublished: boolean;
+  toggleIsPublished: () => void;
 }
 
-export const Actions = ({ academyId, isPublished }: ActionsProps) => {
+export const Actions = ({
+  academyId,
+  isPublished,
+  toggleIsPublished,
+}: ActionsProps) => {
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -25,9 +30,16 @@ export const Actions = ({ academyId, isPublished }: ActionsProps) => {
       setIsLoading(true);
 
       if (isPublished) {
+        await axiosInstance.patch(`/academies/${academyId}`, {
+          isPublished: false,
+        });
+        toggleIsPublished();
         toast.success("Academy unpublished");
       } else {
-        await axios.patch(`/api/courses/${academyId}/publish`);
+        await axiosInstance.patch(`/academies/${academyId}`, {
+          isPublished: true
+        });
+        toggleIsPublished();
         toast.success("Academy published");
       }
     } catch {

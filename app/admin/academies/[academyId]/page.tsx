@@ -8,7 +8,12 @@ import { IconBadge } from "@/components/ui/icon-badge";
 import { LayoutDashboard } from "lucide-react";
 import { Actions } from "./components/actions";
 import { Academy } from "@/types";
-export default async function Academy({ params }: { params: { academyId: string } }) {
+import TopSection from "./components/top-section";
+export default async function Academy({
+  params,
+}: {
+  params: { academyId: string };
+}) {
   const data = await fetch(
     (process.env.NEXT_PUBLIC_API_BASE_URL as string) +
       "/academies/" +
@@ -22,23 +27,26 @@ export default async function Academy({ params }: { params: { academyId: string 
   return (
     <>
       <Toaster position="top-center" reverseOrder={false} />
-      <div className="p-4 lg:p-6">
-        <div className="flex items-center justify-between">
-          <div className="flex flex-col gap-y-2">
-            <h1 className="text-lg font-semibold lg:text-2xl">Academy setup</h1>
-          </div>
-          <Actions academyId={params.academyId} isPublished={academy.isPublished}/>
-        </div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-10 lg:mt-16">
+      <div className="">
+        <TopSection
+          academyId={params.academyId}
+          isPublished={academy.isPublished}
+        />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-10 p-4 lg:p-6 lg:mt-16">
           <div>
             <div className="flex items-center gap-x-2">
               <div className="rounded-full flex items-center justify-center bg-sky-100 text-sky-700 p-1.5">
                 <LayoutDashboard className="w-6 h-6" />
               </div>
-              <h2 className="text-base font-semibold lg:text-lg">Customize your academy</h2>
+              <h2 className="text-base font-semibold lg:text-lg">
+                Customize your academy
+              </h2>
             </div>
             <NameForm initialData={academy} academyId={params.academyId} />
-            <DescriptionForm initialData={academy} academyId={params.academyId} />
+            <DescriptionForm
+              initialData={academy}
+              academyId={params.academyId}
+            />
             {/* <ImageForm initialData={academy} academyId={params.id} /> */}
             {/*
             <CategoryForm
@@ -51,7 +59,10 @@ export default async function Academy({ params }: { params: { academyId: string 
             /> */}
           </div>
           <div className="space-y-6">
-            <ModuleContainer initialData={academy} academyId={params.academyId} />
+            <ModuleContainer
+              initialData={academy}
+              academyId={params.academyId}
+            />
           </div>
         </div>
       </div>
