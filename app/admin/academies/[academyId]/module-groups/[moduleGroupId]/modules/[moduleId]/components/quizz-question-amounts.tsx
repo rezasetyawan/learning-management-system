@@ -18,29 +18,30 @@ import { Input } from "@/components/ui/input";
 import { axiosInstance } from "@/lib/axios";
 import { useForm } from "react-hook-form";
 
-interface NameFormProps {
+interface QuestionAmountsProps {
   initialData: {
-    name: string;
+    questionAmounts: number;
   };
-  academyId: string;
-  moduleGroupId: string;
   moduleId: string;
+  totalQuestions: number;
 }
 
 const formSchema = z.object({
-  name: z.string().min(1, {
-    message: "Name is required",
-  }),
+  questionAmounts: z.preprocess(
+    (a) => parseInt(z.string().parse(a), 10),
+    z.number().gte(3, "Minimun question amounts is 3")
+  ),
 });
 
-const NameForm = ({
+export default function QuestionAmounts({
   initialData,
-  academyId,
-  moduleGroupId,
   moduleId,
-}: NameFormProps) => {
+  totalQuestions,
+}: QuestionAmountsProps) {
   const [isEditing, setIsEditing] = useState(false);
-  const [name, setName] = useState(initialData.name);
+  const [questionAmounts, setQuestionAmounts] = useState(
+    initialData.questionAmounts
+  );
 
   const toggleEdit = () => setIsEditing((current) => !current);
 
@@ -53,15 +54,12 @@ const NameForm = ({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axiosInstance.patch(
-        `/academies/${academyId}/module-groups/${moduleGroupId}/modules/${moduleId}`,
-        {
-          name: values.name,
-          updatedAt: Date.now().toString(),
-        }
-      );
-      setName(values.name);
-      toast.success("Module name updated");
+      await axiosInstance.patch(`/academies/modules/${moduleId}/quizz`, {
+        questionAmounts: values.questionAmounts,
+        updatedAt: Date.now().toString(),
+      });
+      setQuestionAmounts(values.questionAmounts);
+      toast.success("Quizz questionAmounts updated");
       toggleEdit();
     } catch {
       toast.error("Something went wrong");
@@ -69,9 +67,9 @@ const NameForm = ({
   };
 
   return (
-    <div className="mt-6 border bg-white rounded-md p-4">
+    <div className="border bg-white rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        Module name
+        Quizz question amounts
         <Button onClick={toggleEdit} variant="ghost">
           {isEditing ? (
             <>Cancel</>
@@ -83,7 +81,14 @@ const NameForm = ({
           )}
         </Button>
       </div>
-      {!isEditing && <p className="text-sm mt-2">{name}</p>}
+      {!isEditing && (
+        <>
+          <p className="text-sm mt-2">{questionAmounts} questions</p>
+          <p className="text-xs text-muted-foreground mt-2">
+            {totalQuestions} questions in this module
+          </p>
+        </>
+      )}
       {isEditing && (
         <Form {...form}>
           <form
@@ -92,22 +97,18 @@ const NameForm = ({
           >
             <FormField
               control={form.control}
-              name="name"
+              name="questionAmounts"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input
-                      disabled={isSubmitting}
-                      placeholder="e.g. 'Advanced web development'"
-                      {...field}
-                    />
+                    <Input disabled={isSubmitting} type="number" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <div className="flex items-center gap-x-2">
-              <Button disabled={!isValid || isSubmitting} type="submit">
+              <Button disabled={isSubmitting || !isValid} type="submit">
                 Save
               </Button>
             </div>
@@ -116,6 +117,4 @@ const NameForm = ({
       )}
     </div>
   );
-};
-
-export default NameForm;
+}
