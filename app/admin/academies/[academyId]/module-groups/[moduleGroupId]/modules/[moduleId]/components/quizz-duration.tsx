@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Pencil } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import * as z from "zod";
@@ -18,29 +19,23 @@ import { Input } from "@/components/ui/input";
 import { axiosInstance } from "@/lib/axios";
 import { useForm } from "react-hook-form";
 
-interface NameFormProps {
+interface DurationFormProps {
   initialData: {
-    name: string;
+    duration: number;
   };
-  academyId: string;
-  moduleGroupId: string;
   moduleId: string;
 }
 
 const formSchema = z.object({
-  name: z.string().min(1, {
-    message: "Name is required",
-  }),
+  duration: z.preprocess(
+    (a) => parseInt(z.string().parse(a), 10),
+    z.number().gte(300, "Minimun duration is 300 seconds")
+  ),
 });
 
-const NameForm = ({
-  initialData,
-  academyId,
-  moduleGroupId,
-  moduleId,
-}: NameFormProps) => {
+const DurationForm = ({ initialData, moduleId }: DurationFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [name, setName] = useState(initialData.name);
+  const [duration, setDuration] = useState(initialData.duration);
 
   const toggleEdit = () => setIsEditing((current) => !current);
 
@@ -53,15 +48,12 @@ const NameForm = ({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axiosInstance.patch(
-        `/academies/${academyId}/module-groups/${moduleGroupId}/modules/${moduleId}`,
-        {
-          name: values.name,
-          updatedAt: Date.now().toString(),
-        }
-      );
-      setName(values.name);
-      toast.success("Module name updated");
+      await axiosInstance.patch(`/academies/modules/${moduleId}/quizz`, {
+        duration: values.duration,
+        updatedAt: Date.now().toString(),
+      });
+      setDuration(values.duration);
+      toast.success("Quizz duration updated");
       toggleEdit();
     } catch {
       toast.error("Something went wrong");
@@ -69,9 +61,9 @@ const NameForm = ({
   };
 
   return (
-    <div className="mt-6 border bg-white rounded-md p-4">
+    <div className="border bg-white rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        Module name
+        Quizz duration
         <Button onClick={toggleEdit} variant="ghost">
           {isEditing ? (
             <>Cancel</>
@@ -83,7 +75,7 @@ const NameForm = ({
           )}
         </Button>
       </div>
-      {!isEditing && <p className="text-sm mt-2">{name}</p>}
+      {!isEditing && <p className="text-sm mt-2">{duration}s</p>}
       {isEditing && (
         <Form {...form}>
           <form
@@ -92,22 +84,18 @@ const NameForm = ({
           >
             <FormField
               control={form.control}
-              name="name"
+              name="duration"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input
-                      disabled={isSubmitting}
-                      placeholder="e.g. 'Advanced web development'"
-                      {...field}
-                    />
+                    <Input disabled={isSubmitting} type="number" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <div className="flex items-center gap-x-2">
-              <Button disabled={!isValid || isSubmitting} type="submit">
+              <Button disabled={isSubmitting || !isValid} type="submit">
                 Save
               </Button>
             </div>
@@ -118,4 +106,4 @@ const NameForm = ({
   );
 };
 
-export default NameForm;
+export default DurationForm;
