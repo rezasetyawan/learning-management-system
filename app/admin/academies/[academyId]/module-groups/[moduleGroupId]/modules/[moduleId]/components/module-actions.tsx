@@ -24,14 +24,18 @@ export const Actions = ({
   moduleId,
 }: ActionsProps) => {
   const router = useRouter();
-
+  const [currentIsPublished, setCurrentIsPublished] = useState(isPublished);
   const [isLoading, setIsLoading] = useState(false);
+
+  const toggleIsPublished = () => {
+    setCurrentIsPublished((current) => !current);
+  };
 
   const onClick = async () => {
     try {
       setIsLoading(true);
 
-      if (isPublished) {
+      if (currentIsPublished) {
         await axiosInstance.patch(
           `/academies/${academyId}/module-groups/${moduleGroupId}/modules/${moduleId}`,
           {
@@ -39,6 +43,7 @@ export const Actions = ({
             updatedAt: Date.now().toString(),
           }
         );
+        toggleIsPublished();
         toast.success("Module unpublished");
       } else {
         await axiosInstance.patch(
@@ -48,6 +53,7 @@ export const Actions = ({
             updatedAt: Date.now().toString(),
           }
         );
+        toggleIsPublished();
         toast.success("Module published");
       }
     } catch {
@@ -85,7 +91,7 @@ export const Actions = ({
         variant="outline"
         size="sm"
       >
-        {isPublished ? "Unpublish" : "Publish"}
+        {currentIsPublished ? "Unpublish" : "Publish"}
       </Button>
       <ConfirmModal
         onConfirm={onDelete}
