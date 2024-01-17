@@ -125,3 +125,7 @@ textarea {
 .module-groups-container::-webkit-scrollbar-thumb:hover {
   background: #cbd5e1;
 }
+
+.quill {
+  min-height: 200px;
+}

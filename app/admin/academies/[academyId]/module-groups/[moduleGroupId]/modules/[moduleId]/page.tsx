@@ -60,6 +60,7 @@ export default async function ModuleDetail({
   );
 
   const moduleData = data.data.data as Module;
+  console.log(moduleData);
   return (
     <>
       <Toaster position="top-center" reverseOrder={false} />
@@ -88,6 +89,8 @@ export default async function ModuleDetail({
             <TypeSelection
               initialValue={moduleData}
               moduleId={params.moduleId}
+              academyId={params.academyId}
+              moduleGroupId={params.moduleGroupId}
             />
             {moduleData.type === "QUIZZ" && moduleData.quizz !== undefined ? (
               <DurationForm
@@ -104,16 +107,18 @@ export default async function ModuleDetail({
               />
             ) : null}
           </div>
-          {moduleData.type === "LESSON" && (
-            <ModuleContentForm
-              initialData={moduleData}
-              academyId={params.academyId}
-              moduleGroupId={params.moduleGroupId}
-              moduleId={params.moduleId}
-            />
-          )}
+
+          <ModuleContentForm
+            initialData={moduleData}
+            academyId={params.academyId}
+            moduleGroupId={params.moduleGroupId}
+            moduleId={params.moduleId}
+          />
+
           {moduleData.type === "QUIZZ" && moduleData.quizz !== undefined ? (
-            <ModuleQuizz initialData={moduleData} />
+            <>
+              <ModuleQuizz initialData={moduleData} />
+            </>
           ) : null}
         </div>
       </div>

@@ -159,7 +159,7 @@ export default function Editor({
       </div>
       <ReactQuill
         theme="snow"
-        value={value ? value : ""}
+        defaultValue={value}
         modules={modules}
         formats={formats}
         onChange={onChangeHandler}

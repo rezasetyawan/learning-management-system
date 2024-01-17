@@ -39,6 +39,7 @@ export const ModuleContentForm = ({
   moduleId,
 }: ModuleContentFormProps) => {
   let content = initialData.content;
+  console.log(initialData.content)
   const setContent = (value: string) => {
     content = value;
   };

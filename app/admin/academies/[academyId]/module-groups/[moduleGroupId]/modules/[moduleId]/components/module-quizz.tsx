@@ -211,6 +211,7 @@ export default function ModuleQuizz({ initialData }: ModuleQuizzProps) {
 
   return (
     <div className="mt-8">
+      <p className="font-medium mb-2">Quizz questions</p>
       {memoizedQuestions}
       <Button onClick={addNewQuestion} className="w-full mt-3">
         Add question
