@@ -32,7 +32,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Grip, Pencil, PlusCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useMemo, useReducer, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import * as z from "zod";
@@ -275,6 +275,16 @@ export default function ModuleForm({
     }
   }, [updateData]);
 
+  const totalModules = useMemo(() => {
+    return initialData.moduleGroups
+      ? initialData.moduleGroups.reduce(
+          (accumulator, currentValue) =>
+            accumulator + currentValue.modules.length,
+          0
+        )
+      : 0;
+  }, [initialData.moduleGroups]);
+
   return (
     <>
       <DragDropContext onDragEnd={onDragEnd}>
@@ -283,6 +293,9 @@ export default function ModuleForm({
             <div className="font-medium flex items-center justify-between mb-2">
               <p className="text-sm font-medium lg:text-base">
                 Academy modules
+              </p>
+              <p className="text-xs text-muted-foreground mt-4">
+                {totalModules} modules in total
               </p>
             </div>
             {state.rowOrder.map((rowId) => {

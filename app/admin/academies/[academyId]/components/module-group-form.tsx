@@ -344,6 +344,9 @@ export const ModuleGroupForm = ({
             />
           </div>
           <p className="text-xs text-muted-foreground mt-4">
+            {initialData.moduleGroups.length} module groups in total
+          </p>
+          <p className="text-xs text-muted-foreground mt-4">
             Drag and drop to reorder the module groups
           </p>
         </div>
