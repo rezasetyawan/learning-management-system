@@ -54,6 +54,7 @@ export const Actions = ({
       setIsLoading(true);
       await axiosInstance.patch(`/academies/${academyId}`, {
         isDeleted: true,
+        deletedAt: Date.now().toString()
       });
 
       toast.success("Academy deleted");

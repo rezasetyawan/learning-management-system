@@ -31,7 +31,11 @@ type Answer = {
 interface QuestionProps {
   question: Question;
   setQuestion: (questionId: string, data: Question) => void;
-  deleteQuestion: (questionId: string) => void;
+  deleteQuestion: (
+    moduleId: string,
+    quizzId: string,
+    questionId: string
+  ) => void;
   moduleId: string;
   quizzId: string;
 }
@@ -110,6 +114,7 @@ export default function Question({
         {
           id: id,
           isDeleted: true,
+          deletedAt: Date.now().toString(),
         }
       );
     } catch (error) {}
@@ -190,7 +195,9 @@ export default function Question({
         <div className="flex items-center gap-2">
           <Button
             variant="ghost"
-            onClick={() => deleteQuestion(currentQuestion.id)}
+            onClick={() =>
+              deleteQuestion(moduleId, quizzId, currentQuestion.id)
+            }
           >
             <Trash2 className="w-5 h-5 stroke-gray-700" />
           </Button>

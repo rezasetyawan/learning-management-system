@@ -71,6 +71,7 @@ export const Actions = ({
         `/academies/${academyId}/module-groups/${moduleGroupId}/modules/${moduleId}`,
         {
           isDeleted: true,
+          deletedAt: Date.now().toString()
         }
       );
 

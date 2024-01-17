@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import Question from "./question";
 import { Button } from "@/components/ui/button";
 import { nanoid } from "nanoid";
+import { axiosInstance } from "@/lib/axios";
 
 type Module = {
   id: string;
@@ -47,80 +48,6 @@ type Answer = {
 interface ModuleQuizzProps {
   initialData: Module;
 }
-
-// export default function ModuleQuizz({ initialData }: ModuleQuizzProps) {
-//   // give as keyword because if this component render the quizz is not undefined
-//   const [quizz, setQuizz] = useState(initialData.quizz as Quizz);
-
-//   //   const setQuestion = (questionId: string, data: Question) => {
-//   //     // const currentQuizz = { ...quizz };
-//   //     // const questionIndex = currentQuizz.questions.findIndex(
-//   //     //   (question) => question.id === questionId
-//   //     // );
-//   //     // currentQuizz.questions[questionIndex] = data;
-//   //     // console.log('to infinityyyy')
-//   //     // setQuizz((currentQuizz) => ({
-//   //     //   ...currentQuizz,
-//   //     //   questions: currentQuizz.questions.map((q) =>
-//   //     //     q.id === questionId ? data : q
-//   //     //   ),
-//   //     // }));
-//   //   };
-
-//   // TODO: NGULIK LEBIH JAUH TENTAN USECALLBACK HOOK
-//   const setQuestion = useCallback((questionId: string, data: Question) => {
-//     setQuizz((prevQuizz) => {
-//       const updatedQuestions = prevQuizz.questions.map((question) =>
-//         question.id === questionId ? data : question
-//       );
-
-//       return { ...prevQuizz, questions: updatedQuestions };
-//     });
-//   }, []);
-
-//   const addNewQuestion = () => {
-//     const timestamp = Date.now().toString()
-//     const questionId =  nanoid(20)
-
-//     const currentQuizz = {...quizz}
-//     const newQuestion: Question = {
-//         id: questionId,
-//         createdAt: timestamp,
-//         updatedAt: timestamp,
-//         quizzId: currentQuizz.id,
-//         text: '',
-//         answers: [
-//             {
-//                 id: nanoid(20),
-//                 createdAt: timestamp,
-//                 updatedAt: timestamp,
-//                 isCorrect: false,
-//                 text: "",
-//                 questionId: questionId,
-//             }
-//         ]
-//     }
-
-//     currentQuizz.questions.push(newQuestion)
-//     setQuizz(currentQuizz)
-//   }
-//   useEffect(()=> {
-//     console.log(quizz)
-//   },[quizz])
-//   return (
-//     <div className="mt-8">
-//       {quizz !== undefined &&
-//         quizz.questions.map((question) => (
-//           <Question
-//             question={question}
-//             key={question.id}
-//             setQuestion={setQuestion}
-//           />
-//         ))}
-//       <Button onClick={addNewQuestion} className="w-full mt-3">Add question</Button>
-//     </div>
-//   );
-// }
 
 export default function ModuleQuizz({ initialData }: ModuleQuizzProps) {
   const [quizz, setQuizz] = useState(initialData.quizz as Quizz);
@@ -174,13 +101,22 @@ export default function ModuleQuizz({ initialData }: ModuleQuizzProps) {
   };
 
   const deleteQuestion = useCallback(
-    (questionId: string) => {
-      const currentQuestions = [...questionStates];
-      const questionIndex = currentQuestions.findIndex(
-        (question) => question.id === questionId
-      );
-      currentQuestions.splice(questionIndex, 1);
-      setQuestionStates(currentQuestions);
+    async (moduleId: string, quizzId: string, questionId: string) => {
+      try {
+        await axiosInstance.patch(
+          `/academies/modules/${moduleId}/quizz/${quizzId}/questions/${questionId}`,
+          {
+            isDeleted: true,
+            deletedAt: Date.now().toString(),
+          }
+        );
+        const currentQuestions = [...questionStates];
+        const questionIndex = currentQuestions.findIndex(
+          (question) => question.id === questionId
+        );
+        currentQuestions.splice(questionIndex, 1);
+        setQuestionStates(currentQuestions);
+      } catch (error) {}
     },
     [questionStates]
   );
