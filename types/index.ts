@@ -5,8 +5,8 @@ export type Module = {
     type: "LESSON" | "QUIZZ" | "SUBMISSION";
     content: string;
     isPublished: boolean;
-    // isDeleted: boolean;
-    // deletedAt: string;
+    isDeleted?: boolean;
+    deletedAt?: string;
 };
 
 export type ModuleGroup = {
@@ -15,8 +15,8 @@ export type ModuleGroup = {
     order: number;
     modules: Module[];
     isPublished: boolean;
-    // isDeleted: boolean;
-    // deletedAt: string;
+    isDeleted?: boolean;
+    deletedAt?: string;
 };
 
 export type Academy = {
