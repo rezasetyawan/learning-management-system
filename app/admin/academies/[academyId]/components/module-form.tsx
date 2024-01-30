@@ -119,6 +119,7 @@ export default function ModuleForm({
   const [isInitialRender, setIsInitialRender] = useState(true);
   const oldModuleGroups = initialData.moduleGroups;
 
+  console.log("RERENDER");
   const [updateData, setUpdateData] = useState<
     {
       moduleId: string;
@@ -168,10 +169,21 @@ export default function ModuleForm({
   };
 
   const [state, setState] = useState(getInitialData(initialData.moduleGroups));
+  console.log(state.rows["3"].moduleIds);
 
-  const onDragEnd = (result: DropResult) => {
+  function moveElement<T>(array: T[], fromIndex: number, toIndex: number): T[] {
+    if (toIndex >= array.length) {
+      let k = toIndex - array.length;
+      while (k-- + 1) {
+        array.push(undefined!);
+      }
+    }
+    array.splice(toIndex, 0, array.splice(fromIndex, 1)[0]);
+    return array;
+  }
+
+  const onDragEnd = async (result: DropResult) => {
     const { destination, source, type } = result;
-
     if (type === "module") {
       // If user tries to drop in an unknown destination
       if (!destination) return;
@@ -188,9 +200,11 @@ export default function ModuleForm({
       const sourceCol = state.rows[source.droppableId];
       const destinationCol = state.rows[destination.droppableId];
 
+      // TODO: IMPROVE THIS SHIT CODE
       if (sourceCol.id === destinationCol.id) {
-        const newRow = reorderRowList(
-          sourceCol,
+        const currentRow = state.rows[source.droppableId];
+        const updatedModuleIds = moveElement(
+          currentRow.moduleIds,
           source.index,
           destination.index
         );
@@ -199,11 +213,24 @@ export default function ModuleForm({
           ...state,
           rows: {
             ...state.rows,
-            [newRow.id]: newRow,
+            [source.droppableId]: {
+              ...currentRow,
+              moduleIds: updatedModuleIds,
+            },
           },
         };
-        setState(newState);
 
+        const updatePromises = updatedModuleIds.map(async (d, index) => {
+          axiosInstance.patch(
+            `/academies/${academyId}/module-groups/${source.droppableId}/modules/${d}`,
+            {
+              academyModuleGroupId: source.droppableId,
+              order: index + 1,
+            }
+          );
+        });
+        await Promise.all(updatePromises);
+        router.refresh();
         return;
       }
 
@@ -235,10 +262,10 @@ export default function ModuleForm({
     }
   };
 
-  useEffect(() => {
-    // Update state whenever the initialData prop changes
-    setState(getInitialData(initialData.moduleGroups));
-  }, [initialData.moduleGroups]);
+  // useEffect(() => {
+  //   // Update state whenever the initialData prop changes
+  //   setState(getInitialData(initialData.moduleGroups));
+  // }, [initialData.moduleGroups]);
 
   useEffect(() => {
     if (isInitialRender) {
