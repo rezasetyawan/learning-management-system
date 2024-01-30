@@ -8,9 +8,15 @@ import { useState } from "react";
 export default function ModuleGroupAccordion({
   academyId,
   moduleGroup,
+  updateUserLastReadedModule,
 }: {
   academyId: string;
   moduleGroup: ModuleGroup;
+  updateUserLastReadedModule: (
+    academyId: string,
+    moduleGroupId: string,
+    moduleId: string
+  ) => Promise<void>;
 }) {
   const params = useParams<{
     academyId: string;
@@ -50,6 +56,13 @@ export default function ModuleGroupAccordion({
                 className={`block ${
                   params.moduleId === module.id && "font-semibold"
                 }`}
+                onClick={() =>
+                  updateUserLastReadedModule(
+                    academyId,
+                    moduleGroup.id,
+                    module.id
+                  )
+                }
               >
                 {module.name}
               </Link>

@@ -1,5 +1,6 @@
 import { Academy } from "@/types";
 import ModuleContent from "./components/module-content";
+import { cookies } from "next/headers";
 
 type Module = {
   id: string;
@@ -46,6 +47,8 @@ export default async function ModuleDetail({
 }: {
   params: { academyId: string; moduleGroupId: string; moduleId: string };
 }) {
+  const cookieStore = cookies();
+  const accessToken = cookieStore.get("accessToken")?.value;
   const academyData = await fetch(
     (process.env.NEXT_PUBLIC_API_BASE_URL as string) +
       "/academies/" +
@@ -55,7 +58,6 @@ export default async function ModuleDetail({
 
   const academyResponse = await academyData.json();
   const academy = academyResponse.data as Academy;
-  console.log(academy.moduleGroups[0])
 
   const moduleData = await fetch(
     (process.env.NEXT_PUBLIC_API_BASE_URL as string) +
@@ -73,6 +75,7 @@ export default async function ModuleDetail({
       academyName={academy.name}
       currentModule={currentModule}
       moduleGroups={academy.moduleGroups}
+      accessToken={accessToken as string}
     />
   );
 }

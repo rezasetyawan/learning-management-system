@@ -1,6 +1,7 @@
 "use client";
 import { Preview } from "@/components/preview";
 import { Button } from "@/components/ui/button";
+import { axiosInstance } from "@/lib/axios";
 import { Module, ModuleGroup } from "@/types";
 import { ArrowLeft, ChevronLeft, ChevronRight, List } from "lucide-react";
 import Link from "next/link";
@@ -13,6 +14,7 @@ interface ModuleContentProps {
   academyName: string;
   currentModule: Module;
   moduleGroups: ModuleGroup[];
+  accessToken: string;
 }
 export default function ModuleContent({
   academyId,
@@ -20,6 +22,7 @@ export default function ModuleContent({
   academyName,
   currentModule,
   moduleGroups,
+  accessToken,
 }: ModuleContentProps) {
   const [showSidebar, setShowSidebar] = useState(true);
   const toggleSidebar = () => {
@@ -36,8 +39,8 @@ export default function ModuleContent({
   const currentModuleIndex = currentModuleGroup.modules.findIndex(
     (module) => module.id === currentModule.id
   );
-  
-//   both prev and next module with check their module group for getting the module
+
+  //   both prev and next module with check their module group for getting the module
   const prevModule =
     currentModuleIndex >= 0
       ? currentModuleGroup.modules[currentModuleIndex - 1]
@@ -54,6 +57,25 @@ export default function ModuleContent({
         moduleGroups[currentModuleGroupIndex + 1].modules[0]
       ? moduleGroups[currentModuleGroupIndex + 1].modules[0]
       : undefined;
+
+  const updateUserLastReadedModule = async (
+    academyId: string,
+    moduleGroupId: string,
+    moduleId: string
+  ) => {
+    const payload = {
+      academyId,
+      moduleGroupId,
+      moduleId,
+    };
+
+    await axiosInstance.post(`/academies/${academyId}/progess`, payload, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    console.log(payload);
+  };
   return (
     <>
       {/* HEADER */}
@@ -111,6 +133,7 @@ export default function ModuleContent({
                     key={group.id}
                     academyId={academyId}
                     moduleGroup={group}
+                    updateUserLastReadedModule={updateUserLastReadedModule}
                   />
                 ))}
               </div>
@@ -124,6 +147,13 @@ export default function ModuleContent({
               <Link
                 href={`/academies/${academyId}/module-groups/${currentModuleGroup.id}/modules/${prevModule.id}`}
                 className="flex items-center w-4/5 lg:w-3/5"
+                onClick={() =>
+                  updateUserLastReadedModule(
+                    academyId,
+                    currentModuleGroup.id,
+                    prevModule.id
+                  )
+                }
               >
                 <ChevronLeft className="stroke-gray-900 w-5 h-5 md:w-10 md:h-10" />
                 <p className="truncate font-medium text-slate-500 max-md:hidden">
@@ -144,6 +174,13 @@ export default function ModuleContent({
               <Link
                 href={`/academies/${academyId}/module-groups/${currentModuleGroup.id}/modules/${nextModule.id}`}
                 className="flex items-center w-4/5 lg:w-3/5"
+                onClick={() =>
+                  updateUserLastReadedModule(
+                    academyId,
+                    currentModuleGroup.id,
+                    nextModule.id
+                  )
+                }
               >
                 <p className="truncate font-medium text-slate-500 max-md:hidden">
                   {nextModule.name} dofdfdf dfdfdf dfdf dfddfdfdf dfoidufodiuf
