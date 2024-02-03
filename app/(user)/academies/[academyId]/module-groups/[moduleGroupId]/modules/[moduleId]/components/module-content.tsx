@@ -3,10 +3,20 @@ import { Preview } from "@/components/preview";
 import { Button } from "@/components/ui/button";
 import { axiosInstance } from "@/lib/axios";
 import { ModuleGroup } from "@/types";
-import { ArrowLeft, ChevronLeft, ChevronRight, List } from "lucide-react";
+import {
+  ArrowLeft,
+  Check,
+  ChevronLeft,
+  ChevronRight,
+  List,
+  X,
+} from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import ModuleGroupAccordion from "./module-group-accordion";
+import QuizzHistories from "./quizz-histories";
+import { formatTimestamp } from "@/utils";
+
 type Module = {
   id: string;
   name: string;
@@ -48,6 +58,11 @@ type Answer = {
   isCorrect: boolean;
 };
 
+type QuizzHistory = {
+  id: string;
+  createdAt: string;
+  score: number;
+};
 interface ModuleContentProps {
   academyId: string;
   moduleGroupId: string;
@@ -55,7 +70,24 @@ interface ModuleContentProps {
   currentModule: Module;
   moduleGroups: ModuleGroup[];
   accessToken: string;
+  quizzHistories: QuizzHistory[];
 }
+
+type QuizzResult = {
+  id: string;
+  createdAt: string;
+  score: number;
+  answers: {
+    id: string;
+    questionId: string;
+    question: {
+      id: string;
+      text: string;
+      answers: { id: string; text: string }[];
+    };
+    answer: { id: string; text: string; isCorrect: boolean };
+  }[];
+};
 export default function ModuleContent({
   academyId,
   moduleGroupId,
@@ -63,6 +95,7 @@ export default function ModuleContent({
   currentModule,
   moduleGroups,
   accessToken,
+  quizzHistories,
 }: ModuleContentProps) {
   const [showSidebar, setShowSidebar] = useState(true);
   const toggleSidebar = () => {
@@ -114,9 +147,157 @@ export default function ModuleContent({
         Authorization: `Bearer ${accessToken}`,
       },
     });
-    console.log(payload);
   };
-  return (
+
+  const [displayQuizzResult, setDisplayQuizzResult] = useState(false);
+  const [selectedQuizzResultId, setSelectedQuizzResultId] = useState("");
+  const [currentQuizzResult, setCurrentQuizzResult] =
+    useState<QuizzResult | null>(null);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const fetchQuizzResult = async (quizzHistoryId: string) => {
+    const data = await axiosInstance.get(
+      `/user-quizz-histories/${quizzHistoryId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    setCurrentQuizzResult(data.data.data);
+    console.log(data.data.data.answers)
+  };
+
+  useEffect(() => {
+    fetchQuizzResult(selectedQuizzResultId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedQuizzResultId]);
+
+  const showQuizzResultSection = (id: string) => {
+    setSelectedQuizzResultId(id);
+    setDisplayQuizzResult(true);
+  };
+
+  const capitalLetters = [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J",
+    "K",
+    "L",
+    "M",
+    "N",
+    "O",
+    "P",
+    "Q",
+    "R",
+    "S",
+    "T",
+    "U",
+    "V",
+    "W",
+    "X",
+    "Y",
+    "Z",
+  ];
+
+  const correctAndUncorrectMarker = (isCorrect: boolean) => {
+    return isCorrect ? (
+      <div className="text-green-500 flex items-center gap-2 p-2 text-sm rounded-md bg-emerald-100 border border-emerald-400">
+        <Check className="w-6 h-6 stroke-green-600" />
+        <p>Benar</p>
+      </div>
+    ) : (
+      <div className="text-red-500 flex items-center gap-2 p-2 text-sm rounded-md bg-red-100 border border-red-400">
+        <X className="w-6 h-6 stroke-red-500" /> <p>Salah</p>
+      </div>
+    );
+  };
+
+  return displayQuizzResult && currentQuizzResult?.answers ? (
+    <div className="relative w-full h-screen">
+      <div className="w-full bg-white absolute inset-0 z-[1000] grid">
+        <div className="h-14 bg-white flex justify-between items-center border-b px-10 fixed top-0 left-0 right-0">
+          <h2>Hasil Kuis</h2>
+          <Button variant="ghost" onClick={() => setDisplayQuizzResult(false)}>
+            <X className="w-6 h-6 stroke-black" />
+          </Button>
+        </div>
+        <div className="bg-white mt-14">
+          <div className="h-screen w-[26rem] bg-white fixed top-14 left-0 border-r-2">
+            <p className="font-semibold p-8">
+              Tanggal Ujian{" "}
+              <span className="font-normal">
+                {formatTimestamp(currentQuizzResult.createdAt)}
+              </span>
+            </p>
+            <div className="flex justify-evenly p-8 border-y">
+              <div className="font-semibold text-emerald-600 text-center space-y-3">
+                <p>Total soal</p>
+                <p className="text-5xl">{currentQuizzResult.answers.length}</p>
+              </div>
+              <div className="font-semibold text-emerald-600 text-center space-y-3">
+                <p>Jawaban benar</p>
+                <p className="text-5xl">
+                  {
+                    currentQuizzResult.answers.filter(
+                      (item) => item.answer.isCorrect
+                    ).length
+                  }
+                </p>
+              </div>
+            </div>
+            <div>
+              <div className="font-semibold text-emerald-600 text-center space-y-3 p-8 border-b">
+                <p>Score</p>
+                <p className="text-5xl">{currentQuizzResult.score}</p>
+              </div>
+            </div>
+            <p className="p-8">selamat!</p>
+          </div>
+          <div className=" ml-[26rem] bg-white p-10 pl-20">
+            {currentQuizzResult.answers.map((item, index) => (
+              <div key={item.id} className="mb-5">
+                <div className="flex items-center gap-2">
+                  <p className="font-semibold">{index + 1}.</p>
+                  <p>{item.question.text}</p>
+                </div>
+                <div>
+                  {item.question.answers.map((answer, index) => (
+                    <div
+                      key={answer.id}
+                      className="flex items-center gap-4 mt-4"
+                    >
+                      <div
+                        className={`w-8 h-8 flex items-center justify-center border font-medium bg-white text-black rounded-[4px] ${
+                          item.answer.id === answer.id ? item.answer.isCorrect
+                          ? "!bg-emerald-100 border-emerald-400"
+                          : "!bg-red-100 border-red-400" : ""
+                        }`}
+                      >
+                        {capitalLetters[index]}
+                      </div>
+                      <p>{answer.text}</p>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-8">
+                  {correctAndUncorrectMarker(item.answer.isCorrect)}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  ) : (
     <>
       {/* HEADER */}
       <header className="bg-white border-b px-4 py-4 fixed top-0 left-0 right-0 w-full h-14 flex items-center justify-between z-[100] lg:px-10 lg:justify-start">
@@ -144,11 +325,19 @@ export default function ModuleContent({
             {currentModule.type === "QUIZZ" &&
             currentModule.quizz !== undefined ? (
               <div>
-                <Link
-                  href={`/academies/${academyId}/module-groups/${moduleGroupId}/modules/${currentModule.id}/quizz`}
-                >
-                  <Button>Mulai</Button>
-                </Link>
+                <div className="flex justify-end">
+                  <Link
+                    href={`/academies/${academyId}/module-groups/${moduleGroupId}/modules/${currentModule.id}/quizz`}
+                  >
+                    <Button>Mulai</Button>
+                  </Link>
+                </div>
+                <div className="mt-10 border">
+                  <QuizzHistories
+                    quizzHistories={quizzHistories}
+                    showQuizzResultSection={showQuizzResultSection}
+                  />
+                </div>
               </div>
             ) : null}
           </div>
@@ -207,16 +396,14 @@ export default function ModuleContent({
               >
                 <ChevronLeft className="stroke-gray-900 w-5 h-5 md:w-10 md:h-10" />
                 <p className="truncate font-medium text-slate-500 max-md:hidden">
-                  {prevModule.name} doidufd dfdfdf dfdfdfdf dfoidufdofiu
-                  dfoidufodiuf ddofiudf
+                  {prevModule.name}
                 </p>
               </Link>
             </div>
           )}
           <div className="col-start-3 col-end-11 flex justify-center items-center md:col-start-5 md:col-end-9">
             <h3 className="font-medium truncate">
-              {currentModule.name} dododo dfodfodf ddfddof dfdfdfdfdf
-              dfoidufodiuf ddofiudf
+              {currentModule.name}
             </h3>
           </div>
           {nextModule && (
@@ -233,8 +420,7 @@ export default function ModuleContent({
                 }
               >
                 <p className="truncate font-medium text-slate-500 max-md:hidden">
-                  {nextModule.name} dofdfdf dfdfdf dfdf dfddfdfdf dfoidufodiuf
-                  ddofiudf
+                  {nextModule.name}
                 </p>
                 <ChevronRight className="stroke-gray-900 w-5 h-5 md:w-10 md:h-10" />
               </Link>

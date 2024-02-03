@@ -1,5 +1,7 @@
+import { cookies } from "next/headers";
 import QuizzContent from "./components/quizz-content";
 import QuizzHeader from "./components/quizz-header";
+
 type Module = {
   id: string;
   name: string;
@@ -40,6 +42,7 @@ type Answer = {
   text: string;
   isCorrect: boolean;
 };
+
 export default async function ModuleQuizz({
   params,
 }: {
@@ -53,6 +56,9 @@ export default async function ModuleQuizz({
 
   const moduleResponse = await moduleData.json();
   const currentModule = moduleResponse.data as Module;
+
+  const cookieStore = cookies();
+  const accessToken = cookieStore.get("accessToken")?.value || "";
 
   // const quizzModuleData = await fetch(
   //   (process.env.NEXT_PUBLIC_API_BASE_URL as string) +
@@ -75,8 +81,10 @@ export default async function ModuleQuizz({
         <QuizzContent
           quizz={currentModule.quizz}
           moduleURL={`/academies/${params.academyId}/module-groups/${params.moduleGroupId}/modules/${params.moduleId}`}
+          accessToken={accessToken}
         />
       )}
+      
     </>
   );
 }

@@ -42,13 +42,19 @@ type Answer = {
   text: string;
   isCorrect: boolean;
 };
+
+type QuizzHistory = {
+  id: string;
+  createdAt: string;
+  score: number;
+};
 export default async function ModuleDetail({
   params,
 }: {
   params: { academyId: string; moduleGroupId: string; moduleId: string };
 }) {
   const cookieStore = cookies();
-  const accessToken = cookieStore.get("accessToken")?.value;
+  const accessToken = cookieStore.get("accessToken")?.value || "";
   const academyData = await fetch(
     (process.env.NEXT_PUBLIC_API_BASE_URL as string) +
       "/academies/" +
@@ -68,14 +74,33 @@ export default async function ModuleDetail({
   const moduleResponse = await moduleData.json();
   const currentModule = moduleResponse.data as Module;
 
+  const quizzHistoriesData = await fetch(
+    (process.env.NEXT_PUBLIC_API_BASE_URL as string) +
+      `/user-quizz-histories?moduleId=${params.moduleId}`,
+    {
+      cache: "no-store",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
+
+  const quizzHistoriesResponse = await quizzHistoriesData.json();
+  const quizzHistories = quizzHistoriesResponse.data as QuizzHistory[];
+
+  console.log(quizzHistories);
   return (
-    <ModuleContent
-      academyId={academy.id}
-      moduleGroupId={params.moduleGroupId}
-      academyName={academy.name}
-      currentModule={currentModule}
-      moduleGroups={academy.moduleGroups}
-      accessToken={accessToken as string}
-    />
+    <>
+      <ModuleContent
+        academyId={academy.id}
+        moduleGroupId={params.moduleGroupId}
+        academyName={academy.name}
+        currentModule={currentModule}
+        moduleGroups={academy.moduleGroups}
+        accessToken={accessToken as string}
+        quizzHistories={quizzHistories}
+      />
+     
+    </>
   );
 }

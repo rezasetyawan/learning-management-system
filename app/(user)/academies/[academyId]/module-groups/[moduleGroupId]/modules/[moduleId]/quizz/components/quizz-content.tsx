@@ -7,6 +7,7 @@ import { useState } from "react";
 import QuestionContainer from "./question-container";
 import QuizzQuestionsIndicator from "./quizz-questions-indicator";
 import Link from "next/link";
+import { axiosInstance } from "@/lib/axios";
 
 type Quizz = {
   id: string;
@@ -39,8 +40,14 @@ type Answer = {
 interface QuizzContentProps {
   quizz: Quizz;
   moduleURL: string;
+  accessToken: string;
 }
-export default function QuizzContent({ quizz, moduleURL }: QuizzContentProps) {
+export default function QuizzContent({
+  quizz,
+  moduleURL,
+  accessToken,
+}: QuizzContentProps) {
+  console.log(accessToken);
   const [showFinishConfimation, setShowFinishConfimation] = useState(false);
   const [showQuizzResult, setShowQuizzResult] = useState(false);
   const [quizzResult, setQuizzResult] = useState<{
@@ -92,7 +99,7 @@ export default function QuizzContent({ quizz, moduleURL }: QuizzContentProps) {
     return selectedAnswer ? selectedAnswer.answerId === answerId : false;
   };
 
-  const calculateQuizzScore = () => {
+  const calculateQuizzScore = async () => {
     const questions = quizz.questions;
     console.log(userAnswers);
     const reviewedUserAnswers = questions.map((question, index) => {
@@ -119,7 +126,21 @@ export default function QuizzContent({ quizz, moduleURL }: QuizzContentProps) {
     setQuizzResult(result);
     setShowFinishConfimation(false);
     setShowQuizzResult(true);
-    console.log(quizzResult);
+
+    const payload = {
+      createdAt: result.createdAt,
+      score: result.score,
+      moduleId: quizz.moduleId,
+      answers: reviewedUserAnswers.map((item) => ({
+        questionId: item.questionId,
+        answerId: item.answerId,
+      })),
+    };
+    await axiosInstance.post("/user-quizz-histories", payload, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
   };
 
   const capitalLetters = [
@@ -199,7 +220,9 @@ export default function QuizzContent({ quizz, moduleURL }: QuizzContentProps) {
       <div className="w-full bg-white absolute inset-0 z-[1000] grid">
         <div className="h-14 bg-white flex justify-between items-center border-b px-10 fixed top-0 left-0 right-0">
           <h2>Hasil Kuis</h2>
-          <Link href={moduleURL}><X className="w-6 h-6 stroke-black"/></Link>
+          <Link href={moduleURL}>
+            <X className="w-6 h-6 stroke-black" />
+          </Link>
         </div>
         <div className="bg-white mt-14">
           <div className="h-screen w-[26rem] bg-white fixed top-14 left-0 border-r-2">
@@ -246,10 +269,11 @@ export default function QuizzContent({ quizz, moduleURL }: QuizzContentProps) {
                     >
                       <div
                         className={`w-8 h-8 flex items-center justify-center border font-medium bg-white text-black rounded-[4px] ${
-                          getReviewedAnswerByAnswerId(answer.id) ?
-                          getReviewedAnswerByAnswerId(answer.id).isCorrect
-                            ? "!bg-emerald-100 border-emerald-400"
-                            : "!bg-red-100 border-red-400" : ""
+                          getReviewedAnswerByAnswerId(answer.id)
+                            ? getReviewedAnswerByAnswerId(answer.id).isCorrect
+                              ? "!bg-emerald-100 border-emerald-400"
+                              : "!bg-red-100 border-red-400"
+                            : ""
                         }`}
                       >
                         {capitalLetters[index]}
