@@ -2,11 +2,51 @@
 import { Preview } from "@/components/preview";
 import { Button } from "@/components/ui/button";
 import { axiosInstance } from "@/lib/axios";
-import { Module, ModuleGroup } from "@/types";
+import { ModuleGroup } from "@/types";
 import { ArrowLeft, ChevronLeft, ChevronRight, List } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import ModuleGroupAccordion from "./module-group-accordion";
+type Module = {
+  id: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+  order: number;
+  academyModuleGroupId: string;
+  type: "LESSON" | "QUIZZ" | "SUBMISSION";
+  content: string;
+  isPublished: boolean;
+  quizz?: Quizz;
+};
+
+type Quizz = {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  moduleId: string;
+  duration: number;
+  questions: Question[];
+  questionAmounts: number;
+};
+
+type Question = {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  quizzId: string;
+  text: string;
+  answers: Answer[];
+};
+
+type Answer = {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  questionId: string;
+  text: string;
+  isCorrect: boolean;
+};
 
 interface ModuleContentProps {
   academyId: string;
@@ -85,7 +125,7 @@ export default function ModuleContent({
           className="flex items-center gap-4"
         >
           <ArrowLeft />
-          <h2 className="font-semibold text-base">{academyName}</h2>
+          <h1 className="font-semibold text-base">{academyName}</h1>
         </Link>
         <Button variant="ghost" onClick={toggleSidebar} className="lg:hidden">
           <List className="w-4 h-4 stroke-black rotate-180" />
@@ -101,6 +141,16 @@ export default function ModuleContent({
             }`}
           >
             <Preview value={currentModule.content} />
+            {currentModule.type === "QUIZZ" &&
+            currentModule.quizz !== undefined ? (
+              <div>
+                <Link
+                  href={`/academies/${academyId}/module-groups/${moduleGroupId}/modules/${currentModule.id}/quizz`}
+                >
+                  <Button>Mulai</Button>
+                </Link>
+              </div>
+            ) : null}
           </div>
           {/* MODULE LIST */}
           <aside
