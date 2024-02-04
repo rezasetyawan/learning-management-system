@@ -21,8 +21,8 @@ export function formatTimestampToShortString(timestampStr:string) {
     const date = new Date(timestamp);
   
     // Set timezone offset for WIB (UTC+7)
-    const offset = 7 * 60 * 60 * 1000;
-    const timestampWIB = new Date(date.getTime() + offset);
+    // const offset = 7 * 60 * 60 * 1000;
+    const timestampWIB = new Date(date.getTime());
   
     // Get day, month, year
     const day = timestampWIB.getDate().toString().padStart(2, "0");
