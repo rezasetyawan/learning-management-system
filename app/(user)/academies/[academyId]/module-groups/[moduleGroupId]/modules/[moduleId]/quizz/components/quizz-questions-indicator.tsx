@@ -37,7 +37,7 @@ export default function QuizzQuestionsIndicator({
           key={questionId}
           className={`w-8 h-8 flex items-center justify-center border font-medium bg-white text-black rounded-[4px]  ${
             userAnswers[getQuestionsIndexInUserAnswers(questionId)].answerId &&
-            "bg-blue-600 !text-white"
+            "!bg-blue-600 !text-white"
           }`}
         >
           {index + 1}

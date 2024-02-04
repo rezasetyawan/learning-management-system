@@ -75,7 +75,7 @@ export default function QuestionContainer({
                 <label
                   className={`w-8 h-8 flex items-center justify-center border font-medium bg-white text-black rounded-[4px] ${
                     isAnswerChecked(question.id, answer.id) &&
-                    "bg-blue-600 !text-white"
+                    "!bg-blue-600 !text-white"
                   }`}
                 >
                   <input
