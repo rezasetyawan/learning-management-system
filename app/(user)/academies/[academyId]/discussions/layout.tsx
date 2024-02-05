@@ -14,7 +14,7 @@ export default function DiscussionLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="id">
+    <html lang="en">
       <body className={quicksand.className}>
         <main>{children}</main>
       </body>

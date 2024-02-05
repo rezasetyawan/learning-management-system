@@ -54,7 +54,7 @@ export default function DiscussionContent({
       <div className="w-full">
         <DiscussionFilter academyModules={academyModules} />
         <div className="mt-5">
-          {discussions.map((discussion) => (
+          {discussions.length ? discussions.map((discussion) => (
             <div
               className="p-3 rounded-md shadow-sm border mb-3"
               key={discussion.id}
@@ -120,7 +120,9 @@ export default function DiscussionContent({
                 </div>
               </div>
             </div>
-          ))}
+          )) : <div className="bg-blue-100 p-4 border-[1.5px] border-blue-700/60 text-sm">
+            Belum ada diskusi untuk ditampilkan
+            </div>}
         </div>
       </div>
     </div>

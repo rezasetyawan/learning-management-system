@@ -73,8 +73,12 @@ export default async function ModuleDiscussions({
 
   const endpoint =
     searchParams && searchParams?.moduleId
-      ? `/module-discussions?academyId=${params.academyId}&moduleId=${searchParams.moduleId}`
-      : `/module-discussions?academyId=${params.academyId}`;
+      ? `/module-discussions?academyId=${params.academyId}&moduleId=${
+          searchParams.moduleId
+        }&search=${searchParams?.search as string}`
+      : `/module-discussions?academyId=${params.academyId}&search=${
+          searchParams?.search as string
+        }`;
 
   const discussions = await fetch(
     (process.env.NEXT_PUBLIC_API_BASE_URL as string) + endpoint,
@@ -83,8 +87,6 @@ export default async function ModuleDiscussions({
 
   const discussionsResponse = await discussions.json();
   const currentDiscussions = discussionsResponse.data as Discussion[];
-
-  console.log(endpoint);
   return (
     <>
       <Toaster position="top-center" reverseOrder={false} />
