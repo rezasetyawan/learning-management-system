@@ -1,6 +1,7 @@
 import { BookCopy } from "lucide-react";
 import CreateDiscussionModal from "./create-discussion-modal";
 import DiscussionFilter from "./discussion-filter";
+import { getTimeGap } from "@/utils";
 interface Module {
   id: string;
   name: string;
@@ -40,7 +41,7 @@ export default function DiscussionContent({
   academyId,
   discussions,
 }: DiscussionContentProps) {
-  console.log(discussions);
+  const currentTimestamp = Date.now().toString();
   return (
     <div className="w-3/5 flex gap-4">
       <div className="">
@@ -67,9 +68,14 @@ export default function DiscussionContent({
                     ></path>
                   </svg>
                 </div>
-                <p className="text-sm font-semibold">
-                  {discussion.user.username}
-                </p>
+                <div className="flex items-center gap-2 text-sm">
+                  <p className="font-semibold">{discussion.user.username}</p>
+                  &#8226;
+                  <span>
+                    {getTimeGap(discussion.createdAt, currentTimestamp)} yang
+                    lalu
+                  </span>
+                </div>
               </div>
               <div className="mt-2">
                 <h2 className="text-base font-semibold">{discussion.title}</h2>
