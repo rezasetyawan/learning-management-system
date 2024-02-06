@@ -41,6 +41,7 @@ interface Discussion {
   body: string;
   user: {
     username: string;
+    fullname: string;
   };
   createdAt: string;
   isSolved: boolean;

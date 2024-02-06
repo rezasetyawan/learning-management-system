@@ -1,5 +1,9 @@
-import { getTimeGap } from "@/utils";
+import {
+  formatTimestampToShortDate,
+  formatTimestampToShortString,
+} from "@/utils";
 import { BookCopy } from "lucide-react";
+import DiscussionStatusBadge from "../components/dicussion-status-badge";
 
 interface Discussion {
   id: string;
@@ -23,26 +27,26 @@ interface DiscussionDetailProps {
 export default function DiscussionDetailContent({
   discussion,
 }: DiscussionDetailProps) {
-  const currentTimestamp = Date.now().toString();
   return (
     <>
       <div className="border-b-[1.5px] pb-4 border-[#3F3F46]/30">
-        <div className="flex items-center gap-5">
-          <div className="overflow-hidden rounded-[50%] w-5 h-5 flex justify-center lg:w-6 lg:h-6">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-              <path
-                fill="#d1d5db"
-                d="M224 256a128 128 0 1 0 0-256 128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3 0 498.7 13.3 512 29.7 512h388.6c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3h-91.4z"
-              ></path>
-            </svg>
+        <div className="flex justify-between items-center">
+          <div className="flex items-center gap-5">
+            <div className="overflow-hidden rounded-[50%] w-5 h-5 flex justify-center lg:w-6 lg:h-6">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                <path
+                  fill="#d1d5db"
+                  d="M224 256a128 128 0 1 0 0-256 128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3 0 498.7 13.3 512 29.7 512h388.6c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3h-91.4z"
+                ></path>
+              </svg>
+            </div>
+            <div className="flex items-center gap-2 text-sm">
+              <p className="font-semibold">{discussion.user.fullname}</p>
+              &#8226;
+              <span>{formatTimestampToShortDate(discussion.createdAt)}</span>
+            </div>
           </div>
-          <div className="flex items-center gap-2 text-sm">
-            <p className="font-semibold">{discussion.user.fullname}</p>
-            &#8226;
-            <span>
-              {getTimeGap(discussion.createdAt, currentTimestamp)} yang lalu
-            </span>
-          </div>
+          <DiscussionStatusBadge isSolved={discussion.isSolved}/>
         </div>
         <div className="mt-4">
           <h2 className="text-lg font-semibold">{discussion.title}</h2>
