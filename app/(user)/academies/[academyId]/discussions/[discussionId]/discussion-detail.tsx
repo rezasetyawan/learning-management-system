@@ -1,9 +1,7 @@
-import {
-  formatTimestampToShortDate,
-  formatTimestampToShortString,
-} from "@/utils";
+import { formatTimestampToShortDate } from "@/utils";
 import { BookCopy } from "lucide-react";
 import DiscussionStatusBadge from "../components/dicussion-status-badge";
+import DiscussionStatusAction from "./dicussion-status-action";
 
 interface Discussion {
   id: string;
@@ -19,16 +17,37 @@ interface Discussion {
   module: {
     name: string;
   };
+  userId: string;
+}
+
+interface User {
+  id: string;
+  fullname: string;
+  username: string;
+  email: string;
 }
 
 interface DiscussionDetailProps {
   discussion: Discussion;
+  accessToken: string;
+  user: User;
 }
 export default function DiscussionDetailContent({
   discussion,
+  accessToken,
+  user,
 }: DiscussionDetailProps) {
   return (
     <>
+      {user.id === discussion.userId && (
+        <div className="mb-5">
+          <DiscussionStatusAction
+            isSolved={discussion.isSolved}
+            accessToken={accessToken}
+            disccussionId={discussion.id}
+          />
+        </div>
+      )}
       <div className="border-b-[1.5px] pb-4 border-[#3F3F46]/30">
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-5">
@@ -46,7 +65,7 @@ export default function DiscussionDetailContent({
               <span>{formatTimestampToShortDate(discussion.createdAt)}</span>
             </div>
           </div>
-          <DiscussionStatusBadge isSolved={discussion.isSolved}/>
+          <DiscussionStatusBadge isSolved={discussion.isSolved} />
         </div>
         <div className="mt-4">
           <h2 className="text-lg font-semibold">{discussion.title}</h2>

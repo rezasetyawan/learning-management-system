@@ -18,6 +18,7 @@ interface Discussion {
   module: {
     name: string;
   };
+  userId: string;
 }
 
 interface DiscussionReply {
@@ -71,7 +72,11 @@ export default async function DiscussionDetail({
       <Toaster position="top-center" reverseOrder={false} />
       <DiscussionHeader />
       <div className="mx-64 my-10">
-        <DiscussionDetailContent discussion={currentDiscussion} />
+        <DiscussionDetailContent
+          discussion={currentDiscussion}
+          accessToken={accessToken}
+          user={currentUser}
+        />
         <ReplySection
           user={currentUser}
           accessToken={accessToken}
