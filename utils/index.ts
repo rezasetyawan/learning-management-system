@@ -48,6 +48,7 @@ export function formatTimestampToShortString(timestampStr: string) {
 }
 
 export function getTimeGap(timestamp1: string, timestamp2: string) {
+  const MILLIS_IN_MINUTES = 1000 * 60;
   const MILLIS_IN_HOUR = 1000 * 60 * 60;
   const MILLIS_IN_DAY = MILLIS_IN_HOUR * 24;
   const MILLIS_IN_WEEK = MILLIS_IN_DAY * 7;
@@ -56,7 +57,9 @@ export function getTimeGap(timestamp1: string, timestamp2: string) {
 
   const timeDiff = Math.abs(parseInt(timestamp2) - parseInt(timestamp1));
 
-  if (timeDiff < MILLIS_IN_DAY) {
+  if (timeDiff > MILLIS_IN_MINUTES && timeDiff < MILLIS_IN_HOUR) {
+    return `${Math.floor(timeDiff / MILLIS_IN_MINUTES)} menit`;
+  } else if (timeDiff < MILLIS_IN_DAY) {
     return `${Math.floor(timeDiff / MILLIS_IN_HOUR)} jam`;
   } else if (timeDiff > MILLIS_IN_DAY && timeDiff < MILLIS_IN_WEEK) {
     return `${Math.floor(timeDiff / MILLIS_IN_DAY)} hari`;
