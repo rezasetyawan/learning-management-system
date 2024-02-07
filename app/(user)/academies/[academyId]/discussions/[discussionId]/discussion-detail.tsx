@@ -2,6 +2,7 @@ import { formatTimestampToShortDate } from "@/utils";
 import { BookCopy } from "lucide-react";
 import DiscussionStatusBadge from "../components/dicussion-status-badge";
 import DiscussionStatusAction from "./dicussion-status-action";
+import DiscussionAction from "./dicussion-action";
 
 interface Discussion {
   id: string;
@@ -106,6 +107,14 @@ export default function DiscussionDetailContent({
             <BookCopy className="stroke-[#3F3F46] w-4 h-4" />
             <p className="text-base">{discussion.module.name}</p>
           </div>
+          {user.id === discussion.userId && (
+            <div className="flex justify-end">
+              <DiscussionAction
+                accessToken={accessToken}
+                discussionId={discussion.id}
+              />
+            </div>
+          )}
         </div>
       </div>
     </>
