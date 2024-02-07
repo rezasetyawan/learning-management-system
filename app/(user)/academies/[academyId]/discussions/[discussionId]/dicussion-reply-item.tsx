@@ -4,7 +4,8 @@ import { getTimeGap } from "@/utils";
 import { useState } from "react";
 import ReplyForm from "./reply-form";
 import { Button } from "@/components/ui/button";
-import { MessageSquareMore } from "lucide-react";
+import { Divide, MessageSquareMore, Pencil, ToggleLeft } from "lucide-react";
+import EditReplyForm from "./edit-reply-form";
 
 interface DiscussionReply {
   id: string;
@@ -29,21 +30,36 @@ interface DiscussionReplyItemProps {
   currentTimestamp: string;
   user: User;
   accessToken: string;
-  toggleTopSectionReplyForm: () => void
+  toggleTopSectionReplyForm: () => void;
 }
 export default function DiscussionReplyItem({
   reply,
   currentTimestamp,
   user,
   accessToken,
-  toggleTopSectionReplyForm
+  toggleTopSectionReplyForm,
 }: DiscussionReplyItemProps) {
   const [open, setOpen] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
   const toggleOpen = () => {
     setOpen((current) => !current);
-    toggleTopSectionReplyForm()
+    toggleTopSectionReplyForm();
   };
-  return (
+
+  const toggleEdit = () => {
+    setIsEdit((current) => !current);
+  };
+  return isEdit ? (
+    <div className="bg-white p-3 rounded-md shadow-sm border mb-3">
+      <EditReplyForm
+        user={user}
+        accessToken={accessToken}
+        additionalFunction={toggleEdit}
+        initialValue={reply.body}
+        replyId={reply.id}
+      />
+    </div>
+  ) : (
     <div className="bg-white p-3 rounded-md shadow-sm border mb-3">
       <div className="flex items-center gap-5">
         <div className="overflow-hidden rounded-[50%] w-5 h-5 flex justify-center lg:w-6 lg:h-6">
@@ -63,14 +79,22 @@ export default function DiscussionReplyItem({
       <div className="my-2">
         <p>{reply.body}</p>
       </div>
-      <div>
+      <div className="flex items-center gap-3">
         <button
           type="button"
           className="text-sm flex gap-1 items-center font-medium p-1"
-          onClick={toggleOpen}
+          onClick={toggleEdit}
         >
           <MessageSquareMore className="stroke-[#3F3F46] w-4 h-4" />
           Balas
+        </button>
+        <button
+          type="button"
+          className="text-sm flex gap-1 items-center font-medium p-1"
+          onClick={toggleEdit}
+        >
+          <Pencil className="stroke-[#3F3F46] w-4 h-4" />
+          Edit
         </button>
       </div>
       {open && (
