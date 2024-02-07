@@ -93,7 +93,7 @@ export default async function ModuleDiscussions({
       <Toaster position="top-center" reverseOrder={false} />
       <DiscussionHeader />
       <DiscussionHero />
-      <div className="flex justify-center mt-10">
+      <div className="flex justify-center mt-5 xl:mt-10">
         <DiscussionContent
           academyModules={currentAcademyModules}
           accessToken={accessToken}

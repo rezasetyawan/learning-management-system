@@ -66,7 +66,7 @@ export default function DiscussionReplyItem({
   ) : (
     <div className="bg-white p-3 rounded-md shadow-sm border mb-3">
       <div className="flex items-center gap-5">
-        <div className="overflow-hidden rounded-[50%] w-5 h-5 flex justify-center lg:w-6 lg:h-6">
+        <div className="overflow-hidden rounded-[50%] w-7 h-7 flex justify-center lg:w-6 lg:h-6">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
             <path
               fill="#d1d5db"
@@ -74,9 +74,9 @@ export default function DiscussionReplyItem({
             ></path>
           </svg>
         </div>
-        <div className="flex items-center gap-2 text-sm">
+        <div className="flex flex-col items-center text-sm md:flex-row md:gap-2">
           <p className="font-semibold">{reply.user.fullname}</p>
-          &#8226;
+          <span className="hidden md:block">&#8226;</span>
           <span>{getTimeGap(reply.createdAt, currentTimestamp)} yang lalu</span>
         </div>
       </div>

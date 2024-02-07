@@ -46,8 +46,8 @@ export default function DiscussionContent({
 }: DiscussionContentProps) {
   const currentTimestamp = Date.now().toString();
   return (
-    <div className="w-3/5 flex gap-4">
-      <div className="">
+    <div className="w-full mx-4 pb-20 gap-4 lg:flex lg:w-4/5 xl:w-3/5">
+      <div className="hidden lg:block">
         <CreateDiscussionModal
           academyModules={academyModules}
           accessToken={accessToken}
@@ -56,6 +56,13 @@ export default function DiscussionContent({
       </div>
       <div className="w-full">
         <DiscussionFilter academyModules={academyModules} />
+        <div className="lg:hidden">
+          <CreateDiscussionModal
+            academyModules={academyModules}
+            accessToken={accessToken}
+            academyId={academyId}
+          />
+        </div>
         <div className="mt-5">
           {discussions.length ? (
             discussions.map((discussion) => (
@@ -77,11 +84,11 @@ export default function DiscussionContent({
                         ></path>
                       </svg>
                     </div>
-                    <div className="flex items-center gap-2 text-sm">
+                    <div className="flex flex-col items-center text-sm md:flex-row md:gap-2">
                       <p className="font-semibold">
                         {discussion.user.fullname}
                       </p>
-                      &#8226;
+                      <span className="hidden md:block">&#8226;</span>
                       <span>
                         {getTimeGap(discussion.createdAt, currentTimestamp)}{" "}
                         yang lalu

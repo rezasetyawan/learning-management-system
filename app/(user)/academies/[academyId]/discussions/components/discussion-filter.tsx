@@ -74,12 +74,12 @@ export default function DiscussionFilter({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [moduleId]);
   return (
-    <div className="flex gap-3 w-full">
-      <form onSubmit={onSearchHandler} className="w-full">
+    <div className="md:flex gap-3 w-full mb-2 md:mb-0">
+      <form onSubmit={onSearchHandler} className="w-full mb-2 xl:mb-0">
         <Input
           type="text"
           placeholder="Cari judul diskusi"
-          className="w-full"
+          className="xl:w-full"
           value={searchKey}
           onChange={(event: React.FormEvent<HTMLInputElement>) =>
             setSearchKey(event.currentTarget.value)
@@ -92,7 +92,7 @@ export default function DiscussionFilter({
             variant="outline"
             role="combobox"
             aria-expanded={open}
-            className="w-[300px] justify-between"
+            className="w-full md:w-[300px] justify-between"
           >
             {moduleId
               ? modules.filter((item) => item.value === moduleId)[0]?.label

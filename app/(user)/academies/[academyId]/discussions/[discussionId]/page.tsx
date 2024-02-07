@@ -72,7 +72,7 @@ export default async function DiscussionDetail({
     <>
       <Toaster position="top-center" reverseOrder={false} />
       <DiscussionHeader />
-      <div className="mx-64 my-10">
+      <div className="mx-5 my-10 md:mx-10 lg:mx-40 xl:mx-64">
         <DiscussionDetailContent
           discussion={currentDiscussion}
           accessToken={accessToken}

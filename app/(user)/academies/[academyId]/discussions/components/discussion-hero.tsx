@@ -1,6 +1,6 @@
 export default function DiscussionHero() {
   return (
-    <section className="flex gap-3 px-60 py-14 bg-slate-100">
+    <section className="flex gap-3 px-10 py-10 lg:px-40 lg:py-14 xl:px-60 bg-slate-100">
       <div>
         <svg
           width="54"
@@ -15,8 +15,8 @@ export default function DiscussionHero() {
             fill="#3F3F46"
           ></path>
           <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
+            fillRule="evenodd"
+            clipRule="evenodd"
             d="M2.99967 13.6673C1.52691 13.6673 0.333008 14.8612 0.333008 16.334V51.0006C0.333008 51.9614 0.849788 52.8478 1.68581 53.3212C2.52183 53.7945 3.54785 53.7816 4.37166 53.2873L17.0716 45.6673H37.6663C39.1391 45.6673 40.333 44.4734 40.333 43.0006V16.334C40.333 14.8612 39.1391 13.6673 37.6663 13.6673H2.99967ZM5.66634 19.0006H34.9997V40.334H16.333C15.8497 40.334 15.3755 40.4653 14.961 40.714L5.66634 46.2908V19.0006Z"
             fill="#3F3F46"
           ></path>
@@ -30,7 +30,7 @@ export default function DiscussionHero() {
           ></path>
         </svg>
       </div>
-      <div>
+      <div className="text-sm lg:text-base">
         <p>Selamat datang di forum diskusi kelas</p>
         <p>Diskusikan segala pertanyaan Anda</p>
       </div>

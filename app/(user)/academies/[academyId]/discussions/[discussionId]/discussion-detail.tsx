@@ -52,7 +52,7 @@ export default function DiscussionDetailContent({
       <div className="border-b-[1.5px] pb-4 border-[#3F3F46]/30">
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-5">
-            <div className="overflow-hidden rounded-[50%] w-5 h-5 flex justify-center lg:w-6 lg:h-6">
+            <div className="overflow-hidden rounded-[50%] w-7 h-7 flex justify-center lg:w-6 lg:h-6">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                 <path
                   fill="#d1d5db"
@@ -72,7 +72,7 @@ export default function DiscussionDetailContent({
           <h2 className="text-lg font-semibold">{discussion.title}</h2>
           <p className="text-base mt-2">{discussion.body}</p>
         </div>
-        <div className="flex items-center gap-5 mt-3">
+        <div className="flex flex-col gap-2 mt-3 md:flex-row md:gap-5 md:items-center">
           <div className="flex items-center gap-3">
             <svg
               width="16"
@@ -108,7 +108,7 @@ export default function DiscussionDetailContent({
             <p className="text-base">{discussion.module.name}</p>
           </div>
           {user.id === discussion.userId && (
-            <div className="flex justify-end">
+            <div className="flex justify-start xl:justify-end">
               <DiscussionAction
                 accessToken={accessToken}
                 discussionId={discussion.id}
