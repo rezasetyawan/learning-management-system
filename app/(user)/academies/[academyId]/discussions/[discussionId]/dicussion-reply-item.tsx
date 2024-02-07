@@ -87,7 +87,7 @@ export default function DiscussionReplyItem({
         <button
           type="button"
           className="text-sm flex gap-1 items-center font-medium p-1"
-          onClick={toggleEdit}
+          onClick={toggleOpen}
         >
           <MessageSquareMore className="stroke-[#3F3F46] w-4 h-4" />
           Balas
