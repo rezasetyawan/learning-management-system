@@ -6,6 +6,8 @@ import ReplyForm from "./reply-form";
 import { Button } from "@/components/ui/button";
 import { Divide, MessageSquareMore, Pencil, ToggleLeft } from "lucide-react";
 import EditReplyForm from "./edit-reply-form";
+import ReplyAction from "./reply-action";
+import { useParams } from "next/navigation";
 
 interface DiscussionReply {
   id: string;
@@ -42,6 +44,7 @@ export default function DiscussionReplyItem({
 }: DiscussionReplyItemProps) {
   const [open, setOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
+  const params = useParams<{ academyId: string; discussionId: string }>();
   const toggleOpen = () => {
     setOpen((current) => !current);
     toggleTopSectionReplyForm();
@@ -98,6 +101,13 @@ export default function DiscussionReplyItem({
             <Pencil className="stroke-[#3F3F46] w-4 h-4" />
             Edit
           </button>
+        )}
+        {user.id === reply.userId && (
+          <ReplyAction
+            accessToken={accessToken}
+            discussionId={params.discussionId}
+            replyId={reply.id}
+          />
         )}
       </div>
       {open && (
