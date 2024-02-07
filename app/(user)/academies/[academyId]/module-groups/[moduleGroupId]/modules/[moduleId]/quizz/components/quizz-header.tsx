@@ -31,10 +31,10 @@ export default function QuizzHeader({
   const myfunction = () => {
     console.log(isInitialRender.current);
     if (!isInitialRender.current) {
-      console.log("taiiiiiiiiii");
+      console.log("helpp mee");
 
       if (secondsLeft <= 0) {
-        console.log('KONTOLLLL')
+        console.log('test')
       }
     }
   };
@@ -65,7 +65,7 @@ export default function QuizzHeader({
     return formattedTime;
   }
   return (
-    <header className="h-14 bg-white flex justify-between items-center border-b px-10 fixed top-0 left-0 right-0 z-[100]">
+    <header className="h-14 bg-white flex justify-between items-center border-b px-5 fixed top-0 left-0 right-0 z-[100] lg:px-10">
         <h1 className="font-semibold text-base">{moduleName}</h1>
       <div>{convertSecondsToMinutesSeconds(secondsLeft)}</div>
     </header>

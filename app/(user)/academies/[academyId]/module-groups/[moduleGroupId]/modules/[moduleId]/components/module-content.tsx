@@ -225,28 +225,30 @@ export default function ModuleContent({
   return displayQuizzResult && currentQuizzResult?.answers ? (
     <div className="relative w-full h-screen">
       <div className="w-full bg-white absolute inset-0 z-[1000] grid">
-        <div className="h-14 bg-white flex justify-between items-center border-b px-10 fixed top-0 left-0 right-0">
+        <div className="h-14 bg-white flex justify-between items-center border-b px-5 fixed top-0 left-0 right-0 lg:px-10">
           <h2>Hasil Kuis</h2>
           <Button variant="ghost" onClick={() => setDisplayQuizzResult(false)}>
             <X className="w-6 h-6 stroke-black" />
           </Button>
         </div>
         <div className="bg-white mt-14">
-          <div className="h-screen w-[26rem] bg-white fixed top-14 left-0 border-r-2">
-            <p className="font-semibold p-8">
+          <div className="bg-white lg:w-[26rem] lg:fixed lg:top-14 lg:left-0 lg:border-r-2 lg:h-screen">
+            <p className="font-semibold p-4 lg:p-8">
               Tanggal Ujian{" "}
               <span className="font-normal">
                 {formatTimestamp(currentQuizzResult.createdAt)}
               </span>
             </p>
-            <div className="flex justify-evenly p-8 border-y">
+            <div className="flex justify-evenly p-4 border-y lg:p-8">
               <div className="font-semibold text-emerald-600 text-center space-y-3">
                 <p>Total soal</p>
-                <p className="text-5xl">{currentQuizzResult.answers.length}</p>
+                <p className="text-3xl xl:text-5xl">
+                  {currentQuizzResult.answers.length}
+                </p>
               </div>
               <div className="font-semibold text-emerald-600 text-center space-y-3">
                 <p>Jawaban benar</p>
-                <p className="text-5xl">
+                <p className="text-3xl xl:text-5x;">
                   {
                     currentQuizzResult.answers.filter(
                       (item) => item.answer.isCorrect
@@ -258,15 +260,21 @@ export default function ModuleContent({
             <div>
               <div className="font-semibold text-emerald-600 text-center space-y-3 p-8 border-b">
                 <p>Score</p>
-                <p className="text-5xl">{currentQuizzResult.score}</p>
+                <p className="text-3xl xl:text-5xl">
+                  {currentQuizzResult.score}
+                </p>
               </div>
             </div>
-            <p className="p-8">selamat!</p>
+            <p className="p-4">
+              {currentQuizzResult.score >= 75
+                ? "Selamat anda telah menyelesaikan kuis ini dengan baik"
+                : "Semangat! Ulangi materi untuk memperdalam pemahamanmu"}
+            </p>
           </div>
-          <div className=" ml-[26rem] bg-white p-10 pl-20">
+          <div className="bg-white p-4 border-t lg:border-t-0 lg:ml-[26rem] lg:p-10 lg:pl-20">
             {currentQuizzResult.answers.map((item, index) => (
               <div key={item.id} className="mb-5">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 text-sm lg:text-base">
                   <p className="font-semibold">{index + 1}.</p>
                   <p>{item.question.text}</p>
                 </div>
@@ -274,7 +282,7 @@ export default function ModuleContent({
                   {item.question.answers.map((answer, index) => (
                     <div
                       key={answer.id}
-                      className="flex items-center gap-4 mt-4"
+                      className="flex items-center gap-4 mt-4 text-sm lg:text-base"
                     >
                       <div
                         className={`w-8 h-8 flex items-center justify-center border font-medium bg-white text-black rounded-[4px] ${
@@ -355,7 +363,7 @@ export default function ModuleContent({
       <div className="relative">
         <div className="flex justify-center mt-14 relative">
           <div
-            className={`text-3xl h-screen mb-96 transition-all mx-3  w-full lg:w-3/5 ${
+            className={`text-3xl h-screen mb-96 transition-all px-3 w-full lg:w-3/5 ${
               showSidebar ? "lg:mr-[300px]" : ""
             }`}
           >
@@ -369,7 +377,7 @@ export default function ModuleContent({
                   <Link
                     href={`/academies/${academyId}/module-groups/${moduleGroupId}/modules/${currentModule.id}/quizz`}
                   >
-                    <Button>Mulai</Button>
+                    <Button size="sm">Mulai</Button>
                   </Link>
                 </div>
                 <div className="mt-10 border">

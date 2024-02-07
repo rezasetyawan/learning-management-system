@@ -30,7 +30,7 @@ export default function QuizzQuestionsIndicator({
     }
   }, []);
   return (
-    <aside className={cn("grid grid-cols-5 gap-2", className)}>
+    <aside className={cn("grid grid-cols-8 gap-2 lg:grid-cols-5", className)}>
       {questionIds.map((questionId, index) => (
         <Link
           href={`#question-${questionId}`}

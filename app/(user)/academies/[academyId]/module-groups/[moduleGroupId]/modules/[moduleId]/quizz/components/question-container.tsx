@@ -62,16 +62,16 @@ export default function QuestionContainer({
   ];
 
   return (
-    <div>
+    <div className="p-3 mb-20">
       {questions.map((question, index) => (
         <div key={question.id} className="mb-5" id={`question-${question.id}`}>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 text-sm lg:text-base">
             <p className="font-semibold">{index + 1}.</p>
             <p>{question.text}</p>
           </div>
           <div>
             {question.answers.map((answer, index) => (
-              <div key={answer.id} className="flex items-center gap-4 mt-4">
+              <div key={answer.id} className="flex items-center gap-4 mt-4 text-sm lg:text-base">
                 <label
                   className={`w-8 h-8 flex items-center justify-center border font-medium bg-white text-black rounded-[4px] ${
                     isAnswerChecked(question.id, answer.id) &&
@@ -95,9 +95,8 @@ export default function QuestionContainer({
         </div>
       ))}
       <div className="flex justify-end mt-5">
-        <Button onClick={toggleFinishConfirmation}>Selesaikan</Button>
+        <Button onClick={toggleFinishConfirmation} size="sm">Selesaikan</Button>
       </div>
-      <div className="h-screen"></div>
     </div>
   );
 }

@@ -46,10 +46,10 @@ export default function QuizzHistories({
               </TableCell>
               <TableCell>{item.score}%</TableCell>
               <TableCell>
-                {item.score >= 80 ? "Lulus" : "Tidak Lulus"}
+                {item.score >= 75 ? "Lulus" : "Tidak Lulus"}
               </TableCell>
               <TableCell className="flex justify-center">
-                <Button onClick={() => showQuizzResultSection(item.id)}>
+                <Button size="sm" onClick={() => showQuizzResultSection(item.id)}>
                   Lihat Detail
                 </Button>
               </TableCell>

@@ -203,61 +203,75 @@ export default function QuizzContent({
   };
   return showFinishConfimation ? (
     <div className="flex justify-center items-center h-[calc(100vh-14rem)] w-full mt-14">
-      <div>
-        <h2 className="text-lg font-medium text-center">
+      <div className="p-5">
+        <h2 className="text-base font-medium text-center lg:text-sm">
           Apakah Anda yakin ingin mengakhiri kuis ini?
         </h2>
         <div className="flex items-center justify-center gap-5 mt-5">
-          <Button variant="outline" onClick={toggleFinishConfirmation}>
+          <Button
+            variant="outline"
+            onClick={toggleFinishConfirmation}
+            size="sm"
+          >
             Review Kuis
           </Button>
-          <Button onClick={calculateQuizzScore}>Akhiri Kuis</Button>
+          <Button onClick={calculateQuizzScore} size="sm">
+            Akhiri Kuis
+          </Button>
         </div>
       </div>
     </div>
   ) : showQuizzResult ? (
     <div className="relative w-full h-screen">
       <div className="w-full bg-white absolute inset-0 z-[1000] grid">
-        <div className="h-14 bg-white flex justify-between items-center border-b px-10 fixed top-0 left-0 right-0">
+        <div className="h-14 bg-white flex justify-between items-center border-b px-5 fixed top-0 left-0 right-0 lg:px-10">
           <h2>Hasil Kuis</h2>
           <Link href={moduleURL}>
             <X className="w-6 h-6 stroke-black" />
           </Link>
         </div>
         <div className="bg-white mt-14">
-          <div className="h-screen w-[26rem] bg-white fixed top-14 left-0 border-r-2">
+          <div className="bg-white lg:w-[26rem] lg:fixed lg:top-14 lg:left-0 lg:border-r-2 lg:h-screen">
             <p className="font-semibold p-8">
               Tanggal Ujian{" "}
               <span className="font-normal">
                 {formatTimestamp(quizzResult.createdAt)}
               </span>
             </p>
-            <div className="flex justify-evenly p-8 border-y">
+            <div className="flex justify-evenly p-4 border-y">
               <div className="font-semibold text-emerald-600 text-center space-y-3">
                 <p>Total soal</p>
-                <p className="text-5xl">{quizzResult.questionAmounts}</p>
+                <p className="text-3xl xl:text-5xl">
+                  {quizzResult.questionAmounts}
+                </p>
               </div>
               <div className="font-semibold text-emerald-600 text-center space-y-3">
                 <p>Jawaban benar</p>
-                <p className="text-5xl">{quizzResult.correctAnswerAmounts}</p>
+                <p className="text-3xl xl:text-5xl">
+                  {quizzResult.correctAnswerAmounts}
+                </p>
               </div>
             </div>
             <div>
               <div className="font-semibold text-emerald-600 text-center space-y-3 p-8 border-b">
                 <p>Score</p>
-                <p className="text-5xl">{quizzResult.score}</p>
+                <p className="text-3xl xl:text-5xl">{quizzResult.score}</p>
               </div>
             </div>
-            <p className="p-8">selamat!</p>
+            <p className="p-4">
+              {quizzResult.score >= 75
+                ? "Selamat anda telah menyelesaikan kuis ini dengan baik"
+                : "Semangat! Ulangi materi untuk memperdalam pemahamanmu"}
+            </p>
           </div>
-          <div className=" ml-[26rem] bg-white p-10 pl-20">
+          <div className="bg-white p-4 border-t lg:border-t-0 lg:ml-[26rem] lg:p-10 lg:pl-20">
             {quizz.questions.map((question, index) => (
               <div
                 key={question.id}
                 className="mb-5"
                 id={`question-${question.id}`}
               >
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 text-sm lg:text-base">
                   <p className="font-semibold">{index + 1}.</p>
                   <p>{question.text}</p>
                 </div>
@@ -265,7 +279,7 @@ export default function QuizzContent({
                   {question.answers.map((answer, index) => (
                     <div
                       key={answer.id}
-                      className="flex items-center gap-4 mt-4"
+                      className="flex items-center gap-4 mt-4 text-sm lg:text-base"
                     >
                       <div
                         className={`w-8 h-8 flex items-center justify-center border font-medium bg-white text-black rounded-[4px] ${
@@ -298,10 +312,10 @@ export default function QuizzContent({
       <QuizzQuestionsIndicator
         questionIds={questionIds}
         userAnswers={userAnswers}
-        className="p-10 fixed top-24 bg-white w-64"
+        className="bg-white lg:p-10 lg:fixed lg:top-24 lg:w-64 max-lg:p-4 max-lg:mx-2 max-lg:border-b"
       />
 
-      <div className="border-l-2 max-h-[100vh] p-10 overflow-y-scroll ml-64 pt-24">
+      <div className="max-lg:mt-5 lg:border-l-2 lg:max-h-[100vh] lg:p-10 lg:overflow-y-scroll lg:ml-64 lg:pt-24">
         <QuestionContainer
           questions={quizz.questions}
           isAnswerChecked={isAnswerChecked}
