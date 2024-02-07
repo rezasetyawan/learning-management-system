@@ -30,6 +30,7 @@ interface DiscussionReply {
     fullname: string;
     username: string;
   };
+  userId: string;
 }
 
 interface User {

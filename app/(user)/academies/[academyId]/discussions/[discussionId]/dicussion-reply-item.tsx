@@ -16,6 +16,7 @@ interface DiscussionReply {
     fullname: string;
     username: string;
   };
+  userId: string;
 }
 
 interface User {
@@ -88,14 +89,16 @@ export default function DiscussionReplyItem({
           <MessageSquareMore className="stroke-[#3F3F46] w-4 h-4" />
           Balas
         </button>
-        <button
-          type="button"
-          className="text-sm flex gap-1 items-center font-medium p-1"
-          onClick={toggleEdit}
-        >
-          <Pencil className="stroke-[#3F3F46] w-4 h-4" />
-          Edit
-        </button>
+        {user.id === reply.userId && (
+          <button
+            type="button"
+            className="text-sm flex gap-1 items-center font-medium p-1"
+            onClick={toggleEdit}
+          >
+            <Pencil className="stroke-[#3F3F46] w-4 h-4" />
+            Edit
+          </button>
+        )}
       </div>
       {open && (
         <div className="my-3 border-t-2 pt-3">
