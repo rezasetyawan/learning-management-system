@@ -98,7 +98,7 @@ export default function ModuleContent({
   accessToken,
   quizzHistories,
 }: ModuleContentProps) {
-  const [showSidebar, setShowSidebar] = useState(true);
+  const [showSidebar, setShowSidebar] = useState(false);
   const toggleSidebar = () => {
     setShowSidebar((current) => !current);
   };
@@ -308,7 +308,7 @@ export default function ModuleContent({
           href={`/academies/${academyId}`}
           className="flex items-center gap-4"
         >
-          <ArrowLeft />
+          <ArrowLeft className="w-5 h-5" />
           <h1 className="font-semibold text-base">{academyName}</h1>
         </Link>
         <div className="flex items-center gap-3 lg:hidden">
@@ -359,7 +359,9 @@ export default function ModuleContent({
               showSidebar ? "lg:mr-[300px]" : ""
             }`}
           >
-            <Preview value={currentModule.content} />
+            <div className="mt-5">
+              <Preview value={currentModule.content} />
+            </div>
             {currentModule.type === "QUIZZ" &&
             currentModule.quizz !== undefined ? (
               <div>
@@ -386,11 +388,11 @@ export default function ModuleContent({
           {/* MODULE LIST */}
           <aside
             id="module-list"
-            className={`w-full p-4 border-l-2 h-[calc(100vh-7.5rem)] transition-transform duration-500 bg-white md:w-[300px] fixed top-14 right-0 ${
+            className={`w-full border-l-2 h-[calc(100vh-7.5rem)] transition-transform duration-500 bg-white md:w-[300px] fixed top-14 right-0 ${
               !showSidebar && "translate-x-[1000px]"
             }`}
           >
-            <div className="flex gap-5 items-center justify-between">
+            <div className="flex gap-5 items-center justify-between p-4">
               <Button
                 onClick={toggleSidebar}
                 className="w-9 h-9 p-0 rounded-full flex items-center justify-center max-lg:hidden"
@@ -398,16 +400,16 @@ export default function ModuleContent({
                 <ChevronRight className="w-5 h-5 stroke-white xl:w-7 xl:h-7" />
               </Button>
               <Button
-                className={`translate-x-[300px] transition-transform delay-500 duration-500 opacity-0 w-16 h-10 p-3 hidden items-center justify-start rounded-l-full lg:flex ${
+                className={`translate-x-[300px] transition-transform delay-500 duration-500 opacity-0 w-12 h-8 p-3 hidden items-center justify-start rounded-l-full lg:flex ${
                   !showSidebar && "-translate-x-[830px] opacity-100"
                 }`}
                 onClick={toggleSidebar}
               >
-                <List className="w-4 h-4 stroke-white xl:w-6 xl:h-6" />
+                <List className="w-3 h-3 stroke-white xl:w-6 xl:h-6" />
               </Button>
-              <p className="text-lg font-semibold">Daftar Modul</p>
+              <p className="text-base font-semibold lg:text-lg">Daftar Modul</p>
             </div>
-            <div>
+            <div className="border-t-2 p-4">
               <div className={`overflow-hidden`}>
                 {moduleGroups.map((group) => (
                   <ModuleGroupAccordion
@@ -436,15 +438,17 @@ export default function ModuleContent({
                   )
                 }
               >
-                <ChevronLeft className="stroke-gray-900 w-5 h-5 md:w-10 md:h-10" />
-                <p className="truncate font-medium text-slate-500 max-md:hidden">
+                <ChevronLeft className="stroke-gray-900 w-5 h-5 md:w-6 md:h-6" />
+                <p className="truncate font-medium text-slate-500 text-sm max-md:hidden">
                   {prevModule.name}
                 </p>
               </Link>
             </div>
           )}
           <div className="col-start-3 col-end-11 flex justify-center items-center md:col-start-5 md:col-end-9">
-            <h3 className="font-medium truncate">{currentModule.name}</h3>
+            <h3 className="font-medium truncate text-sm">
+              {currentModule.name}
+            </h3>
           </div>
           {nextModule && (
             <div className="col-start-11 col-end-13 flex items-center justify-end w-full md:col-start-9">
@@ -459,10 +463,10 @@ export default function ModuleContent({
                   )
                 }
               >
-                <p className="truncate font-medium text-slate-500 max-md:hidden">
+                <p className="truncate font-medium text-slate-500 text-sm max-md:hidden">
                   {nextModule.name}
                 </p>
-                <ChevronRight className="stroke-gray-900 w-5 h-5 md:w-10 md:h-10" />
+                <ChevronRight className="stroke-gray-900 w-5 h-5 md:w-6 md:h-6" />
               </Link>
             </div>
           )}

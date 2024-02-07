@@ -37,7 +37,7 @@ export default function ModuleGroupAccordion({
           }`}
         />
         <h3
-          className="font-semibold text-base cursor-pointer p-2 my-1.5"
+          className="font-semibold cursor-pointer p-2 mb-1 text-sm"
           id="module-name"
         >
           {moduleGroup.name}
@@ -53,7 +53,7 @@ export default function ModuleGroupAccordion({
               <Link
                 key={module.id}
                 href={`/academies/${academyId}/module-groups/${moduleGroup.id}/modules/${module.id}`}
-                className={`block ${
+                className={`block text-sm ${
                   params.moduleId === module.id && "font-semibold"
                 }`}
                 onClick={() =>
