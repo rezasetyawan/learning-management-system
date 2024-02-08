@@ -22,8 +22,8 @@ import { Input } from "@/components/ui/input";
 import { axiosInstance } from "@/lib/axios";
 
 const formSchema = z.object({
-  name: z.string().min(1, {
-    message: "Title is required",
+  name: z.string().min(5, {
+    message: "Name is required",
   }),
 });
 
@@ -59,10 +59,9 @@ const CreatePage = () => {
   return (
     <div className="max-w-5xl mx-auto flex md:items-center md:justify-center h-full p-6">
       <div>
-        <h1 className="text-2xl">Name your course</h1>
+        <h1 className="text-2xl font-semibold">Nama kelas</h1>
         <p className="text-sm text-slate-600">
-          What would you like to name your course? Don&apos;t worry, you can
-          change this later.
+          Apa nama kelas yang ingin Anda buat? Anda juga bisa menggantinya nanti
         </p>
         <Form {...form}>
           <form
@@ -74,16 +73,16 @@ const CreatePage = () => {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Course title</FormLabel>
+                  <FormLabel>Nama kelas</FormLabel>
                   <FormControl>
                     <Input
                       disabled={isSubmitting}
-                      placeholder="e.g. 'Advanced web development'"
+                      placeholder=""
                       {...field}
                     />
                   </FormControl>
                   <FormDescription>
-                    What will you teach in this course?
+                    Apa yang akan Anda bahas di kelas ini?
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -96,7 +95,7 @@ const CreatePage = () => {
                 </Button>
               </Link>
               <Button type="submit" disabled={!isValid || isSubmitting}>
-                Continue
+                Submit
               </Button>
             </div>
           </form>
