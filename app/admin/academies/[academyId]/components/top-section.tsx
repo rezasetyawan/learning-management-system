@@ -8,10 +8,12 @@ import Link from "next/link";
 interface TopSectionLabel {
   academyId: string;
   isPublished: boolean;
+  accessToken: string;
 }
 export default function TopSection({
   academyId,
   isPublished,
+  accessToken,
 }: TopSectionLabel) {
   const [currentIsPublished, setCurrentIsPublished] = useState(isPublished);
 
@@ -32,6 +34,7 @@ export default function TopSection({
           academyId={academyId}
           isPublished={currentIsPublished}
           toggleIsPublished={toggleIsPublished}
+          accessToken={accessToken}
         />
       </div>
     </>

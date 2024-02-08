@@ -9,6 +9,7 @@ import { LayoutDashboard } from "lucide-react";
 import { Actions } from "./components/actions";
 import { Academy } from "@/types";
 import TopSection from "./components/top-section";
+import { cookies } from "next/headers";
 export default async function Academy({
   params,
 }: {
@@ -23,6 +24,8 @@ export default async function Academy({
 
   const academyResponse = await data.json();
   const academy = academyResponse.data as Academy;
+  const cookieStore = cookies();
+  const accessToken = cookieStore.get("accessToken")?.value || "";
 
   return (
     <>
@@ -31,6 +34,7 @@ export default async function Academy({
         <TopSection
           academyId={params.academyId}
           isPublished={academy.isPublished}
+          accessToken={accessToken}
         />
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-10 p-4 lg:p-6 lg:mt-16">
           <div>
@@ -42,26 +46,27 @@ export default async function Academy({
                 Customize your academy
               </h2>
             </div>
-            <NameForm initialData={academy} academyId={params.academyId} />
+            <NameForm
+              initialData={academy}
+              academyId={params.academyId}
+              accessToken={accessToken}
+            />
             <DescriptionForm
               initialData={academy}
               academyId={params.academyId}
+              accessToken={accessToken}
             />
-            {/* <ImageForm initialData={academy} academyId={params.id} /> */}
-            {/*
-            <CategoryForm
-              initialData={course}
-              courseId={course.id}
-              options={categories.map((category) => ({
-                label: category.name,
-                value: category.id,
-              }))}
-            /> */}
+            <ImageForm
+              initialData={academy}
+              academyId={params.academyId}
+              accessToken={accessToken}
+            />
           </div>
           <div className="space-y-6">
             <ModuleContainer
               initialData={academy}
               academyId={params.academyId}
+              accessToken={accessToken}
             />
           </div>
         </div>

@@ -34,8 +34,9 @@ interface ModuleGroupFormProps {
     newModuleGroup: ModuleGroup,
     moduleGroupId: string
   ) => void;
-  deleteModuleGroup: (moduleGroupId:string) => void;
+  deleteModuleGroup: (moduleGroupId: string) => void;
   academyId: string;
+  accessToken: string;
 }
 
 const formSchema = z.object({
@@ -54,7 +55,8 @@ export const ModuleGroupForm = ({
   sortModuleGroups,
   addModuleGroups,
   updateModuleGroup,
-  deleteModuleGroup
+  deleteModuleGroup,
+  accessToken,
 }: ModuleGroupFormProps) => {
   const [isCreating, setIsCreating] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
@@ -114,7 +116,12 @@ export const ModuleGroupForm = ({
 
       const response = await axiosInstance.post(
         `/academies/${academyId}/module-groups`,
-        payload
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
       );
 
       addModuleGroups({
@@ -144,7 +151,12 @@ export const ModuleGroupForm = ({
 
     await axiosInstance.patch(
       `/academies/${academyId}/module-groups/${currentEditModuleGroup.id}`,
-      payload
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
     );
 
     updateModuleGroup(
@@ -167,6 +179,11 @@ export const ModuleGroupForm = ({
           `/academies/${academyId}/module-groups/${data.id}`,
           {
             order: data.order,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
           }
         );
       });
@@ -187,12 +204,17 @@ export const ModuleGroupForm = ({
         `/academies/${academyId}/module-groups/${moduleGroupId}`,
         {
           isDeleted: true,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
         }
       );
-      
+
       toast.success("Module group deleted");
-      deleteModuleGroup(moduleGroupId)
-      toggleEdit()
+      deleteModuleGroup(moduleGroupId);
+      toggleEdit();
     } catch {
       toast.error("Something went wrong");
     } finally {
@@ -208,7 +230,9 @@ export const ModuleGroupForm = ({
         </div>
       )}
       <div className="font-medium flex items-center justify-between">
-        <p className="text-sm font-medium lg:text-base">Academy module groups</p>
+        <p className="text-sm font-medium lg:text-base">
+          Academy module groups
+        </p>
         {!isEditing && (
           <Button onClick={toggleCreating} variant="ghost" className="mr-2">
             {isCreating ? (

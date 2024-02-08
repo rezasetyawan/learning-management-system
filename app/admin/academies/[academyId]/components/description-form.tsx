@@ -25,6 +25,7 @@ interface DescriptionFormProps {
     description: string;
   };
   academyId: string;
+  accessToken: string;
 }
 
 const formSchema = z.object({
@@ -36,6 +37,7 @@ const formSchema = z.object({
 export const DescriptionForm = ({
   initialData,
   academyId,
+  accessToken,
 }: DescriptionFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [description, setDescription] = useState(initialData.description);
@@ -56,10 +58,18 @@ export const DescriptionForm = ({
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       const updatedAt = Date.now().toString();
-      await axiosInstance.patch(`/academies/${academyId}`, {
-        ...values,
-        updatedAt,
-      });
+      await axiosInstance.patch(
+        `/academies/${academyId}`,
+        {
+          ...values,
+          updatedAt,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
       setDescription(values.description);
       toast.success("Description updated");
       toggleEdit();

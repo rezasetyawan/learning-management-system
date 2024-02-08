@@ -24,6 +24,7 @@ interface TitleFormProps {
     name: string;
   };
   academyId: string;
+  accessToken: string;
 }
 
 const formSchema = z.object({
@@ -32,7 +33,7 @@ const formSchema = z.object({
   }),
 });
 
-const NameForm = ({ initialData, academyId }: TitleFormProps) => {
+const NameForm = ({ initialData, academyId, accessToken }: TitleFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState(initialData.name);
 
@@ -50,10 +51,18 @@ const NameForm = ({ initialData, academyId }: TitleFormProps) => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       const updatedAt = Date.now().toString();
-      await axiosInstance.patch(`/academies/${academyId}`, {
-        ...values,
-        updatedAt,
-      });
+      await axiosInstance.patch(
+        `/academies/${academyId}`,
+        {
+          ...values,
+          updatedAt,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
       setName(values.name);
       toast.success("Name updated");
       toggleEdit();

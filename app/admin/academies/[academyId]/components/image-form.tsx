@@ -15,6 +15,7 @@ import { Academy } from "@/types";
 interface ImageFormProps {
   initialData: Academy;
   academyId: string;
+  accessToken: string;
 }
 
 const formSchema = z.object({
@@ -23,7 +24,11 @@ const formSchema = z.object({
   }),
 });
 
-export const ImageForm = ({ initialData, academyId }: ImageFormProps) => {
+export const ImageForm = ({
+  initialData,
+  academyId,
+  accessToken,
+}: ImageFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [image, setImage] = useState<File | null>(null);
 
@@ -50,8 +55,9 @@ export const ImageForm = ({ initialData, academyId }: ImageFormProps) => {
         await axiosInstance.patch(`/academies/${academyId}`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${accessToken}`,
           },
-          timeout: 10000,
+          timeout: 20000,
         });
         setImage(null);
         toast.success("Cover image updated");

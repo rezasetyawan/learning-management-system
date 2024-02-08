@@ -6,7 +6,8 @@ import Link from "next/link";
 
 const fetchAcadmies = async () => {
   const data = await fetch(
-    (process.env.NEXT_PUBLIC_API_BASE_URL as string) + "/academies"
+    (process.env.NEXT_PUBLIC_API_BASE_URL as string) + "/academies",
+    { cache: "no-store" }
   );
 
   return data.json();
@@ -24,7 +25,7 @@ export default async function Academies() {
       </div>
       <div className="mx-5 my-10 md:mx-10 lg:mx-40 xl:mx-60">
         {/* TODO: MAKE THIS AS CLIENT COMPONENT AND FILTER */}
-        <Input type="text" placeholder="Cari kelas" className="max-w-sm"/>
+        <Input type="text" placeholder="Cari kelas" className="max-w-sm" />
         <div className="grid grid-cols-1 gap-6 mt-6 md:grid-cols-2 xl:grid-cols-3">
           {academies.map((academy) => {
             return (

@@ -14,12 +14,14 @@ interface ActionsProps {
   academyId: string;
   isPublished: boolean;
   toggleIsPublished: () => void;
+  accessToken: string;
 }
 
 export const Actions = ({
   academyId,
   isPublished,
   toggleIsPublished,
+  accessToken,
 }: ActionsProps) => {
   const router = useRouter();
 
@@ -29,16 +31,35 @@ export const Actions = ({
     try {
       setIsLoading(true);
 
+      const updatedAt = Date.now().toString()
       if (isPublished) {
-        await axiosInstance.patch(`/academies/${academyId}`, {
-          isPublished: false,
-        });
+        await axiosInstance.patch(
+          `/academies/${academyId}`,
+          {
+            isPublished: false,
+            updatedAt
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
         toggleIsPublished();
         toast.success("Academy unpublished");
       } else {
-        await axiosInstance.patch(`/academies/${academyId}`, {
-          isPublished: true
-        });
+        await axiosInstance.patch(
+          `/academies/${academyId}`,
+          {
+            isPublished: true,
+            updatedAt
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
         toggleIsPublished();
         toast.success("Academy published");
       }
@@ -52,10 +73,19 @@ export const Actions = ({
   const onDelete = async () => {
     try {
       setIsLoading(true);
-      await axiosInstance.patch(`/academies/${academyId}`, {
-        isDeleted: true,
-        deletedAt: Date.now().toString()
-      });
+      const updatedAt = Date.now().toString()
+      await axiosInstance.patch(
+        `/academies/${academyId}`,
+        {
+          isDeleted: true,
+          deletedAt: Date.now().toString(),
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
 
       toast.success("Academy deleted");
       router.push("/admin/academies");

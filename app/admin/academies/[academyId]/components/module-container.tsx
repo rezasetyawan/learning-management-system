@@ -11,11 +11,13 @@ interface ModuleContainerProps {
     moduleGroups: ModuleGroup[];
   };
   academyId: string;
+  accessToken:string
 }
 
 export default function ModuleContainer({
   initialData,
   academyId,
+  accessToken
 }: ModuleContainerProps) {
   const [moduleGroups, setModuleGroups] = useState(initialData.moduleGroups);
 
@@ -102,12 +104,14 @@ export default function ModuleContainer({
         addModuleGroups={addModuleGroups}
         updateModuleGroup={updateModuleGroup}
         deleteModuleGroup={deleteModuleGroup}
+        accessToken={accessToken}
       />
 
       <ModuleForm
         initialData={{ moduleGroups }}
         academyId={academyId}
         addModule={addModule}
+        accessToken={accessToken}
       />
     </>
   );

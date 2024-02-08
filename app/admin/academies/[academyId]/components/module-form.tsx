@@ -43,6 +43,7 @@ interface ModuleFormProps {
   };
   addModule: (newModule: Module, moduleGroupId: string) => void;
   academyId: string;
+  accessToken: string;
 }
 
 interface Row {
@@ -113,6 +114,7 @@ export default function ModuleForm({
   initialData,
   academyId,
   addModule,
+  accessToken,
 }: ModuleFormProps) {
   const [isUpdating, setIsUpdating] = useState(false);
   const router = useRouter();
@@ -169,7 +171,6 @@ export default function ModuleForm({
   };
 
   const [state, setState] = useState(getInitialData(initialData.moduleGroups));
-  console.log(state.rows["3"].moduleIds);
 
   function moveElement<T>(array: T[], fromIndex: number, toIndex: number): T[] {
     if (toIndex >= array.length) {
@@ -226,6 +227,11 @@ export default function ModuleForm({
             {
               academyModuleGroupId: source.droppableId,
               order: index + 1,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
             }
           );
         });
@@ -289,6 +295,11 @@ export default function ModuleForm({
             {
               academyModuleGroupId: d.academyModuleGroupId,
               order: d.order,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
             }
           );
         });
@@ -338,6 +349,7 @@ export default function ModuleForm({
                   moduleGroupId={rowId}
                   addModule={addModule}
                   onEdit={onEdit}
+                  accessToken={accessToken}
                 />
               );
             })}
@@ -355,6 +367,7 @@ const Row = ({
   moduleGroupId,
   addModule,
   onEdit,
+  accessToken,
 }: {
   row: Row;
   modules: Module[];
@@ -362,6 +375,7 @@ const Row = ({
   moduleGroupId: string;
   addModule: (newModule: Module, moduleGroupId: string) => void;
   onEdit: (moduleGroupId: string, moduleId: string) => void;
+  accessToken: string;
 }) => {
   const [isCreating, setIsCreating] = useState(false);
   const toggleCreating = () => {
@@ -398,7 +412,12 @@ const Row = ({
       //   router.refresh();
       const response = await axiosInstance.post(
         `/academies/${academyId}/module-groups/${moduleGroupId}/modules`,
-        payload
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
       );
       addModule(
         {
