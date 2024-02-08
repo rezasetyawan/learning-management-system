@@ -25,6 +25,7 @@ interface NameFormProps {
   academyId: string;
   moduleGroupId: string;
   moduleId: string;
+  accessToken: string;
 }
 
 const formSchema = z.object({
@@ -38,6 +39,7 @@ const NameForm = ({
   academyId,
   moduleGroupId,
   moduleId,
+  accessToken,
 }: NameFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState(initialData.name);
@@ -58,6 +60,11 @@ const NameForm = ({
         {
           name: values.name,
           updatedAt: Date.now().toString(),
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
         }
       );
       setName(values.name);

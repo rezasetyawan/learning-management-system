@@ -19,12 +19,14 @@ interface TypeSelectionProps {
   academyId: string;
   moduleGroupId: string;
   moduleId: string;
+  accessToken: string;
 }
 export default function TypeSelection({
   initialValue,
   moduleId,
   academyId,
   moduleGroupId,
+  accessToken,
 }: TypeSelectionProps) {
   const isInitialRender = useRef(true);
   const [selectedType, setSelectedType] = useState(initialValue.type);
@@ -40,12 +42,20 @@ export default function TypeSelection({
     console.log(isInitialRender);
     const timestamp = Date.now().toString();
     async function createQuizz() {
-      await axiosInstance.post(`/academies/modules/${moduleId}/quizz`, {
-        moduleId: moduleId,
-        createdAt: timestamp,
-        updatedAt: timestamp,
-        questionAmounts: 3,
-      });
+      await axiosInstance.post(
+        `/academies/modules/${moduleId}/quizz`,
+        {
+          moduleId: moduleId,
+          createdAt: timestamp,
+          updatedAt: timestamp,
+          questionAmounts: 3,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
     }
 
     async function updateQuizzType(type: string) {
@@ -55,19 +65,23 @@ export default function TypeSelection({
         {
           updatedAt: timestamp,
           type: type,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
         }
       );
     }
     if (selectedType === "QUIZZ") {
       updateQuizzType(selectedType);
       createQuizz();
-      window.location.reload()
+      window.location.reload();
     } else {
       updateQuizzType(selectedType);
-      window.location.reload()
+      window.location.reload();
     }
-    
-  }, [academyId, moduleGroupId, moduleId, router, selectedType]);
+  }, [academyId, accessToken, moduleGroupId, moduleId, router, selectedType]);
   return (
     <div className="md:mt-6 border bg-white rounded-md p-4 font-medium">
       Module type

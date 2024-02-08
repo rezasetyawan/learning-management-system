@@ -432,7 +432,8 @@ const Row = ({
       );
       toggleCreating();
       toast.success("New module added");
-    } catch {
+    } catch (error) {
+      console.error(error)
       toast.error("Something went wrong");
     }
   };

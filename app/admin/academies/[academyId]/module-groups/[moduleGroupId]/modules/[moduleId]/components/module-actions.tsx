@@ -14,7 +14,7 @@ interface ActionsProps {
   isPublished: boolean;
   moduleGroupId: string;
   moduleId: string;
-  //   disabled: boolean
+  accessToken: string;
 }
 
 export const Actions = ({
@@ -22,6 +22,7 @@ export const Actions = ({
   isPublished,
   moduleGroupId,
   moduleId,
+  accessToken,
 }: ActionsProps) => {
   const router = useRouter();
   const [currentIsPublished, setCurrentIsPublished] = useState(isPublished);
@@ -41,6 +42,11 @@ export const Actions = ({
           {
             isPublished: false,
             updatedAt: Date.now().toString(),
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
           }
         );
         toggleIsPublished();
@@ -51,6 +57,11 @@ export const Actions = ({
           {
             isPublished: true,
             updatedAt: Date.now().toString(),
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
           }
         );
         toggleIsPublished();
@@ -71,7 +82,12 @@ export const Actions = ({
         `/academies/${academyId}/module-groups/${moduleGroupId}/modules/${moduleId}`,
         {
           isDeleted: true,
-          deletedAt: Date.now().toString()
+          deletedAt: Date.now().toString(),
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
         }
       );
 

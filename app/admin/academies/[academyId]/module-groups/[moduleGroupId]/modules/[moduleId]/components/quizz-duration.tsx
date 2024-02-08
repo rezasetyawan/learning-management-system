@@ -24,6 +24,7 @@ interface DurationFormProps {
     duration: number;
   };
   moduleId: string;
+  accessToken: string;
 }
 
 const formSchema = z.object({
@@ -33,7 +34,7 @@ const formSchema = z.object({
   ),
 });
 
-const DurationForm = ({ initialData, moduleId }: DurationFormProps) => {
+const DurationForm = ({ initialData, moduleId, accessToken }: DurationFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [duration, setDuration] = useState(initialData.duration);
 
@@ -48,10 +49,18 @@ const DurationForm = ({ initialData, moduleId }: DurationFormProps) => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axiosInstance.patch(`/academies/modules/${moduleId}/quizz`, {
-        duration: values.duration,
-        updatedAt: Date.now().toString(),
-      });
+      await axiosInstance.patch(
+        `/academies/modules/${moduleId}/quizz`,
+        {
+          duration: values.duration,
+          updatedAt: Date.now().toString(),
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
       setDuration(values.duration);
       toast.success("Quizz duration updated");
       toggleEdit();

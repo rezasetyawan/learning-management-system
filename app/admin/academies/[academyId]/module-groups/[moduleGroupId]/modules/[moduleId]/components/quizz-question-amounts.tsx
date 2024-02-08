@@ -24,6 +24,7 @@ interface QuestionAmountsProps {
   };
   moduleId: string;
   totalQuestions: number;
+  accessToken: string;
 }
 
 const formSchema = z.object({
@@ -37,6 +38,7 @@ export default function QuestionAmounts({
   initialData,
   moduleId,
   totalQuestions,
+  accessToken,
 }: QuestionAmountsProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [questionAmounts, setQuestionAmounts] = useState(
@@ -54,10 +56,18 @@ export default function QuestionAmounts({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axiosInstance.patch(`/academies/modules/${moduleId}/quizz`, {
-        questionAmounts: values.questionAmounts,
-        updatedAt: Date.now().toString(),
-      });
+      await axiosInstance.patch(
+        `/academies/modules/${moduleId}/quizz`,
+        {
+          questionAmounts: values.questionAmounts,
+          updatedAt: Date.now().toString(),
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
       setQuestionAmounts(values.questionAmounts);
       toast.success("Quizz questionAmounts updated");
       toggleEdit();

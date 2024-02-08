@@ -8,6 +8,7 @@ import ModuleQuizz from "./components/module-quizz";
 import TypeSelection from "./components/module-type-selection";
 import DurationForm from "./components/quizz-duration";
 import QuestionAmounts from "./components/quizz-question-amounts";
+import { cookies } from "next/headers";
 
 type Module = {
   id: string;
@@ -60,7 +61,8 @@ export default async function ModuleDetail({
   );
 
   const moduleData = data.data.data as Module;
-  console.log(moduleData);
+  const cookieStore = cookies();
+  const accessToken = cookieStore.get("accessToken")?.value || "";
   return (
     <>
       <Toaster position="top-center" reverseOrder={false} />
@@ -74,6 +76,7 @@ export default async function ModuleDetail({
             moduleGroupId={params.moduleGroupId}
             moduleId={params.moduleId}
             isPublished={moduleData.isPublished}
+            accessToken={accessToken}
           />
         </div>
         <div className="mt-10 lg:mt-16">
@@ -84,6 +87,7 @@ export default async function ModuleDetail({
                 academyId={params.academyId}
                 moduleGroupId={params.moduleGroupId}
                 moduleId={params.moduleId}
+                accessToken={accessToken}
               />
             </div>
             <TypeSelection
@@ -91,11 +95,13 @@ export default async function ModuleDetail({
               moduleId={params.moduleId}
               academyId={params.academyId}
               moduleGroupId={params.moduleGroupId}
+              accessToken={accessToken}
             />
             {moduleData.type === "QUIZZ" && moduleData.quizz !== undefined ? (
               <DurationForm
                 initialData={moduleData.quizz}
                 moduleId={params.moduleId}
+                accessToken={accessToken}
               />
             ) : null}
 
@@ -104,6 +110,7 @@ export default async function ModuleDetail({
                 initialData={moduleData.quizz}
                 moduleId={params.moduleId}
                 totalQuestions={moduleData.quizz.questions.length}
+                accessToken={accessToken}
               />
             ) : null}
           </div>
@@ -113,6 +120,7 @@ export default async function ModuleDetail({
             academyId={params.academyId}
             moduleGroupId={params.moduleGroupId}
             moduleId={params.moduleId}
+            accessToken={accessToken}
           />
 
           {moduleData.type === "QUIZZ" && moduleData.quizz !== undefined ? (

@@ -30,6 +30,7 @@ interface ModuleContentFormProps {
   academyId: string;
   moduleGroupId: string;
   moduleId: string;
+  accessToken: string;
 }
 
 export const ModuleContentForm = ({
@@ -37,9 +38,9 @@ export const ModuleContentForm = ({
   academyId,
   moduleGroupId,
   moduleId,
+  accessToken,
 }: ModuleContentFormProps) => {
   let content = initialData.content;
-  console.log(initialData.content)
   const setContent = (value: string) => {
     content = value;
   };
@@ -55,6 +56,11 @@ export const ModuleContentForm = ({
         {
           content: content,
           updatedAt: Date.now().toString(),
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
         }
       );
       toast.success("Module content updated");
