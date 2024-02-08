@@ -204,6 +204,7 @@ export const ModuleGroupForm = ({
         `/academies/${academyId}/module-groups/${moduleGroupId}`,
         {
           isDeleted: true,
+          deletedAt: Date.now().toString(),
         },
         {
           headers: {
