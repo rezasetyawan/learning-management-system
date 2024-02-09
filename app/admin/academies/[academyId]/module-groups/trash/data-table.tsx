@@ -231,7 +231,7 @@ export function DataTable<TData, TValue>({
                 <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                 <AlertDialogDescription>
                   This action cannot be undone. This will permanently delete
-                  your account and remove your data from our servers.
+                  selected data and remove it from our servers.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
