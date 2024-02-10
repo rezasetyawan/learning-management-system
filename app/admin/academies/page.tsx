@@ -3,9 +3,11 @@ import Link from "next/link";
 import ActionsSection from "./components/actions-section";
 import { Button } from "@/components/ui/button";
 
-const fetchAcadmies = async () => {
+const fetchAcademies = async (searchKey: string) => {
   const data = await fetch(
-    (process.env.NEXT_PUBLIC_API_BASE_URL as string) + "/academies",
+    `${process.env.NEXT_PUBLIC_API_BASE_URL as string}/academies?search=${
+      searchKey || ""
+    }`,
     {
       cache: "no-store",
     }
@@ -23,8 +25,14 @@ type Academy = {
   coverImageUrl: string;
   isPublished: boolean;
 };
-export default async function Academies() {
-  const academies = (await fetchAcadmies()) as Academy[];
+export default async function Academies({
+  searchParams,
+}: {
+  searchParams?: { [key: string]: string | string[] | undefined };
+}) {
+  const academies = (await fetchAcademies(
+    searchParams?.search as string
+  )) as Academy[];
   return (
     <div className="my-10 mx-20">
       <div className="w-full flex items-center gap-2">

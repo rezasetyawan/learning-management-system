@@ -3,18 +3,26 @@ import Navbar from "@/components/Navbar";
 import { Input } from "@/components/ui/input";
 import { Academy } from "@/types";
 import Link from "next/link";
+import AcademyFilter from "./components/academy-filter";
 
-const fetchAcadmies = async () => {
-  const data = await fetch(
-    (process.env.NEXT_PUBLIC_API_BASE_URL as string) + "/academies",
-    { cache: "no-store" }
+const fetchAcademies = async (searchKey: string) => {
+  const data = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL as string}/academies?search=${searchKey || ""}`,
+    {
+      cache: "no-store",
+    }
   );
 
   return data.json();
 };
 
-export default async function Academies() {
-  const academies = (await fetchAcadmies()) as Academy[];
+export default async function Academies({
+  searchParams,
+}: {
+  searchParams?: { [key: string]: string | string[] | undefined };
+}) {
+  const academies = (await fetchAcademies(
+    searchParams?.search as string
+  )) as Academy[];
   return (
     <>
       <Navbar />
@@ -25,7 +33,9 @@ export default async function Academies() {
       </div>
       <div className="mx-5 my-10 md:mx-10 lg:mx-40 xl:mx-60">
         {/* TODO: MAKE THIS AS CLIENT COMPONENT AND FILTER */}
-        <Input type="text" placeholder="Cari kelas" className="max-w-sm" />
+        <div className="w-1/2">
+          <AcademyFilter />
+        </div>
         <div className="grid grid-cols-1 gap-6 mt-6 md:grid-cols-2 xl:grid-cols-3">
           {academies.map((academy) => {
             return (
