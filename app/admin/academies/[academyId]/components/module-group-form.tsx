@@ -385,6 +385,7 @@ export const ModuleGroupForm = ({
               items={initialData.moduleGroups || []}
               toggleEdit={toggleEdit}
               setCurrentEditModuleGroup={setCurrentEditModuleGroup}
+              academyId={academyId}
             />
           </div>
           <p className="text-xs text-muted-foreground mt-4">
