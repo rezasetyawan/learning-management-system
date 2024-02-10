@@ -9,6 +9,9 @@ import TypeSelection from "./components/module-type-selection";
 import DurationForm from "./components/quizz-duration";
 import QuestionAmounts from "./components/quizz-question-amounts";
 import { cookies } from "next/headers";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { FileClock } from "lucide-react";
 
 type Module = {
   id: string;
@@ -70,6 +73,14 @@ export default async function ModuleDetail({
         <div className="flex items-center justify-between">
           <div className="flex flex-col gap-y-2">
             <h1 className="text-lg font-semibold lg:text-2xl">Module setup</h1>
+            <Link
+              href={`/admin/academies/${params.academyId}/module-groups/${params.moduleGroupId}/modules/${params.moduleId}/logs?moduleName=${moduleData.name}`}
+            >
+              <Button variant="link" className="flex items-center gap-1 p-0 m-0">
+                <FileClock className="w-4 h-4" />
+                Aktivitas
+              </Button>
+            </Link>
           </div>
           <Actions
             academyId={params.academyId}
