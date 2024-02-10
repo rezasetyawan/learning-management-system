@@ -1,12 +1,14 @@
 import Navbar from "@/components/admin/navbar";
-import Sidebar from "@/components/admin/sidebar"
+import Sidebar from "@/components/admin/sidebar";
 
 const DashboardLayout = ({
-  children
+  children,
+  modal,
 }: {
   children: React.ReactNode;
+  modal: React.ReactNode;
 }) => {
-  return ( 
+  return (
     <div className="h-full">
       <div className="h-[80px] lg:pl-56 fixed inset-y-0 w-full z-50">
         <Navbar />
@@ -16,9 +18,11 @@ const DashboardLayout = ({
       </div>
       <main className="lg:pl-56 pt-[80px] h-full">
         {children}
+        {modal}
+        <div id="modal-root" />
       </main>
     </div>
-   );
-}
- 
+  );
+};
+
 export default DashboardLayout;
