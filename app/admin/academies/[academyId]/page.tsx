@@ -35,8 +35,9 @@ export default async function Academy({
           academyId={params.academyId}
           isPublished={academy.isPublished}
           accessToken={accessToken}
+          academyName={academy.name}
         />
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-10 p-4 lg:p-6 lg:mt-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 p-4 lg:p-6">
           <div>
             <div className="flex items-center gap-x-2">
               <div className="rounded-full flex items-center justify-center bg-sky-100 text-sky-700 p-1.5">
