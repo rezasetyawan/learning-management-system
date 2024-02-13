@@ -30,7 +30,23 @@ type Module = {
   content: string;
   isPublished: boolean;
   quizz?: Quizz;
+  submission: Submission
 };
+
+type Submission = {
+  id: string
+  userId: string
+  createdAt: string
+  note: string
+  academyId: string
+  moduleId: string
+  fileUrl: string
+  status: "PENDING" | "REVIEW" | "REVIEWED"
+  result: {
+      isPassed: boolean
+  }[]
+  waitingOrder: number
+} | null
 
 type Quizz = {
   id: string;
@@ -378,6 +394,7 @@ export default function ModuleContent({
                 <SubmissionModule
                   content={currentModule.content}
                   name={currentModule.name}
+                  submission={currentModule.submission}
                 />
               )}
             </div>

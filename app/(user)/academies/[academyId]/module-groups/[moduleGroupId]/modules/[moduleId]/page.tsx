@@ -13,7 +13,23 @@ type Module = {
   content: string;
   isPublished: boolean;
   quizz?: Quizz;
+  submission: Submission;
 };
+
+type Submission = {
+  id: string;
+  userId: string;
+  createdAt: string;
+  note: string;
+  academyId: string;
+  moduleId: string;
+  fileUrl: string;
+  status: "PENDING" | "REVIEW" | "REVIEWED";
+  result: {
+    isPassed: boolean;
+  }[];
+  waitingOrder: number;
+} | null;
 
 type Quizz = {
   id: string;
@@ -68,7 +84,12 @@ export default async function ModuleDetail({
   const moduleData = await fetch(
     (process.env.NEXT_PUBLIC_API_BASE_URL as string) +
       `/academies/${params.academyId}/module-groups/${params.moduleGroupId}/modules/${params.moduleId}`,
-    { cache: "no-store" }
+    {
+      cache: "no-store",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
   );
 
   const moduleResponse = await moduleData.json();
@@ -100,7 +121,6 @@ export default async function ModuleDetail({
         accessToken={accessToken as string}
         quizzHistories={quizzHistories}
       />
-     
     </>
   );
 }
