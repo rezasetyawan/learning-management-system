@@ -50,22 +50,52 @@ const formSchema = z.object({
   ),
 });
 
-interface UserSubmissionDetail {
-  id: string;
-  createdAt: string;
-  note: string;
-  fileUrl: string;
-  status: "PENDING" | "REVIEW" | "REVIEWED";
-  academyId: string;
-  academyName: string;
-  user: {
-    id: string;
+interface Reviewer {
     fullname: string;
-  };
-  moduleName: string;
-  moduleId: string;
-  moduleGroupId: string;
-  result: null | {};
+    username: string;
+}
+
+interface Result {
+    id: string;
+    reviewer: Reviewer;
+    createdAt: string;
+    reviewerNote: string;
+    score: number;
+    isPassed: boolean;
+    submissionId: string;
+}
+
+interface Module {
+    name: string;
+    id: string;
+    group: {
+        id: string;
+    };
+}
+
+interface Academy {
+    name: string;
+    id: string;
+}
+
+interface User {
+    fullname: string;
+    username: string;
+}
+
+interface UserSubmissionDetail {
+    id: string;
+    userId: string;
+    createdAt: string;
+    note: string;
+    academyId: string;
+    moduleId: string;
+    fileUrl: string;
+    status: string;
+    result: Result[];
+    module: Module;
+    academy: Academy;
+    user: User;
 }
 
 interface ReviewFormProps {
@@ -223,7 +253,7 @@ export default function ReviewForm({
                           <Link
                             href={`/admin/academies/${submission.academyId}`}
                           >
-                            {submission.academyName}
+                            {submission.academy.name}
                           </Link>
                         </span>
                       </div>
@@ -233,9 +263,9 @@ export default function ReviewForm({
                         </span>
                         <span>
                           <Link
-                            href={`/admin/academies/${submission.academyId}/module-groups/${submission.moduleGroupId}/modules/${submission.moduleId}`}
+                            href={`/admin/academies/${submission.academyId}/module-groups/${submission.module.group.id}/modules/${submission.moduleId}`}
                           >
-                            {submission.moduleName}
+                            {submission.module.name}
                           </Link>
                         </span>
                       </div>
