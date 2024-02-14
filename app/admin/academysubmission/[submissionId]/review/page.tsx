@@ -1,54 +1,55 @@
 import { cookies } from "next/headers";
 import SubmissionInfo from "../components/submission-info";
 import ReviewForm from "./components/review-form";
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
+import { redirect } from "next/navigation";
 
 interface Reviewer {
-    fullname: string;
-    username: string;
+  fullname: string;
+  username: string;
 }
 
 interface Result {
-    id: string;
-    reviewer: Reviewer;
-    createdAt: string;
-    reviewerNote: string;
-    score: number;
-    isPassed: boolean;
-    submissionId: string;
+  id: string;
+  reviewer: Reviewer;
+  createdAt: string;
+  reviewerNote: string;
+  score: number;
+  isPassed: boolean;
+  submissionId: string;
 }
 
 interface Module {
-    name: string;
+  name: string;
+  id: string;
+  group: {
     id: string;
-    group: {
-        id: string;
-    };
+  };
 }
 
 interface Academy {
-    name: string;
-    id: string;
+  name: string;
+  id: string;
 }
 
 interface User {
-    fullname: string;
-    username: string;
+  fullname: string;
+  username: string;
 }
 
 interface UserSubmissionDetail {
-    id: string;
-    userId: string;
-    createdAt: string;
-    note: string;
-    academyId: string;
-    moduleId: string;
-    fileUrl: string;
-    status: string;
-    result: Result[];
-    module: Module;
-    academy: Academy;
-    user: User;
+  id: string;
+  userId: string;
+  createdAt: string;
+  note: string;
+  academyId: string;
+  moduleId: string;
+  fileUrl: string;
+  status: string;
+  result: Result[];
+  module: Module;
+  academy: Academy;
+  user: User;
 }
 
 interface UserSubmissionDetailResponse {
@@ -76,6 +77,10 @@ export default async function SubmissionReviewPage({
 
   const userSubmissionDetailResponse =
     (await data.json()) as UserSubmissionDetailResponse;
+
+  if (userSubmissionDetailResponse.data.status === "REVIEWED") {
+    redirect(`/admin/academysubmission/${params.submissionId}`);
+  }
 
   return (
     <>
