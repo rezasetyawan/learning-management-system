@@ -3,6 +3,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { formatTimestampToShortString } from "@/utils";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 interface UserSubmission {
   id: string;
@@ -49,13 +50,18 @@ export const columns: ColumnDef<UserSubmission>[] = [
     accessorKey: "status",
   },
   {
+    accessorKey: "id",
     header: "Action",
     cell: ({ row }) => (
       <div className="flex items-center gap-1">
-        <Button variant="outline" size="sm">
-          Detail
-        </Button>
-        <Button size="sm">Review</Button>
+        <Link href={`/admin/academysubmission/${row.getValue("id")}`}>
+          <Button variant="outline" size="sm">
+            Detail
+          </Button>
+        </Link>
+        <Link href={`/admin/academysubmission/${row.getValue("id")}/review`}>
+          <Button size="sm">Review</Button>
+        </Link>
       </div>
     ),
   },
