@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import SubmissionInfo from "./components/submission-info";
+import SubmissionResult from "./components/submission-result";
 
 interface Reviewer {
     fullname: string;
@@ -80,6 +81,9 @@ export default async function AcademySubmissionDetail({
         <h2 className="text-xl font-semibold">Submission: {userSubmissionDetailResponse.data.module.name}</h2>
       </div>
       <SubmissionInfo submission={userSubmissionDetailResponse.data} />
+      <div className="mt-4">
+        <SubmissionResult result={userSubmissionDetailResponse.data.result[0]}/>
+      </div>
     </div>
   );
 }
