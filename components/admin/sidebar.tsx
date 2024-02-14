@@ -1,15 +1,19 @@
-"use client"
-import SidebarRoutes  from "./sidebar-routes";
+"use client";
+import SidebarRoutes from "./sidebar-routes";
 
-const Sidebar = () => {
+interface SidebarProps {
+  userRole: "admin" | "user" | "superadmin";
+}
+
+const Sidebar = ({ userRole }: SidebarProps) => {
   return (
     <div className="h-full border-r flex flex-col overflow-y-auto bg-white shadow-sm">
       <h1 className="p-6 font-semibold text-xl">LMS</h1>
       <div className="flex flex-col w-full">
-        <SidebarRoutes />
+        <SidebarRoutes userRole={userRole} />
       </div>
     </div>
   );
 };
 
-export default Sidebar
+export default Sidebar;

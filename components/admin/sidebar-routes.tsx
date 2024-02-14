@@ -1,24 +1,33 @@
 "use client";
 
-import { BookCopy, LayoutGrid } from "lucide-react";
+import { BookCopy, LayoutGrid, UsersRound } from "lucide-react";
 
 import SidebarItem from "./sidebar-item";
 
-const teacherRoutes = [
-  {
-    icon: LayoutGrid,
-    label: "Home",
-    href: "/admin",
-  },
-  {
-    icon: BookCopy,
-    label: "Academies",
-    href: "/admin/academies",
-  },
-];
+interface SidebarRoutesProps {
+  userRole: "admin" | "user" | "superadmin";
+}
+const SidebarRoutes = ({ userRole }: SidebarRoutesProps) => {
+  const routes = [
+    {
+      icon: LayoutGrid,
+      label: "Home",
+      href: "/admin",
+    },
+    {
+      icon: BookCopy,
+      label: "Academies",
+      href: "/admin/academies",
+    },
+  ];
 
-const SidebarRoutes = () => {
-  const routes = teacherRoutes;
+  if (userRole === "superadmin") {
+    routes.push({
+      icon: UsersRound,
+      label: "Users",
+      href: "/superadmin/users",
+    });
+  }
 
   return (
     <div className="flex flex-col w-full">
