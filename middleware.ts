@@ -43,12 +43,15 @@ export async function middleware(request: NextRequest) {
             } else {
                 return NextResponse.next();
             }
-        } else {
-            // if (!request.nextUrl.pathname.startsWith('/')) { 
-            //     return NextResponse.redirect(new URL('/', request.url));
-            // } else 
-
-            if (request.nextUrl.pathname.startsWith('/admin')) {
+        } else if (getRoleResponse.role === 'superadmin') {
+            if (!request.nextUrl.pathname.startsWith('/admin') && !request.nextUrl.pathname.startsWith('/superadmin')) {
+                return NextResponse.redirect(new URL('/admin', request.url));
+            } else {
+                return NextResponse.next();
+            }
+        }
+        else {
+            if (request.nextUrl.pathname.startsWith('/admin') || request.nextUrl.pathname.startsWith('/superadmin')) {
                 return NextResponse.redirect(new URL('/', request.url));
             }
             else {
