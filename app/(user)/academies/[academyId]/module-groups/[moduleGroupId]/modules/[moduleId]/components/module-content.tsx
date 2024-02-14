@@ -17,6 +17,7 @@ import ModuleGroupAccordion from "./module-group-accordion";
 import QuizzHistories from "./quizz-histories";
 import { formatTimestamp } from "@/utils";
 import DiscussionsNavigation from "./discussions-navigation";
+import SubmissionModule from "./submission-module";
 
 type Module = {
   id: string;
@@ -29,7 +30,23 @@ type Module = {
   content: string;
   isPublished: boolean;
   quizz?: Quizz;
+  submission: Submission
 };
+
+type Submission = {
+  id: string
+  userId: string
+  createdAt: string
+  note: string
+  academyId: string
+  moduleId: string
+  fileUrl: string
+  status: "PENDING" | "REVIEW" | "REVIEWED"
+  result: {
+      isPassed: boolean
+  }[]
+  waitingOrder: number
+} | null
 
 type Quizz = {
   id: string;
@@ -222,6 +239,7 @@ export default function ModuleContent({
     );
   };
 
+  console.log(currentModule.type);
   return displayQuizzResult && currentQuizzResult?.answers ? (
     <div className="relative w-full h-screen">
       <div className="w-full bg-white absolute inset-0 z-[1000] grid">
@@ -363,12 +381,22 @@ export default function ModuleContent({
       <div className="relative">
         <div className="flex justify-center mt-14 relative">
           <div
-            className={`text-3xl h-screen mb-96 transition-all px-3 w-full lg:w-3/5 ${
+            className={`mb-96 transition-all px-3 w-full lg:w-3/5 ${
               showSidebar ? "lg:mr-[300px]" : ""
             }`}
           >
             <div className="mt-5">
-              <Preview value={currentModule.content} />
+              {currentModule.type === "QUIZZ" ||
+              currentModule.type === "LESSON" ? (
+                <Preview value={currentModule.content} />
+              ) : null}
+              {currentModule.type === "SUBMISSION" && (
+                <SubmissionModule
+                  content={currentModule.content}
+                  name={currentModule.name}
+                  submission={currentModule.submission}
+                />
+              )}
             </div>
             {currentModule.type === "QUIZZ" &&
             currentModule.quizz !== undefined ? (

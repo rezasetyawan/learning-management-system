@@ -5,7 +5,7 @@ import { Actions } from "./actions";
 import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { FileClock } from "lucide-react";
+import { BookText, FileClock } from "lucide-react";
 
 interface TopSectionLabel {
   academyId: string;
@@ -30,18 +30,31 @@ export default function TopSection({
         <Banner label="This academy is unpublished. It will not be visible to the normal users." />
       )}
       <div className="flex items-center justify-between p-4 lg:p-6">
-        
-        <div className="flex flex-col gap-y-2">
-        <h1 className="text-lg font-semibold lg:text-2xl">Academy setup</h1>
+        <div className="space-y-2">
+          <h1 className="text-lg font-semibold lg:text-2xl">Academy setup</h1>
+          <div className="flex items-center gap-2">
             <Link
               href={`/admin/academies/${academyId}/logs?academyName=${academyName}`}
             >
-              <Button variant="link" className="flex items-center gap-1 p-0 m-0">
+              <Button
+                variant="link"
+                className="flex items-center gap-1 p-0 m-0"
+              >
                 <FileClock className="w-4 h-4" />
                 Aktivitas
               </Button>
             </Link>
+            <Link href={`/admin/academies/${academyId}/submission`}>
+              <Button
+                variant="link"
+                className="flex items-center gap-1 p-0 m-0"
+              >
+                <BookText className="w-4 h-4" />
+                User Submission
+              </Button>
+            </Link>
           </div>
+        </div>
         <Actions
           academyId={academyId}
           isPublished={currentIsPublished}
