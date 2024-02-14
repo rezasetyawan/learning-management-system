@@ -187,7 +187,6 @@ export default function SubmissionModule({
                 <ol className="relative text-gray-500 border-s-[3px] border-gray-200 sm:hidden">
                   <li className="mb-10 ms-6">
                     <span className="absolute flex items-center justify-center w-8 h-8 rounded-full -start-4 bg-white ">
-        
                       <svg
                         className="w-6 h-6 text-blue-600"
                         aria-hidden="true"
@@ -388,11 +387,19 @@ export default function SubmissionModule({
               Klik lanjut untuk mengirimkan submission yang sudah Anda kerjakan.
             </p>
           </div>
-          <Link href={`${pathname}/submission`}>
-            <Button size="sm" className="m-3">
-              Lanjut
-            </Button>
-          </Link>
+          {submission && submission.result[0].isPassed !== undefined ? (
+            <Link href={`/academysubmission/${submission.id}`}>
+              <Button size="sm" className="m-3">
+                Lihat Detail Review
+              </Button>
+            </Link>
+          ) : (
+            <Link href={`${pathname}/submission`}>
+              <Button size="sm" className="m-3">
+                {!submission?.result[0].isPassed ? "Submit Ulang" : "Lanjut"}
+              </Button>
+            </Link>
+          )}
         </div>
       </div>
     </div>
