@@ -75,17 +75,14 @@ export const columns: ColumnDef<User>[] = [
     accessorKey: "role",
   },
   {
-    accessorKey: "id",
+    accessorKey: "username",
     header: "Action",
     cell: ({ row }) => (
       <div className="flex items-center gap-1">
-        <Link href={`/`}>
+        <Link href={`/superadmin/users/${row.getValue("username")}`}>
           <Button variant="outline" size="sm">
             Detail
           </Button>
-        </Link>
-        <Link href={``}>
-          <Button size="sm">Edit</Button>
         </Link>
       </div>
     ),
