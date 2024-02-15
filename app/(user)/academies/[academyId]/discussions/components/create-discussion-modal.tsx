@@ -111,7 +111,7 @@ export default function CreateDiscussionModal({
   return (
     <Dialog onOpenChange={setOpenDialog} open={openDialog}>
       <DialogTrigger asChild>
-        <Button onClick={() => setOpenDialog(true)}>Buat diskusi baru</Button>
+        <Button onClick={() => setOpenDialog(true)} size="sm">Buat diskusi baru</Button>
       </DialogTrigger>
       <DialogContent className="xl:max-w-3xl z-[1001]">
         <DialogHeader>
@@ -207,7 +207,7 @@ export default function CreateDiscussionModal({
           </div>
         </div>
         <DialogFooter>
-          <Button type="submit" disabled={isLoading} onClick={onSubmitHandler}>
+          <Button type="submit" disabled={isLoading} onClick={onSubmitHandler} size="sm">
             Buat Diskusi
           </Button>
         </DialogFooter>

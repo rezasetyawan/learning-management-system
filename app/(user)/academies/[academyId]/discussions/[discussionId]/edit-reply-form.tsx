@@ -90,11 +90,11 @@ export default function EditReplyForm({
       />
       <div className="flex justify-end items-center mt-3 gap-3">
         {additionalFunction && (
-          <Button variant="ghost" type="button" onClick={additionalFunction}>
+          <Button variant="ghost" type="button" size="sm" onClick={additionalFunction}>
             Batal
           </Button>
         )}
-        <Button type="submit" disabled={isLoading}>
+        <Button type="submit" size="sm" disabled={isLoading}>
           Simpan
         </Button>
       </div>
