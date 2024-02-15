@@ -19,7 +19,7 @@ export default function AcademyFilter() {
       <form onSubmit={onSearchHandler} className="w-full">
         <Input
           type="text"
-          placeholder="Search class you want"
+          placeholder="Cari kelas yang Anda inginkan"
           className="xl:w-full"
           value={searchKey}
           onChange={(event: React.FormEvent<HTMLInputElement>) =>
