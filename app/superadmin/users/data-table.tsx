@@ -29,6 +29,15 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 import { Button } from "@/components/ui/button";
 import React, { useState } from "react";
@@ -36,6 +45,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { axiosInstance } from "@/lib/axios";
 import { useParams, useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
+import CreateUserModal from "./[username]/components/create-user-modal";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -85,19 +95,19 @@ export function DataTable<TData, TValue>({
       }
 
       console.log(keys);
-    //   const deletionPromises = keys.map((key) =>
-    //     axiosInstance.delete(
-    //       `/academies/${params.academyId}/module-groups/${key.moduleGroupId}/modules/${key.id}`,
+      //   const deletionPromises = keys.map((key) =>
+      //     axiosInstance.delete(
+      //       `/academies/${params.academyId}/module-groups/${key.moduleGroupId}/modules/${key.id}`,
 
-    //       {
-    //         headers: {
-    //           Authorization: `Bearer ${accessToken}`,
-    //         },
-    //       }
-    //     )
-    //   );
+      //       {
+      //         headers: {
+      //           Authorization: `Bearer ${accessToken}`,
+      //         },
+      //       }
+      //     )
+      //   );
 
-    //   await Promise.all(deletionPromises);
+      //   await Promise.all(deletionPromises);
       toast.success("Modules deleted sucessfully");
       router.refresh();
     } catch (error) {
@@ -123,19 +133,19 @@ export function DataTable<TData, TValue>({
       }
 
       console.log(keys);
-    //   const restorationPromises = keys.map((key) =>
-    //     axiosInstance.patch(
-    //       `/academies/${params.academyId}/module-groups/${key.moduleGroupId}/modules/${key.id}`,
-    //       { isDeleted: false, updatedAt: timestamp },
-    //       {
-    //         headers: {
-    //           Authorization: `Bearer ${accessToken}`,
-    //         },
-    //       }
-    //     )
-    //   );
+      //   const restorationPromises = keys.map((key) =>
+      //     axiosInstance.patch(
+      //       `/academies/${params.academyId}/module-groups/${key.moduleGroupId}/modules/${key.id}`,
+      //       { isDeleted: false, updatedAt: timestamp },
+      //       {
+      //         headers: {
+      //           Authorization: `Bearer ${accessToken}`,
+      //         },
+      //       }
+      //     )
+      //   );
 
-    //   await Promise.all(restorationPromises);
+      //   await Promise.all(restorationPromises);
       toast.success("Modules restored sucessfully");
       router.refresh();
     } catch (error) {
@@ -148,15 +158,18 @@ export function DataTable<TData, TValue>({
   return (
     <div>
       <Toaster position="top-center" reverseOrder={false} />
-      <div className="flex items-center py-4">
+      <div className="flex items-cente justify-between py-4">
         <Input
           placeholder="Cari user berdasarkan username"
-          value={(table.getColumn("username")?.getFilterValue() as string) ?? ""}
+          value={
+            (table.getColumn("username")?.getFilterValue() as string) ?? ""
+          }
           onChange={(event) =>
             table.getColumn("username")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
+        <CreateUserModal accessToken={accessToken} />
       </div>
       <div className="rounded-md border">
         <Table>
@@ -223,7 +236,8 @@ export function DataTable<TData, TValue>({
               <AlertDialogHeader>
                 <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                 <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete selected data and remove it from our servers.
+                  This action cannot be undone. This will permanently delete
+                  selected data and remove it from our servers.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
