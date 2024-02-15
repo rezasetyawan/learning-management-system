@@ -26,14 +26,14 @@ interface Data {
   moduleGroups: ModuleGroup[];
 }
 
-function flattenModules(data: Data): Module[] {
-  return data.moduleGroups.reduce(
-    (accumulator: Module[], currentGroup: ModuleGroup) => {
-      return accumulator.concat(currentGroup.modules);
-    },
-    []
-  );
-}
+// function flattenModules(data: Data): Module[] {
+//   return data.moduleGroups.reduce(
+//     (accumulator: Module[], currentGroup: ModuleGroup) => {
+//       return accumulator.concat(currentGroup.modules);
+//     },
+//     []
+//   );
+// }
 
 interface Discussion {
   id: string;
@@ -68,9 +68,7 @@ export default async function ModuleDiscussions({
 
   const academyModulesResponse = await academyModules.json();
 
-  const currentAcademyModules: Module[] = flattenModules(
-    academyModulesResponse.data as Data
-  );
+  const currentAcademyModules: Module[] = academyModulesResponse.data;
 
   const endpoint =
     searchParams && searchParams?.moduleId
