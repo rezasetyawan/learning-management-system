@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import Modal from "./components/modal";
+import { Toaster } from "react-hot-toast";
 
 interface User {
   id: string;
@@ -33,8 +34,11 @@ export default async function UserDetailPage({
 
   const user = (await data.json()) as User;
   return (
-    <div className={"p-5 space-y-5"}>
-      <Modal user={user} />
-    </div>
+    <>
+      <Toaster position="top-center" reverseOrder={false} />
+      <div className={"p-5 space-y-5"}>
+        <Modal user={user} accessToken={accessToken} />
+      </div>
+    </>
   );
 }

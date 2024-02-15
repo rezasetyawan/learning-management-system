@@ -14,8 +14,9 @@ interface User {
 
 interface UserInfoProps {
   user: User;
+  accessToken: string;
 }
-export default function UserInfo({ user }: UserInfoProps) {
+export default function UserInfo({ user, accessToken }: UserInfoProps) {
   return (
     <div>
       <div className="flex gap-3">
@@ -54,7 +55,7 @@ export default function UserInfo({ user }: UserInfoProps) {
           </div>
           <div className="mt-2">
             <p className="font-semibold text-slate-500">Role pengguna</p>
-            <UserRoleSelection user={user} />
+            <UserRoleSelection user={user} accessToken={accessToken} />
           </div>
         </div>
       </div>

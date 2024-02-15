@@ -24,9 +24,10 @@ interface User {
 }
 interface ModalProps {
   user: User;
+  accessToken: string;
 }
 
-export default function Modal({ user }: ModalProps) {
+export default function Modal({ user, accessToken }: ModalProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -48,7 +49,7 @@ export default function Modal({ user }: ModalProps) {
               </Link>
             </AlertDialogTitle>
             <div className="pt-5">
-              <UserInfo user={user} />
+              <UserInfo user={user} accessToken={accessToken} />
             </div>
           </AlertDialogHeader>
         </AlertDialogContent>
