@@ -33,7 +33,11 @@ export default async function Home() {
             <p className="text-sm text-muted-foreground mt-2">
               Mulai belajar terstruktur dengan materi yang berkualitas
             </p>
-            <Button className="mt-3 xl:mt-6" size="sm">Belajar Sekarang</Button>
+            <Link href={`/academies`}>
+              <Button className="mt-3 xl:mt-6" size="sm">
+                Belajar Sekarang
+              </Button>
+            </Link>
           </div>
           <img
             src="/home/hero.jpg"
@@ -41,7 +45,7 @@ export default async function Home() {
             className="rounded-md md:max-w-[40%]"
           />
         </div>
-        
+
         <div className="gap-4 bg-slate-100 p-4 rounded-lg mt-6 md:mt-10 md:flex md:mx-10 lg:mt-16 lg:mx-20 xl:mt-20 xl:mx-40">
           <div className="md:w-2/5">
             <h3 className="pb-1 border-b w-full text-lg font-semibold">
