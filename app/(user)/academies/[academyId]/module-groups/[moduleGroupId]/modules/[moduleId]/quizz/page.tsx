@@ -48,17 +48,21 @@ export default async function ModuleQuizz({
 }: {
   params: { academyId: string; moduleGroupId: string; moduleId: string };
 }) {
+  const cookieStore = cookies();
+  const accessToken = cookieStore.get("accessToken")?.value || "";
   const moduleData = await fetch(
     (process.env.NEXT_PUBLIC_API_BASE_URL as string) +
       `/academies/${params.academyId}/module-groups/${params.moduleGroupId}/modules/${params.moduleId}`,
-    { cache: "no-store" }
+    {
+      cache: "no-store",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
   );
 
   const moduleResponse = await moduleData.json();
   const currentModule = moduleResponse.data as Module;
-
-  const cookieStore = cookies();
-  const accessToken = cookieStore.get("accessToken")?.value || "";
 
   // const quizzModuleData = await fetch(
   //   (process.env.NEXT_PUBLIC_API_BASE_URL as string) +
@@ -84,7 +88,6 @@ export default async function ModuleQuizz({
           accessToken={accessToken}
         />
       )}
-      
     </>
   );
 }
