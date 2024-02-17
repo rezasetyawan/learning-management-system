@@ -337,9 +337,7 @@ export default function ModuleForm({
                 <p className="text-xs text-muted-foreground">
                   {totalModules} modules in total
                 </p>
-                <Link
-                  href={`/admin/academies/${academyId}/modules/trash`}
-                >
+                <Link href={`/admin/academies/${academyId}/modules/trash`}>
                   <Button variant="ghost" className="p-0 m-0">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -580,9 +578,12 @@ const Row = ({
                                     >
                                       <Grip className="h-5 w-5" />
                                     </div>
-                                    <p className="text-xs lg:text-sm">
+                                    <Link
+                                      href={`/admin/academies/${academyId}/module-groups/${moduleGroupId}/modules/${module.id}/preview`}
+                                      className="text-xs lg:text-sm"
+                                    >
                                       {module.name}
-                                    </p>
+                                    </Link>
                                     <div className="ml-auto pr-2 flex items-center gap-x-2">
                                       <Badge
                                         className={cn(
