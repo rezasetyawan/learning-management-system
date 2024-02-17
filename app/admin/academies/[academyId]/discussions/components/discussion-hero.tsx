@@ -32,7 +32,7 @@ export default function DiscussionHero() {
       </div>
       <div className="text-sm lg:text-base">
         <p>Selamat datang di forum diskusi kelas</p>
-        <p>Diskusikan segala pertanyaan Anda</p>
+        <p>Mari bantu pengguna lain untuk menyelesaikan kendala mereka</p>
       </div>
     </section>
   );
