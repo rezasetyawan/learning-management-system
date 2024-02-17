@@ -39,8 +39,10 @@ export async function middleware(request: NextRequest) {
 
         if (getRoleResponse.role === 'admin') {
             if (!request.nextUrl.pathname.startsWith('/admin')) {
+                console.log("Redirect admin")
                 return NextResponse.redirect(new URL('/admin', request.url));
             } else {
+                console.log("Admin next")
                 return NextResponse.next();
             }
         } else if (getRoleResponse.role === 'superadmin') {
