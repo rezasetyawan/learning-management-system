@@ -11,7 +11,7 @@ const SidebarRoutes = ({ userRole }: SidebarRoutesProps) => {
   const routes = [
     {
       icon: LayoutGrid,
-      label: "Home",
+      label: "Dashboard",
       href: "/admin",
     },
     {
