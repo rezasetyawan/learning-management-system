@@ -110,7 +110,7 @@ export default async function Home() {
                 <div>
                   <p className="text-xl font-semibold">{data.userCounts}</p>
                   <p className={`text-sm`}>
-                    +{data.unReviewedSubmissionCounts} belum direview
+                    {data.unReviewedSubmissionCounts} belum direview
                   </p>
                 </div>
               </div>
