@@ -3,11 +3,35 @@ import { Button } from "@/components/ui/button";
 import { Academy } from "@/types";
 import Link from "next/link";
 import AcademySyllabus from "./academy-syllabus";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import JoinRequestAlert from "./join-request-alert";
 
+interface AcademyApplication {
+  id: string;
+  academyId: string;
+  status: "PENDING" | "APPROVED" | "REJECTED";
+  message: string;
+}
 interface AcademyContentProps {
   academy: Academy;
+  academyApplication: AcademyApplication | undefined;
+  accessToken: string;
 }
-export default function AcademyContent({ academy }: AcademyContentProps) {
+export default function AcademyContent({
+  academy,
+  academyApplication,
+  accessToken,
+}: AcademyContentProps) {
   return (
     <div>
       <div className="lg:grid grid-cols-12 gap-8 p-6 lg:px-32 xl:p-16 xl:px-40 bg-slate-100">
@@ -21,11 +45,36 @@ export default function AcademyContent({ academy }: AcademyContentProps) {
           <p className="mt-2 text-sm lg:text-base">{academy.description}</p>
         </div>
         <div className="flex flex-col gap-1.5 col-span-3 mt-4 lg:mt-0">
-          <Button>
-            <Link href={`/academies/${academy.id}/continue`}>
-              Belajar Sekarang
-            </Link>
-          </Button>
+          {academyApplication && academyApplication.status === "APPROVED" ? (
+            <Button>
+              <Link href={`/academies/${academy.id}/continue`}>
+                Belajar Sekarang
+              </Link>
+            </Button>
+          ) : academyApplication && !academyApplication.status ? (
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button>Belajar Sekarang</Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>
+                    Permintaan Bergabung ke Kelas
+                  </AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Maaf, Anda belum tergabung di kelas ini, permintaan
+                    bergabung Anda sedang dalam proses, silahkan tunggu kabar
+                    lebih lanjut.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogAction>Tutup</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          ) : (
+            <JoinRequestAlert accessToken={accessToken} academyId={academy.id} />
+          )}
           <Button variant="outline">Informasi kelas</Button>
           <Button variant="outline">
             <Link href={"#syllabus-section"}>Lihat silabus</Link>
