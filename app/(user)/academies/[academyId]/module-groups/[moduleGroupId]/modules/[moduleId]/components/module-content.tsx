@@ -2,7 +2,8 @@
 import { Preview } from "@/components/preview";
 import { Button } from "@/components/ui/button";
 import { axiosInstance } from "@/lib/axios";
-import { ModuleGroup } from "@/types";
+import { Module as ModuleBase, ModuleGroup } from "@/types";
+import { formatTimestamp } from "@/utils";
 import {
   ArrowLeft,
   Check,
@@ -12,11 +13,10 @@ import {
   X,
 } from "lucide-react";
 import Link from "next/link";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import DiscussionsNavigation from "./discussions-navigation";
 import ModuleGroupAccordion from "./module-group-accordion";
 import QuizzHistories from "./quizz-histories";
-import { formatTimestamp } from "@/utils";
-import DiscussionsNavigation from "./discussions-navigation";
 import SubmissionModule from "./submission-module";
 
 type Module = {
@@ -107,6 +107,56 @@ type QuizzResult = {
   }[];
 };
 
+function findNextModule(
+  moduleGroups: ModuleGroup[],
+  moduleGroupId: string,
+  currentModule: ModuleBase
+): ModuleBase | undefined {
+  const currentModuleGroupIndex = moduleGroups.findIndex(
+    (group) => group.id === moduleGroupId
+  );
+
+  let nextModule: ModuleBase | undefined = undefined;
+  let groupIndexOffset = 1;
+
+  while (!nextModule) {
+    const nextGroup = moduleGroups[currentModuleGroupIndex + groupIndexOffset];
+    if (!nextGroup) break; // No next module group available
+    if (nextGroup.modules.length > 0) {
+      nextModule = nextGroup.modules[0];
+    } else {
+      groupIndexOffset++; // Move to the next module group
+    }
+  }
+
+  return nextModule;
+}
+
+function findPrevModule(
+  moduleGroups: ModuleGroup[],
+  moduleGroupId: string,
+  currentModule: ModuleBase
+): ModuleBase | undefined {
+  const currentModuleGroupIndex = moduleGroups.findIndex(
+    (group) => group.id === moduleGroupId
+  );
+
+  let prevModule: ModuleBase | undefined = undefined;
+  let groupIndexOffset = 1;
+
+  while (!prevModule) {
+    const prevGroup = moduleGroups[currentModuleGroupIndex - groupIndexOffset];
+    if (!prevGroup) break; // No previous module group available
+    if (prevGroup.modules.length > 0) {
+      prevModule = prevGroup.modules[prevGroup.modules.length - 1];
+    } else {
+      groupIndexOffset++; // Move to the previous module group
+    }
+  }
+
+  return prevModule;
+}
+
 export default function ModuleContent({
   academyId,
   moduleGroupId,
@@ -132,23 +182,15 @@ export default function ModuleContent({
     (module) => module.id === currentModule.id
   );
 
-  //   both prev and next module with check their module group for getting the module
   const prevModule =
-    currentModuleIndex >= 0
+    currentModuleIndex > 0
       ? currentModuleGroup.modules[currentModuleIndex - 1]
-      : moduleGroups[currentModuleGroupIndex - 1]
-      ? moduleGroups[currentModuleGroupIndex - 1].modules[
-          moduleGroups[currentModuleGroupIndex - 1].modules.length - 1
-        ]
-      : undefined;
+      : findPrevModule(moduleGroups, moduleGroupId, currentModule);
+
   const nextModule =
-    currentModuleIndex >= 0 &&
-    currentModuleGroup.modules[currentModuleIndex + 1]
+    currentModuleIndex < currentModuleGroup.modules.length - 1
       ? currentModuleGroup.modules[currentModuleIndex + 1]
-      : moduleGroups[currentModuleGroupIndex + 1] &&
-        moduleGroups[currentModuleGroupIndex + 1].modules[0]
-      ? moduleGroups[currentModuleGroupIndex + 1].modules[0]
-      : undefined;
+      : findNextModule(moduleGroups, moduleGroupId, currentModule);
 
   const updateUserLastReadedModule = async (
     academyId: string,
