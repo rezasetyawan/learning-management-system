@@ -54,6 +54,10 @@ export const columns: ColumnDef<AcademyApplication>[] = [
     accessorKey: "user.fullname",
   },
   {
+    header: "Username",
+    accessorKey: "user.username",
+  },
+  {
     header: "Nama Kelas",
     accessorKey: "academy.name",
   },
