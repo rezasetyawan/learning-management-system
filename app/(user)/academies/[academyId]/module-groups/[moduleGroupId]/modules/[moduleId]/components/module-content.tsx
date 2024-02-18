@@ -30,23 +30,23 @@ type Module = {
   content: string;
   isPublished: boolean;
   quizz?: Quizz;
-  submission: Submission
+  submission: Submission;
 };
 
 type Submission = {
-  id: string
-  userId: string
-  createdAt: string
-  note: string
-  academyId: string
-  moduleId: string
-  fileUrl: string
-  status: "PENDING" | "REVIEW" | "REVIEWED"
+  id: string;
+  userId: string;
+  createdAt: string;
+  note: string;
+  academyId: string;
+  moduleId: string;
+  fileUrl: string;
+  status: "PENDING" | "REVIEW" | "REVIEWED";
   result: {
-      isPassed: boolean
-  }[]
-  waitingOrder: number
-} | null
+    isPassed: boolean;
+  }[];
+  waitingOrder: number;
+} | null;
 
 type Quizz = {
   id: string;
@@ -106,6 +106,7 @@ type QuizzResult = {
     answer: { id: string; text: string; isCorrect: boolean };
   }[];
 };
+
 export default function ModuleContent({
   academyId,
   moduleGroupId,
@@ -240,6 +241,23 @@ export default function ModuleContent({
   };
 
   console.log(currentModule.type);
+  const addUserProgress = async () => {
+    try {
+      await axiosInstance.patch(
+        "/user-progress",
+        {
+          academyId,
+          moduleId: currentModule.id,
+          isCompleted: true,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+    } catch (error) {}
+  };
   return displayQuizzResult && currentQuizzResult?.answers ? (
     <div className="relative w-full h-screen">
       <div className="w-full bg-white absolute inset-0 z-[1000] grid">
@@ -491,13 +509,14 @@ export default function ModuleContent({
               <Link
                 href={`/academies/${academyId}/module-groups/${currentModuleGroup.id}/modules/${nextModule.id}`}
                 className="flex items-center w-4/5 lg:w-3/5"
-                onClick={() =>
+                onClick={() => {
                   updateUserLastReadedModule(
                     academyId,
                     currentModuleGroup.id,
                     nextModule.id
-                  )
-                }
+                  );
+                  addUserProgress();
+                }}
               >
                 <p className="truncate font-medium text-slate-500 text-sm max-md:hidden">
                   {nextModule.name}
