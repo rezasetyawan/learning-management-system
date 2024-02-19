@@ -28,6 +28,8 @@ export type Academy = {
     moduleGroups: ModuleGroup[];
     coverImageUrl: string;
     isPublished: boolean;
+    moduleCount: number;
+    joinedUserCount: number;
 };
 
 export type createModuleGroup = {

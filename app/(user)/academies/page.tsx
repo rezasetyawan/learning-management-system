@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Academy } from "@/types";
 import Link from "next/link";
 import AcademyFilter from "./components/academy-filter";
+import { Newspaper, Users } from "lucide-react";
 
 const fetchAcademies = async (searchKey: string) => {
   const data = await fetch(
@@ -41,21 +42,35 @@ export default async function Academies({
         </div>
 
         {academies.length ? (
-          <div className="grid grid-cols-1 gap-6 mt-6 md:grid-cols-2 xl:grid-cols-3">
+          <div className="grid grid-cols-1 gap-6 mt-6 md:grid-cols-2 xl:grid-cols-2">
             {academies.map((academy) => {
               return (
                 <Link
                   key={academy.id}
                   href={"/admin/academies/" + academy.id}
-                  className="p-1 rounded-sm shadow-sm border block"
+                  className="p-3 rounded-sm shadow-sm border flex gap-3"
                 >
-                  <div>
-                    <img
-                      src={academy.coverImageUrl}
-                      alt={academy.name}
-                      className="rounded-sm"
-                    />
-                    <h2>{academy.name}</h2>
+                  <img
+                    src={academy.coverImageUrl}
+                    alt={academy.name}
+                    className="rounded-sm aspect-square object-cover w-28"
+                  />
+                  <div className="space-y-1">
+                    <h2 className="text-base font-semibold">{academy.name}</h2>
+                    <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-2">
+                        <Newspaper className="w-4 h-4 stroke-[#3f3f46]" />
+                        <span className="text-sm">
+                          {academy.moduleCount} Modul
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Users className="w-4 h-4 stroke-[#3f3f46]" />
+                        <span className="text-sm">
+                          {academy.joinedUserCount} Siswa terdaftar
+                        </span>
+                      </div>
+                    </div>
                     <p className="line-clamp-3 text-sm">
                       {academy.description}
                     </p>
