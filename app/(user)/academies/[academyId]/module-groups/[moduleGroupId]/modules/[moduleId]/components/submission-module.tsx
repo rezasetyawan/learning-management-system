@@ -4,7 +4,7 @@ import { Preview } from "@/components/preview";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { useState } from "react";
 
 /* eslint-disable @next/next/no-img-element */
@@ -34,11 +34,11 @@ export default function SubmissionModule({
 }: SubmissionModuleProps) {
   const [showInstruction, setShowInstruction] = useState(false);
   const pathname = usePathname();
+  const params = useParams<{ academyId: string; moduleId: string }>();
   const toggleInstructionSection = () => {
     setShowInstruction((current) => !current);
   };
 
-  console.log(submission);
   return showInstruction ? (
     <div className={`absolute w-full inset-0 transition-all`}>
       <header className="bg-white border-b px-4 py-4 fixed top-0 left-0 right-0 w-full h-14 flex items-center justify-between z-[100] lg:px-10 lg:justify-start">
@@ -48,7 +48,7 @@ export default function SubmissionModule({
           className="flex items-center gap-4"
         >
           <ArrowLeft className="w-5 h-5" />
-          <h1 className="font-semibold text-base">Instruksi</h1>
+          <h1 className="font-semibold text-base">Instruksi Submission</h1>
         </Button>
       </header>
       <div className="mt-14 flex justify-center">
@@ -69,7 +69,7 @@ export default function SubmissionModule({
             <div className="flex flex-col items-center gap-3">
               <img src="/modules/coding.svg" alt="" className="w-96" />
               <h3 className="font-semibold">
-                Saat ini Anda dalamp proses mengerjakan submission
+                Saat ini Anda dalam proses mengerjakan submission
               </h3>
             </div>
           ) : (
@@ -322,7 +322,10 @@ export default function SubmissionModule({
                 ></path>
               </svg>
             </div>
-            <h4 className="text-sm" onClick={toggleInstructionSection}>
+            <h4
+              className="text-sm cursor-pointer"
+              onClick={toggleInstructionSection}
+            >
               Intruksi Submission
             </h4>
             <p className="text-muted-foreground text-sm">
@@ -359,7 +362,14 @@ export default function SubmissionModule({
                 ></path>
               </svg>
             </div>
-            <h4 className="text-sm">Forum Diskusi</h4>
+            <h4>
+              <Link
+                href={`/academies/${params.academyId}/discussions?moduleId=${params.moduleId}`}
+                className="text-sm"
+              >
+                Forum Diskusi
+              </Link>
+            </h4>
             <p className="text-muted-foreground text-sm">
               Bertanya ke forum diskusi jika mengalami kendala saat mengerjakan
               submission.
