@@ -57,7 +57,7 @@ export default async function Academies({
                   />
                   <div className="space-y-1">
                     <h2 className="text-base font-semibold">{academy.name}</h2>
-                    <div className="flex items-center gap-4">
+                    <div className="sm:flex items-center gap-4">
                       <div className="flex items-center gap-2">
                         <Newspaper className="w-4 h-4 stroke-[#3f3f46]" />
                         <span className="text-sm">
