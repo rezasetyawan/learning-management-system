@@ -47,7 +47,7 @@ export default async function Academies({
               return (
                 <Link
                   key={academy.id}
-                  href={"/admin/academies/" + academy.id}
+                  href={"/academies/" + academy.id}
                   className="p-3 rounded-sm shadow-sm border flex gap-3"
                 >
                   <img
