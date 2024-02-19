@@ -15,6 +15,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import JoinRequestAlert from "./join-request-alert";
+import { Newspaper, Users } from "lucide-react";
 
 interface AcademyApplication {
   id: string;
@@ -40,8 +41,20 @@ export default function AcademyContent({
           alt={academy.name}
           className="aspect-[1.7/1] xl:aspect-square rounded-md object-cover w-full block col-span-3"
         />
-        <div className="col-span-6 mt-2 lg:mt-0">
-          <h2 className="text-lg font-medium lg:text-2xl">{academy.name}</h2>
+        <div className="col-span-6 mt-2 space-y-2 lg:mt-0">
+          <h2 className="text-lg font-semibold lg:text-2xl">{academy.name}</h2>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              <Newspaper className="w-5 h-5 stroke-[#3f3f46]" />
+              <span className="text-sm">{academy.moduleCount} Modul</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Users className="w-5 h-5 stroke-[#3f3f46]" />
+              <span className="text-sm">
+                {academy.joinedUserCount} Siswa terdaftar
+              </span>
+            </div>
+          </div>
           <p className="mt-2 text-sm lg:text-base">{academy.description}</p>
         </div>
         <div className="flex flex-col gap-1.5 col-span-3 mt-4 lg:mt-0">
@@ -73,7 +86,10 @@ export default function AcademyContent({
               </AlertDialogContent>
             </AlertDialog>
           ) : (
-            <JoinRequestAlert accessToken={accessToken} academyId={academy.id} />
+            <JoinRequestAlert
+              accessToken={accessToken}
+              academyId={academy.id}
+            />
           )}
           <Button variant="outline">Informasi kelas</Button>
           <Button variant="outline">
