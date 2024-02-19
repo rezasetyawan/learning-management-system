@@ -46,7 +46,7 @@ export const Actions = ({
           }
         );
         toggleIsPublished();
-        toast.success("Academy unpublished");
+        toast.success("Kelas berhasil tidak dipublish");
       } else {
         await axiosInstance.patch(
           `/academies/${academyId}`,
@@ -61,10 +61,10 @@ export const Actions = ({
           }
         );
         toggleIsPublished();
-        toast.success("Academy published");
+        toast.success("Kelas berhasil dipublish");
       }
     } catch {
-      toast.error("Something went wrong");
+      toast.error("Maaf, ada kesalahan");
     } finally {
       setIsLoading(false);
     }
@@ -87,10 +87,10 @@ export const Actions = ({
         }
       );
 
-      toast.success("Academy deleted");
+      toast.success("Kelas berhasil dihapus");
       router.push("/admin/academies");
     } catch {
-      toast.error("Something went wrong");
+      toast.error("Kelas gagal dihapus");
     } finally {
       setIsLoading(false);
     }
@@ -104,11 +104,11 @@ export const Actions = ({
         variant="outline"
         size="sm"
       >
-        {isPublished ? "Unpublish" : "Publish"}
+        {isPublished ? "Batal publish" : "Publish"}
       </Button>
       <ConfirmModal
         onConfirm={onDelete}
-        message="Are you want to delete this academy?"
+        message="Apakah anda yakin ingin menghapus kelas ini?"
       >
         <Button size="sm" disabled={isLoading}>
           <Trash className="h-4 w-4" />

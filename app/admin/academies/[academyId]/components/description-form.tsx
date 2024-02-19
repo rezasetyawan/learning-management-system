@@ -71,20 +71,20 @@ export const DescriptionForm = ({
         }
       );
       setDescription(values.description);
-      toast.success("Description updated");
+      toast.success("Deskripsi kelas berhasil diubah");
       toggleEdit();
     } catch {
-      toast.error("Something went wrong");
+      toast.error("Deskripsi kelas gagal diubah");
     }
   };
 
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        <p className="text-sm font-medium lg:text-base">Academy description</p>
+        <p className="text-sm font-medium lg:text-base">Deskripsi kelas</p>
         <Button onClick={toggleEdit} variant="ghost">
           {isEditing ? (
-            <>Cancel</>
+            <>Batal</>
           ) : (
             <>
               <Pencil className="h-4 w-4 mr-2" />
@@ -100,7 +100,7 @@ export const DescriptionForm = ({
             !initialData.description && "text-slate-500 italic"
           )}
         >
-          {description || "No description"}
+          {description || "Tidak ada deskripsi"}
         </p>
       )}
       {isEditing && (
@@ -128,7 +128,7 @@ export const DescriptionForm = ({
             />
             <div className="flex items-center gap-x-2">
               <Button disabled={!isValid || isSubmitting} type="submit">
-                Save
+                Simpan
               </Button>
             </div>
           </form>

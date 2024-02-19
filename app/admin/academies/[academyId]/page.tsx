@@ -44,7 +44,7 @@ export default async function Academy({
                 <LayoutDashboard className="w-6 h-6" />
               </div>
               <h2 className="text-base font-semibold lg:text-lg">
-                Customize your academy
+                Kustomisasi kelas Anda
               </h2>
             </div>
             <NameForm

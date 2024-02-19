@@ -57,23 +57,18 @@ export const ImageForm = ({
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${accessToken}`,
           },
-          timeout: 20000,
+          timeout: 200000,
         });
         setImage(null);
-        toast.success("Cover image updated");
+        toast.success("Cover berhasil diubah");
         toggleEdit();
       }
     } catch (error) {
       console.error(error);
-      toast.error("Something went wrong");
+      toast.error("Cover gagal diubah");
     }
   };
 
-  useEffect(() => {
-    console.log(image);
-  }, [image]);
-
-  console.log(initialData);
   const previewImageUrl = useMemo(() => {
     if (image) return URL.createObjectURL(image);
   }, [image]);
@@ -81,19 +76,19 @@ export const ImageForm = ({
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        Academy cover image
+        Gambar Cover Kelas
         <Button onClick={toggleEdit} variant="ghost">
-          {isEditing && <>Cancel</>}
+          {isEditing && <>Batal</>}
           {!isEditing && !initialData.coverImageUrl && (
             <>
               <PlusCircle className="h-4 w-4 mr-2" />
-              Add an image
+              Tambah Gambar
             </>
           )}
           {!isEditing && initialData.coverImageUrl && (
             <>
               <Pencil className="h-4 w-4 mr-2" />
-              Edit image
+              Edit Gambar
             </>
           )}
         </Button>
@@ -145,11 +140,10 @@ export const ImageForm = ({
                     image && "text-white"
                   }`}
                 >
-                  <span className="font-semibold">Click to upload</span> or drag
-                  and drop
+                  <span className="font-semibold">Klik untuk upload</span>
                 </p>
                 <p className={`text-xs text-gray-500 ${image && "text-white"}`}>
-                  PNG, JPG or GIF
+                  PNG, JPG, JPEG 
                 </p>
               </div>
               <input
@@ -169,10 +163,10 @@ export const ImageForm = ({
           </div>
 
           <div className="text-xs text-muted-foreground mt-4">
-            16:9 aspect ratio recommended
+            direkomendasikan aspek rasio 16:9
           </div>
-          <Button type="submit" disabled={!image}>
-            Save
+          <Button type="submit" disabled={!image} size="sm" className="mt-2">
+            Simpan
           </Button>
         </form>
       )}

@@ -95,7 +95,7 @@ export default function ModuleContainer({
         <div className="rounded-full flex items-center justify-center bg-sky-100 text-sky-700 p-1.5">
           <ListChecks className="w-6 h-6" />
         </div>
-        <h2 className="text-base font-semibold lg:text-lg">Academy module section</h2>
+        <h2 className="text-base font-semibold lg:text-lg">Modul Group & Modul Kelas</h2>
       </div>
       <ModuleGroupForm
         initialData={{ moduleGroups }}

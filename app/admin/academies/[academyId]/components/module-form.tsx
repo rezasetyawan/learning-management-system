@@ -331,11 +331,11 @@ export default function ModuleForm({
           <div className="flex flex-col">
             <div className="font-medium flex items-center justify-between mb-2">
               <p className="text-sm font-medium lg:text-base">
-                Academy modules
+                Modul Kelas
               </p>
               <div className="flex items-center gap-4">
                 <p className="text-xs text-muted-foreground">
-                  {totalModules} modules in total
+                  Total {totalModules} module
                 </p>
                 <Link href={`/admin/academies/${academyId}/modules/trash`}>
                   <Button variant="ghost" className="p-0 m-0">
@@ -350,7 +350,7 @@ export default function ModuleForm({
                         d="M7.035 3.5c-.9 0-1.629.675-1.737 1.527A.75.75 0 0 1 5.5 5h13c.07 0 .137.01.201.027A1.75 1.75 0 0 0 16.965 3.5zM6.85 19.83a.75.75 0 0 0 .745.67h8.807a.75.75 0 0 0 .746-.67L18.59 6.496a.758.758 0 0 1-.09.005h-13a.758.758 0 0 1-.091-.005zM3.803 5.6A3.25 3.25 0 0 1 7.035 2h9.93a3.25 3.25 0 0 1 3.231 3.6L18.64 19.991A2.25 2.25 0 0 1 16.403 22H7.596a2.25 2.25 0 0 1-2.237-2.008zm7.989 4.81a.25.25 0 0 1 .415 0l.67 1a.75.75 0 0 0 1.246-.835l-.669-1a1.75 1.75 0 0 0-2.909 0l-.669 1a.75.75 0 1 0 1.247.834zM9.636 12.6a.75.75 0 0 1 .257 1.028l-.364.607a.5.5 0 0 0 .428.757h.793a.75.75 0 0 1 0 1.5h-.793c-1.554 0-2.514-1.696-1.715-3.029l.365-.607a.75.75 0 0 1 1.029-.257m4.473 1.028a.75.75 0 1 1 1.286-.771l.364.607c.799 1.333-.161 3.028-1.715 3.028h-.794a.75.75 0 0 1 0-1.5h.794a.5.5 0 0 0 .429-.757z"
                       />
                     </svg>
-                    Trash
+                    Sampah
                   </Button>
                 </Link>
               </div>
@@ -450,10 +450,9 @@ const Row = ({
         moduleGroupId
       );
       toggleCreating();
-      toast.success("New module added");
+      toast.success("Modul berhasil ditambahkan");
     } catch (error) {
-      console.error(error);
-      toast.error("Something went wrong");
+      toast.error("Modul gagal ditambahkan");
     }
   };
   return (
@@ -483,11 +482,11 @@ const Row = ({
                       className="text-xs lg:text-sm"
                     >
                       {isCreating ? (
-                        <>Cancel</>
+                        <>Batal</>
                       ) : (
                         <>
                           <PlusCircle className="h-4 w-4 mr-2" />
-                          Add
+                          Tambah
                         </>
                       )}
                     </Button>
@@ -535,7 +534,7 @@ const Row = ({
                           disabled={!isValid || isSubmitting}
                           type="submit"
                         >
-                          Create
+                          Buat
                         </Button>
                       </form>
                     </Form>
@@ -545,7 +544,7 @@ const Row = ({
                     <div className="p-4 rounded-md">
                       {!modules.length && (
                         <p className="font-medium text-center text-xs lg:text-sm">
-                          No module groups
+                          Belum ada modul untuk ditampilkan
                         </p>
                       )}
                       <div className="max-h-[300px] overflow-y-scroll w-full lg:pr-4 modules-container">
@@ -614,7 +613,7 @@ const Row = ({
                       {!!modules.length && (
                         <div>
                           <p className="text-xs text-muted-foreground mt-4">
-                            {modules.length} modules
+                            {modules.length} module
                           </p>
                           <p className="text-xs text-muted-foreground mt-4">
                             Drag and drop to reorder the module groups

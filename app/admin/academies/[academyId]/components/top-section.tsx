@@ -27,11 +27,11 @@ export default function TopSection({
   return (
     <>
       {!currentIsPublished && (
-        <Banner label="This academy is unpublished. It will not be visible to the normal users." />
+        <Banner label="Kelas ini tidak dipublish, ini akan membuat kelas tidak dapat diakses oleh pengguna." />
       )}
       <div className="flex items-center justify-between p-4 lg:p-6">
         <div className="space-y-2">
-          <h1 className="text-lg font-semibold lg:text-2xl">Academy setup</h1>
+          <h1 className="text-lg font-semibold lg:text-2xl">Pengaturan Kelas</h1>
           <div className="flex items-center gap-2">
             <Link
               href={`/admin/academies/${academyId}/logs?academyName=${academyName}`}
@@ -50,7 +50,7 @@ export default function TopSection({
                 className="flex items-center gap-1 p-0 m-0"
               >
                 <BookText className="w-4 h-4" />
-                User Submission
+                Submission pengguna
               </Button>
             </Link>
             <Link href={`/admin/academies/${academyId}/discussions`}>
@@ -83,7 +83,7 @@ export default function TopSection({
                     fill="currentColor"
                   ></path>
                 </svg>
-                Discussions
+                Diskusi
               </Button>
             </Link>
           </div>

@@ -64,20 +64,20 @@ const NameForm = ({ initialData, academyId, accessToken }: TitleFormProps) => {
         }
       );
       setName(values.name);
-      toast.success("Name updated");
+      toast.success("Nama kelas berhasil diubah");
       toggleEdit();
     } catch {
-      toast.error("Something went wrong");
+      toast.error("Nama kelas gagal diubah");
     }
   };
 
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        <p className="text-sm font-medium lg:text-base">Academy name</p>
+        <p className="text-sm font-medium lg:text-base">Nama kelas</p>
         <Button onClick={toggleEdit} variant="ghost">
           {isEditing ? (
-            <>Cancel</>
+            <>Batal</>
           ) : (
             <>
               <Pencil className="h-4 w-4 mr-2" />
@@ -111,7 +111,7 @@ const NameForm = ({ initialData, academyId, accessToken }: TitleFormProps) => {
             />
             <div className="flex items-center gap-x-2">
               <Button disabled={!isValid || isSubmitting} type="submit">
-                Save
+                Simpan
               </Button>
             </div>
           </form>
