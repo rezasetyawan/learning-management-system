@@ -48,7 +48,7 @@ export default async function Academies({
             return (
               <Link
                 key={academy.id}
-                href={"/academies/" + academy.id}
+                href={"/admin/academies/" + academy.id}
                 className="p-3 rounded-sm shadow-sm border"
               >
                 <div className="flex gap-3">
