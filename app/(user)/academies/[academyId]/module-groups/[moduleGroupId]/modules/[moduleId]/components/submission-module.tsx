@@ -65,7 +65,7 @@ export default function SubmissionModule({
       </div>
       <div className="mt-10 border shadow-sm rounded-md">
         <div className="p-3 border-b">
-          {submission === null ? (
+          {!submission ? (
             <div className="flex flex-col items-center gap-3">
               <img src="/modules/coding.svg" alt="" className="w-96" />
               <h3 className="font-semibold">
@@ -96,7 +96,8 @@ export default function SubmissionModule({
                   </li>
                   <li className="flex md:w-full items-center after:content-[''] after:w-full after:h-0.5 after:bg-gray-200 after:border-1 after:hidden sm:after:inline-block after:mx-6 xl:after:mx-5 ">
                     <div className="relative after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-200">
-                      {submission.status === "REVIEWED" ? (
+                      {submission.status === "REVIEWED" &&
+                      submission.result.length ? (
                         <svg
                           className="w-7 h-7 text-blue-600"
                           aria-hidden="true"
@@ -176,7 +177,8 @@ export default function SubmissionModule({
                       <span className="absolute top-10 left-1/2 -translate-x-1/2 whitespace-nowrap text-sm">
                         {submission.status === "REVIEW"
                           ? "Menunggu hasil review"
-                          : submission.result[0].isPassed
+                          : submission.result.length &&
+                            submission.result[0].isPassed
                           ? "Diterima"
                           : "Ditolak"}
                       </span>
