@@ -13,6 +13,11 @@ export type DeletedAcademy = {
   isPublished: boolean;
   deletedAt: string;
   deletedBy: string;
+  user: {
+    fullname: string;
+    username: true;
+    role: string;
+  };
 };
 
 export const columns: ColumnDef<DeletedAcademy>[] = [
@@ -52,7 +57,15 @@ export const columns: ColumnDef<DeletedAcademy>[] = [
     },
   },
   {
-    accessorKey: "deletedBy",
+    accessorKey: "user",
     header: "Dihapus oleh",
+    cell: ({ row }) => {
+      const user: {
+        fullname: string;
+        username: true;
+        role: string;
+      } = row.getValue("user");
+      return <span>{user.fullname} ({user.role})</span>;
+    },
   },
 ];

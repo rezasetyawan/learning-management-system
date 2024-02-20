@@ -4,12 +4,18 @@ import Link from "next/link";
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
 
+const cookieStore = cookies();
+const accessToken = cookieStore.get("accessToken")?.value || "";
+
 const fetchAcadmies = async () => {
   const data = await fetch(
     (process.env.NEXT_PUBLIC_API_BASE_URL as string) +
       "/academies?isDeleted=true",
     {
       cache: "no-store",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
     }
   );
 
@@ -26,6 +32,11 @@ type Academy = {
   isPublished: boolean;
   deletedAt: string;
   deletedBy: string;
+  user: {
+    fullname: string;
+    username: true;
+    role: string;
+  }
 };
 export default async function AcademiesTrashPage() {
   const academies = (await fetchAcadmies()) as Academy[];
