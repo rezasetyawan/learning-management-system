@@ -77,7 +77,7 @@ export default async function ModuleDetail({
       <div className="p-4 lg:p-6">
         <div className="flex items-center justify-between">
           <div className="flex flex-col gap-y-2">
-            <h1 className="text-lg font-semibold lg:text-2xl">Module setup</h1>
+            <h1 className="text-lg font-semibold lg:text-2xl">Pengaturan Modul</h1>
             <div className="flex items-center gap-2">
               <Link
                 href={`/admin/academies/${params.academyId}/module-groups/${params.moduleGroupId}/modules/${params.moduleId}/logs?moduleName=${moduleData.name}`}

@@ -72,10 +72,10 @@ const DurationForm = ({ initialData, moduleId, accessToken }: DurationFormProps)
   return (
     <div className="border bg-white rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        Quizz duration
+        Durasi Kuis
         <Button onClick={toggleEdit} variant="ghost">
           {isEditing ? (
-            <>Cancel</>
+            <>Batal</>
           ) : (
             <>
               <Pencil className="h-4 w-4 mr-2" />
@@ -105,7 +105,7 @@ const DurationForm = ({ initialData, moduleId, accessToken }: DurationFormProps)
             />
             <div className="flex items-center gap-x-2">
               <Button disabled={isSubmitting || !isValid} type="submit">
-                Save
+                Simpan
               </Button>
             </div>
           </form>

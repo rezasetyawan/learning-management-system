@@ -31,6 +31,7 @@ export default function Answer({
         onChange={(event: React.FormEvent<HTMLInputElement>) =>
           updateAnswerText(answer.id, event.currentTarget.value)
         }
+        placeholder="Tulis jawaban disini"
         className="text-base focus-visible:ring-0 border-0 bg-white rounded-none focus-visible:border-b-2 focus-visible:border-red-900"
       />
       {answer.isCorrect ? (

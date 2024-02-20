@@ -30,7 +30,7 @@ interface NameFormProps {
 
 const formSchema = z.object({
   name: z.string().min(1, {
-    message: "Name is required",
+    message: "Nama dibutuhkan",
   }),
 });
 
@@ -68,20 +68,20 @@ const NameForm = ({
         }
       );
       setName(values.name);
-      toast.success("Module name updated");
+      toast.success("Nama modul berhasil diubah");
       toggleEdit();
     } catch {
-      toast.error("Something went wrong");
+      toast.error("Nama modul gagal diubah");
     }
   };
 
   return (
     <div className="mt-6 border bg-white rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        Module name
+        Nama Modul
         <Button onClick={toggleEdit} variant="ghost">
           {isEditing ? (
-            <>Cancel</>
+            <>Batal</>
           ) : (
             <>
               <Pencil className="h-4 w-4 mr-2" />
@@ -115,7 +115,7 @@ const NameForm = ({
             />
             <div className="flex items-center gap-x-2">
               <Button disabled={!isValid || isSubmitting} type="submit">
-                Save
+                Simpan
               </Button>
             </div>
           </form>

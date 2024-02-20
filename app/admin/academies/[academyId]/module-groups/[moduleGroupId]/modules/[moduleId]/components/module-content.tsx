@@ -1,25 +1,10 @@
 "use client";
 
-import * as z from "zod";
-import axios from "axios";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { Pencil } from "lucide-react";
 import { FormEvent, useState } from "react";
 import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
 
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 
-import { Preview } from "@/components/preview";
 import Editor from "@/components/editor";
 import { axiosInstance } from "@/lib/axios";
 
@@ -63,10 +48,10 @@ export const ModuleContentForm = ({
           },
         }
       );
-      toast.success("Module content updated");
+      toast.success("Konten berhasil disimpan");
       toggleEdit();
     } catch {
-      toast.error("Something went wrong");
+      toast.error("Gagal menyimpan konten");
     }
   };
 
@@ -77,7 +62,7 @@ export const ModuleContentForm = ({
       }`}
     >
       <div className="font-medium flex items-center justify-between">
-        Module content
+        Konten Modul
       </div>
       <form className="mt-4" onSubmit={onSubmit}>
         <Editor
@@ -89,7 +74,7 @@ export const ModuleContentForm = ({
         />
 
         <div className="flex items-center justify-end gap-x-2 mt-4">
-          <Button type="submit">Save</Button>
+          <Button type="submit">Simpan</Button>
         </div>
       </form>
     </div>

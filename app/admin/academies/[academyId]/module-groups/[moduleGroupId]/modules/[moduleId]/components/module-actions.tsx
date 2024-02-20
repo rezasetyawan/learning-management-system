@@ -50,7 +50,7 @@ export const Actions = ({
           }
         );
         toggleIsPublished();
-        toast.success("Module unpublished");
+        toast.success("Modul berhasil tidak dipublish");
       } else {
         await axiosInstance.patch(
           `/academies/${academyId}/module-groups/${moduleGroupId}/modules/${moduleId}`,
@@ -65,10 +65,10 @@ export const Actions = ({
           }
         );
         toggleIsPublished();
-        toast.success("Module published");
+        toast.success("Modul berhasil dipublish");
       }
     } catch {
-      toast.error("Something went wrong");
+      toast.error("Maaf, ada kesalahan");
     } finally {
       setIsLoading(false);
     }
@@ -91,10 +91,10 @@ export const Actions = ({
         }
       );
 
-      toast.success("Module deleted");
+      toast.success("Modul berhasil dihapus");
       router.push(`/admin/academies/${academyId}`);
     } catch {
-      toast.error("Something went wrong");
+      toast.error("Modul gagal dihapus");
     } finally {
       setIsLoading(false);
     }
@@ -108,7 +108,7 @@ export const Actions = ({
         variant="outline"
         size="sm"
       >
-        {currentIsPublished ? "Unpublish" : "Publish"}
+        {currentIsPublished ? "Batal publish" : "Publish"}
       </Button>
       <ConfirmModal
         onConfirm={onDelete}

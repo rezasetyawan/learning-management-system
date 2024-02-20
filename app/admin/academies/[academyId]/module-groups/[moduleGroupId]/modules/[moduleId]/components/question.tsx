@@ -142,12 +142,12 @@ export default function Question({
         `/academies/modules/${moduleId}/quizz/${quizzId}/questions/${currentQuestion.id}`,
         answers
       );
-      toast.success("Question saved");
+      toast.success("Pertanyaan berhasil disimpan");
       setIsLoading(false);
       setIsSaved(true);
     } catch (error) {
       setIsLoading(false);
-      toast.error("Failed to save question");
+      toast.error("Pertanyaan gagal disimpan");
     }
   };
   return (
@@ -158,6 +158,7 @@ export default function Question({
         onChange={(event: React.FormEvent<HTMLInputElement>) =>
           setCurrentQuestionText(event.currentTarget.value)
         }
+        placeholder="Tulis pertanyaan disini"
       />
       <div>
         {!showAnswerKeySection &&
@@ -171,7 +172,7 @@ export default function Question({
             </div>
           ))}
         <Button variant="ghost" onClick={addNewAnswerOption}>
-          Add option
+          Tambah opsi
         </Button>
       </div>
       {showAnswerKeySection &&
@@ -190,7 +191,7 @@ export default function Question({
           onClick={toggleAnswerKeySection}
         >
           <ClipboardCheck className="w-5 h-5 stroke-blue-700" />
-          Answer key
+          Kunci jawaban
         </Button>
         <div className="flex items-center gap-2">
           <Button
@@ -206,7 +207,7 @@ export default function Question({
             disabled={isLoading || isSaved}
             onClick={onSaveHandler}
           >
-            Save
+            Simpan
           </Button>
         </div>
       </div>

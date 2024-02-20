@@ -79,10 +79,10 @@ export default function QuestionAmounts({
   return (
     <div className="border bg-white rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        Quizz question amounts
+        Jumlah Pertanyaan
         <Button onClick={toggleEdit} variant="ghost">
           {isEditing ? (
-            <>Cancel</>
+            <>Batal</>
           ) : (
             <>
               <Pencil className="h-4 w-4 mr-2" />
@@ -95,7 +95,7 @@ export default function QuestionAmounts({
         <>
           <p className="text-sm mt-2">{questionAmounts} questions</p>
           <p className="text-xs text-muted-foreground mt-2">
-            {totalQuestions} questions in this module
+            total {totalQuestions} pertanyaan di modul ini
           </p>
         </>
       )}
@@ -119,7 +119,7 @@ export default function QuestionAmounts({
             />
             <div className="flex items-center gap-x-2">
               <Button disabled={isSubmitting || !isValid} type="submit">
-                Save
+                Simpan
               </Button>
             </div>
           </form>

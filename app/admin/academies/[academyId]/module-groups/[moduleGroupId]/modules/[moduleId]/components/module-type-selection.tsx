@@ -84,7 +84,7 @@ export default function TypeSelection({
   }, [academyId, accessToken, moduleGroupId, moduleId, router, selectedType]);
   return (
     <div className="md:mt-6 border bg-white rounded-md p-4 font-medium">
-      Module type
+      Tipe Modul
       <Select
         onValueChange={(value: "QUIZZ" | "LESSON" | "SUBMISSION") => {
           setSelectedType(value);
