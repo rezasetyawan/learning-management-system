@@ -6,76 +6,184 @@ import { FormEvent, useState } from "react";
 import { axiosInstance } from "@/lib/axios";
 import { useRouter } from "next/navigation";
 import { create } from "@/actions/cookies";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import toast, { Toaster } from "react-hot-toast";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Eye, EyeOff } from "lucide-react";
+import Link from "next/link";
 
-export default function Login() {
-  const [userData, setUserData] = useState({
-    fullname: "Reza Setyawan",
-    username: "reza",
-    email: "setyawanreza960@gmail.com",
-    password: "12345678",
+const formSchema = z.object({
+  fullname: z.string(),
+  username: z.string(),
+  email: z.string().email("Tolong masukan email yang valid").default(""),
+  password: z.string().min(8).default(""),
+});
+
+export default function Register() {
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
   });
 
   const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
 
-  const onSubmitHandler = async (event: FormEvent) => {
-    event.preventDefault();
+  const togglePasswordVisibility = () => {
+    setShowPassword((current) => !current);
+  };
 
+  const onSubmitHandler = async (values: z.infer<typeof formSchema>) => {
     try {
-      console.log(userData);
-      const result = await axiosInstance.post("/auth/register", userData);
-      create(result.data.access_token);
-      router.push("/");
+      axiosInstance
+        .post("/auth/register", values)
+        .then((result) => {
+          if (result.status === 200 && result.data.status === "success") {
+            create(result.data.access_token);
+            router.push("/");
+          }
+        })
+        .catch((error) => {
+          if (error.response.status === 400) {
+            toast.error(error.response.data.message, {
+              duration: 5000,
+            });
+          }
+        });
     } catch (error) {
       console.log(error);
     }
   };
+
+  const { isSubmitting, isValid } = form.formState;
   return (
-    <div className="flex flex-col justify-center items-center h-svh">
-      <h1 className="text-2xl font-semibold mb-10">Sign Up</h1>
-      <form
-        className=" min-w-[400px] max-w-lg"
-        onSubmit={(event: FormEvent) => onSubmitHandler(event)}
-      >
-        <Input
-          type="text"
-          className="w-full"
-          value={userData.fullname}
-          onChange={(event: React.FormEvent<HTMLInputElement>) =>
-            setUserData({ ...userData, fullname: event.currentTarget.value })
-          }
-          required
-        />
-        <Input
-          type="text"
-          className="w-full mt-2"
-          value={userData.username}
-          onChange={(event: React.FormEvent<HTMLInputElement>) =>
-            setUserData({ ...userData, username: event.currentTarget.value })
-          }
-          required
-        />
-        <Input
-          type="email"
-          className="w-full mt-2"
-          value={userData.email}
-          onChange={(event: React.FormEvent<HTMLInputElement>) =>
-            setUserData({ ...userData, email: event.currentTarget.value })
-          }
-          required
-        />
-        <Input
-          type="password"
-          className="w-full mt-2"
-          value={userData.password}
-          onChange={(event: React.FormEvent<HTMLInputElement>) =>
-            setUserData({ ...userData, password: event.currentTarget.value })
-          }
-          required
-        ></Input>
-        <Button className="mt-4 w-full" type={"submit"}>
-          Submit
-        </Button>
-      </form>
-    </div>
+    <>
+      <Toaster position="top-center" reverseOrder={false} />
+      <div className="flex flex-col justify-center items-center h-svh">
+        <h1 className="text-2xl font-bold mb-10">Sign Up</h1>
+        <Form {...form}>
+          <form
+            className=" min-w-[400px] max-w-lg"
+            onSubmit={form.handleSubmit(onSubmitHandler)}
+          >
+            <FormField
+              control={form.control}
+              name="fullname"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="font-medium">Nama Lengkap</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={isSubmitting}
+                      placeholder=""
+                      {...field}
+                      required
+                      type="text"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem className="mt-1">
+                  <FormLabel className="font-medium">Username</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={isSubmitting}
+                      placeholder=""
+                      {...field}
+                      required
+                      type="text"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem className="mt-1">
+                  <FormLabel className="font-medium">Email</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={isSubmitting}
+                      placeholder=""
+                      {...field}
+                      required
+                      type="email"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem className="mt-1">
+                  <FormLabel className="font-medium">Password</FormLabel>
+                  <FormControl>
+                    <div className="relative w-full">
+                      <Input
+                        disabled={isSubmitting}
+                        placeholder=""
+                        {...field}
+                        required
+                        type={showPassword ? "text" : "password"}
+                        className="w-full"
+                        minLength={8}
+                      />
+                      <button
+                        className="absolute top-[28%] right-4"
+                        onClick={togglePasswordVisibility}
+                        type="button"
+                      >
+                        {showPassword ? (
+                          <EyeOff className="w-4 h-4 stroke-slate-400" />
+                        ) : (
+                          <Eye className="w-4 h-4 stroke-slate-400" />
+                        )}
+                      </button>
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <Button
+              className="mt-4 w-full"
+              type={"submit"}
+              disabled={isSubmitting || !isValid}
+            >
+              Submit
+            </Button>
+            <p className="text-sm mt-2">
+              Sudah punya akun?{" "}
+              <Link
+                href={"/register"}
+                className="text-blue-700 font-semibold text-left"
+              >
+                Login terlebih dahulu
+              </Link>
+            </p>
+          </form>
+        </Form>
+      </div>
+    </>
   );
 }
