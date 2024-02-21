@@ -3,7 +3,8 @@ import type { NextRequest } from 'next/server'
 import { cookies } from 'next/headers'
 
 export async function middleware(request: NextRequest) {
-    if (request.nextUrl.pathname === '/login' || request.nextUrl.pathname === '/register') {
+    const publicUrl = ['/login', '/register', '/not-found.svg']
+    if (publicUrl.includes(request.nextUrl.pathname)) {
         return NextResponse.next();
     }
 
@@ -74,6 +75,7 @@ export const config = {
             ],
         },
         '/login',
-        '/register'
+        '/register',
+        '/'
     ]
 }
