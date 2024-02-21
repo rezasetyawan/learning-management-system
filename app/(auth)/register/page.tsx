@@ -175,7 +175,7 @@ export default function Register() {
             <p className="text-sm mt-2">
               Sudah punya akun?{" "}
               <Link
-                href={"/register"}
+                href={"/login"}
                 className="text-blue-700 font-semibold text-left"
               >
                 Login terlebih dahulu
