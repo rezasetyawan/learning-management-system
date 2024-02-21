@@ -2,6 +2,7 @@ import { Academy } from "@/types";
 import { cookies } from "next/headers";
 import { Toaster } from "react-hot-toast";
 import AcademyContent from "./components/academy-content";
+import { notFound } from "next/navigation";
 
 interface AcademyApplication {
   id: string;
@@ -27,6 +28,10 @@ export default async function Academy({
       params.academyId,
     { cache: "no-store" }
   );
+
+  if (data.status === 404) {
+    notFound();
+  }
   const academyResponse = await data.json();
   const academy = academyResponse.data as Academy;
 
@@ -39,7 +44,7 @@ export default async function Academy({
 
   const academyApplicationData =
     (await academyApplicationResponse.json()) as AcademyApplicationResponse;
-    
+
   return (
     <>
       <Toaster position="top-center" reverseOrder={false} />

@@ -1,5 +1,4 @@
 /* eslint-disable @next/next/no-img-element */
-import Navbar from "@/components/Navbar";
 import { Academy } from "@/types";
 import { Pencil } from "lucide-react";
 import { cookies } from "next/headers";
@@ -53,7 +52,6 @@ export default async function ProfilePage({
   const joinDate = new Date(+userProfile.createdAt);
   return (
     <>
-      <Navbar />
       <div className="bg-[url('/users/profile-bg.png')] px-8 py-16 bg-no-repeat bg-cover md:flex items-center gap-5 text-white md:p-10 md:py-14 md:px-40 lg:py-14">
         <div className="relative w-40 h-40">
           <img
