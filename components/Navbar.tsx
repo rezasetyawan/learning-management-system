@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Button } from "./ui/button";
 import { cookies } from "next/headers";
 import ProfileDropDownMenu from "./ProfileDropDown";
+import MobileSidebar from "./mobile-sidebar";
 
 async function getData(accessToken: string) {
   try {
@@ -28,11 +29,11 @@ export default async function Navbar() {
       label: "Home",
       active: false,
     },
-    {
-      href: `/learning-path`,
-      label: "Learning Path",
-      active: false,
-    },
+    // {
+    //   href: `/learning-path`,
+    //   label: "Learning Path",
+    //   active: false,
+    // },
     {
       href: `/academies`,
       label: "Academies",
@@ -41,7 +42,7 @@ export default async function Navbar() {
   ];
   return (
     <header className="flex items-center p-3 font-rubik border-b max-md:h-14 lg:px-8 w-full justify-between sticky top-0 z-[1000] bg-white">
-      <div className="flex gap-2 lg:gap-10">
+      <div className="flex gap-2 lg:gap-10 max-lg:hidden">
         <h1 className="text-lg lg:text-2xl font-semibold">
           <Link href={"/"}>LMS</Link>
         </h1>
@@ -60,6 +61,9 @@ export default async function Navbar() {
             })}
           </div>
         </nav>
+      </div>
+      <div className="lg:hidden">
+        <MobileSidebar />
       </div>
       {!user && (
         <div className="flex gap-2">
