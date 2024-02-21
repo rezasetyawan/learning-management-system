@@ -1,10 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
-import Navbar from "@/components/Navbar";
-import { Input } from "@/components/ui/input";
 import { Academy } from "@/types";
+import { Newspaper, Users } from "lucide-react";
 import Link from "next/link";
 import AcademyFilter from "./components/academy-filter";
-import { Newspaper, Users } from "lucide-react";
 
 const fetchAcademies = async (searchKey: string) => {
   const data = await fetch(
@@ -29,7 +27,6 @@ export default async function Academies({
   )) as Academy[];
   return (
     <>
-      <Navbar />
       <div className="bg-[url('/academies/hero.jpg')] px-8 py-16 bg-no-repeat bg-cover flex items-center justify-center md:p-10 md:py-20 lg:p-20">
         <h2 className="text-lg text-center font-medium md:text-2xl xl:text-3xl">
           Eksplor kelas dengan materi yang terstruktur

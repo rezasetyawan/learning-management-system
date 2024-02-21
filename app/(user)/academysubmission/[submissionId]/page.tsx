@@ -1,7 +1,6 @@
 import { cookies } from "next/headers";
 import SubmissionInfo from "./components/submission-info";
 import SubmissionResult from "./components/submission-result";
-import Navbar from "@/components/Navbar";
 interface Reviewer {
   fullname: string;
   username: string;
@@ -78,7 +77,6 @@ export default async function AcademySubmissionDetail({
 
   return (
     <>
-      <Navbar />
       <div className="mx-60 mb-40">
         <div className="my-5">
           <h2 className="text-xl font-semibold">
