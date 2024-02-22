@@ -8,7 +8,7 @@ export async function middleware(request: NextRequest) {
         return NextResponse.next();
     }
 
-    const accessToken = cookies().get('accessToken')?.value
+    const accessToken = cookies().get('accessToken')?.value || ""
 
     if (!accessToken) {
         return NextResponse.redirect(new URL('/login', request.url))
@@ -26,9 +26,9 @@ export async function middleware(request: NextRequest) {
 
     console.log((process.env.NEXT_PUBLIC_API_BASE_URL as string) + '/auth/verify-token')
     console.log(checkTokenResponse)
-    if (!checkTokenResponse.data.is_token_valid) {
-        return NextResponse.redirect(new URL('/login', request.url))
-    }
+    // if (!checkTokenResponse.data.is_token_valid) {
+    //     return NextResponse.redirect(new URL('/login', request.url))
+    // }
 
     if (checkTokenResponse.data.username) {
         // fetch to api to get user role
