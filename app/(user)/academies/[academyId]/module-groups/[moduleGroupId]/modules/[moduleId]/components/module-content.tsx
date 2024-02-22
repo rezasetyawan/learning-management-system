@@ -389,7 +389,7 @@ export default function ModuleContent({
   ) : (
     <>
       {/* HEADER */}
-      <header className="bg-white border-b px-4 py-4 fixed top-0 left-0 right-0 w-full h-14 flex items-center justify-between z-[100] lg:px-10 lg:justify-start">
+      <header className="bg-white border-b px-4 py-4 fixed top-0 left-0 right-0 w-full h-16 flex items-center justify-between z-[2000] lg:px-10 lg:justify-start">
         <Link
           href={`/academies/${academyId}`}
           className="flex items-center gap-4"

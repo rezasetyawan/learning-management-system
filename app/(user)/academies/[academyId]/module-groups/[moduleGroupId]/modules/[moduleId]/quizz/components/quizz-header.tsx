@@ -65,7 +65,7 @@ export default function QuizzHeader({
     return formattedTime;
   }
   return (
-    <header className="h-14 bg-white flex justify-between items-center border-b px-5 fixed top-0 left-0 right-0 z-[100] lg:px-10">
+    <header className="h-16 bg-white flex justify-between items-center border-b px-5 fixed top-0 left-0 right-0 z-[2000] lg:px-10">
         <h1 className="font-semibold text-base">{moduleName}</h1>
       <div>{convertSecondsToMinutesSeconds(secondsLeft)}</div>
     </header>
