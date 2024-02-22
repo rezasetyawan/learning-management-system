@@ -1,7 +1,6 @@
+import { cookies } from "next/headers";
 import Link from "next/link";
 import { Button } from "../ui/button";
-import { cookies } from "next/headers";
-import ProfileDropDownMenu from "./ProfileDropDown";
 import MobileSidebar from "./mobile-sidebar";
 
 async function getData(accessToken: string) {
@@ -31,7 +30,7 @@ export default async function Navbar({ userRole }: NavbarProps) {
  
   return (
     <>
-      <header className="flex items-center p-3 font-rubik border-b max-md:h-14 lg:px-8 w-full justify-between sticky top-0 z-[1000] bg-white lg:justify-end">
+      <header className="flex items-center p-3 h-14 font-rubik border-b max-md:h-14 lg:px-8 w-full justify-between sticky top-0 z-[1000] bg-white lg:justify-end lg:h-16">
         <MobileSidebar userRole={userRole} />
         {!user && (
           <div className="flex gap-2">
@@ -43,7 +42,6 @@ export default async function Navbar({ userRole }: NavbarProps) {
             </Button>
           </div>
         )}
-        {user && <ProfileDropDownMenu user={user} />}
       </header>
     </>
   );

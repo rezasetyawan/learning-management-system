@@ -1,5 +1,6 @@
 "use client";
 
+import { deleteCookies } from "@/actions/cookies";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -8,7 +9,8 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
-import { deleteCookies } from "@/actions/cookies";
+import { LogOut, UserRound } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 type Props = {
@@ -41,15 +43,24 @@ export default function ProfileDropDownMenu({ user }: Props) {
               </svg>
             </div>
           </NavigationMenuTrigger>
-          <NavigationMenuContent className="p-2 mr-10 w-10 max-w-[10rem] flex flex-col justify-center text-sm">
-            <NavigationMenuLink>Dashboard</NavigationMenuLink>
-            <NavigationMenuLink>Profile</NavigationMenuLink>
+          <NavigationMenuContent className="py-4 px-4 w-full flex flex-col justify-center text-sm right-16 md:w-max">
             <NavigationMenuLink>
+              <Link
+                href={`/users/${user.username}`}
+                className="flex items-center gap-2"
+              >
+                {" "}
+                <UserRound className="w-4 h-4 stroke-[#3f3f46]" />
+                Profil
+              </Link>
+            </NavigationMenuLink>
+            <NavigationMenuLink className="mt-2">
               <p
-                className="text-red-600 cursor-pointer"
+                className="text-red-600 cursor-pointer flex items-center gap-2"
                 onClick={logoutHandler}
               >
-                Logout
+                <LogOut className="w-4 h-4 stroke-red-600" />
+                Keluar
               </p>
             </NavigationMenuLink>
           </NavigationMenuContent>
