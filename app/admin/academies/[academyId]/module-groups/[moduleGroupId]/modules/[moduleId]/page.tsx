@@ -12,6 +12,7 @@ import { cookies } from "next/headers";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Eye, FileClock } from "lucide-react";
+import { notFound } from "next/navigation";
 
 type Module = {
   id: string;
@@ -61,16 +62,20 @@ export default async function ModuleDetail({
 }) {
   const cookieStore = cookies();
   const accessToken = cookieStore.get("accessToken")?.value || "";
-  const data = await axiosInstance.get(
-    `/academies/${params.academyId}/module-groups/${params.moduleGroupId}/modules/${params.moduleId}`,
+  const data = await fetch(
+    (process.env.NEXT_PUBLIC_API_BASE_URL as string) +
+      `/academies/${params.academyId}/module-groups/${params.moduleGroupId}/modules/${params.moduleId}`,
     {
+      cache: "no-store",
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
     }
   );
 
-  const moduleData = data.data.data as Module;
+  const moduleResponse = await data.json()
+  const moduleData = moduleResponse.data as Module
+  if (data.status === 404) notFound();
   return (
     <>
       <Toaster position="top-center" reverseOrder={false} />
