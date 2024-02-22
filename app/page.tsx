@@ -74,7 +74,7 @@ export default async function Home() {
               <CarouselNext className="static inset-0 translate-x-0 translate-y-0" />
             </div>
             <CarouselContent>
-              {academies.concat(academies).map((academy) => {
+              {academies.map((academy) => {
                 return (
                   <CarouselItem
                     key={academy.id}
