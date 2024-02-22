@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { redirect, useRouter } from "next/navigation";
+import { notFound, redirect, useRouter } from "next/navigation";
 
 export default async function AcademyContinue({
   params,
@@ -15,7 +15,11 @@ export default async function AcademyContinue({
       "/continue",
     { cache: "no-store", headers: { Authorization: `Bearer ${accessToken}` } }
   );
+
+  if (data.status === 404) {
+    notFound()
+  }
+
   const responseData = await data.json();
-  console.log(responseData);
   redirect(`/academies/${params.academyId}/module-groups/${responseData.data.moduleGroupId}/modules/${responseData.data.moduleId}`)
 }
