@@ -2,14 +2,30 @@ import { cookies } from "next/headers";
 import SubmissionForm from "./components/submission-form";
 import SubmissionHeader from "./components/submission-header";
 import { Toaster } from "react-hot-toast";
+import { notFound } from "next/navigation";
 
-export default function SubmissionPage({
+export default async function SubmissionPage({
   params,
 }: {
   params: { academyId: string; moduleGroupId: string; moduleId: string };
 }) {
   const cookieStore = cookies();
   const accessToken = cookieStore.get("accessToken")?.value || "";
+ 
+  const moduleData = await fetch(
+    (process.env.NEXT_PUBLIC_API_BASE_URL as string) +
+      `/academies/${params.academyId}/module-groups/${params.moduleGroupId}/modules/${params.moduleId}`,
+    {
+      cache: "no-store",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
+
+  if (moduleData.status === 404) {
+    notFound();
+  }
   return (
     <>
     <Toaster position="top-center" reverseOrder={false} />

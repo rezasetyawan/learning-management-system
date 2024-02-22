@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import QuizzContent from "./components/quizz-content";
 import QuizzHeader from "./components/quizz-header";
+import { notFound } from "next/navigation";
 
 type Module = {
   id: string;
@@ -60,6 +61,10 @@ export default async function ModuleQuizz({
       },
     }
   );
+
+  if (moduleData.status === 404) {
+    notFound();
+  }
 
   const moduleResponse = await moduleData.json();
   const currentModule = moduleResponse.data as Module;

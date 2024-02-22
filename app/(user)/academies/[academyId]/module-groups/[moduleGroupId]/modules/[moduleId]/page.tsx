@@ -1,6 +1,7 @@
 import { Academy } from "@/types";
 import ModuleContent from "./components/module-content";
 import { cookies } from "next/headers";
+import { notFound } from "next/navigation";
 
 type Module = {
   id: string;
@@ -91,6 +92,10 @@ export default async function ModuleDetail({
       },
     }
   );
+
+  if (moduleData.status === 404) {
+    notFound();
+  }
 
   const moduleResponse = await moduleData.json();
   const currentModule = moduleResponse.data as Module;
