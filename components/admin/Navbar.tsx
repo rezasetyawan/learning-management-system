@@ -23,7 +23,7 @@ interface NavbarProps {
   userRole: "admin" | "user" | "superadmin";
 }
 
-export default async function Navbar({ userRole }: NavbarProps) {
+export default async function AdminNavbar({ userRole }: NavbarProps) {
   const cookieStore = cookies();
   const accessToken = cookieStore.get("accessToken")?.value;
   let user = null;
