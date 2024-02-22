@@ -4,10 +4,7 @@ import Link from "next/link";
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
 
-const cookieStore = cookies();
-const accessToken = cookieStore.get("accessToken")?.value || "";
-
-const fetchAcadmies = async () => {
+const fetchAcadmies = async (accessToken: string) => {
   const data = await fetch(
     (process.env.NEXT_PUBLIC_API_BASE_URL as string) +
       "/academies?isDeleted=true",
@@ -39,9 +36,9 @@ type Academy = {
   }
 };
 export default async function AcademiesTrashPage() {
-  const academies = (await fetchAcadmies()) as Academy[];
   const cookieStore = cookies();
   const accessToken = cookieStore.get("accessToken")?.value || "";
+  const academies = (await fetchAcadmies(accessToken)) as Academy[];
 
   return (
     <div className={"p-5 space-y-5"}>

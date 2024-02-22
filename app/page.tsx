@@ -13,7 +13,10 @@ import {
 
 const fetchAcademies = async () => {
   const data = await fetch(
-    (process.env.NEXT_PUBLIC_API_BASE_URL as string) + "/academies"
+    (process.env.NEXT_PUBLIC_API_BASE_URL as string) + "/academies",
+    {
+      cache: "no-store",
+    }
   );
 
   return data.json();
@@ -74,7 +77,7 @@ export default async function Home() {
               <CarouselNext className="static inset-0 translate-x-0 translate-y-0" />
             </div>
             <CarouselContent>
-              {academies.concat(academies).map((academy) => {
+              {academies.map((academy) => {
                 return (
                   <CarouselItem
                     key={academy.id}

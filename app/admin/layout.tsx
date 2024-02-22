@@ -1,4 +1,4 @@
-import Navbar from "@/components/admin/navbar";
+import AdminNavbar from "@/components/admin/navbar";
 import Sidebar from "@/components/admin/sidebar"
 import { cookies } from "next/headers";
 
@@ -29,7 +29,7 @@ const DashboardLayout = async ({
   return ( 
     <div className="h-full">
       <div className="h-[80px] lg:pl-56 fixed inset-y-0 w-full z-50">
-        <Navbar userRole={user.role} />
+        <AdminNavbar userRole={user.role} />
       </div>
       <div className="hidden lg:flex h-full w-56 flex-col fixed inset-y-0 z-50">
         <Sidebar userRole={user.role}/>
