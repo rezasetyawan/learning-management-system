@@ -1,15 +1,14 @@
 /* eslint-disable @next/next/no-assign-module-variable */
-import NameForm from "./components/name-form";
-import { DescriptionForm } from "./components/description-form";
-import ModuleContainer from "./components/module-container";
-import { Toaster } from "react-hot-toast";
-import { ImageForm } from "./components/image-form";
-import { IconBadge } from "@/components/ui/icon-badge";
-import { LayoutDashboard } from "lucide-react";
-import { Actions } from "./components/actions";
 import { Academy } from "@/types";
-import TopSection from "./components/top-section";
+import { LayoutDashboard } from "lucide-react";
 import { cookies } from "next/headers";
+import { notFound } from "next/navigation";
+import { Toaster } from "react-hot-toast";
+import { DescriptionForm } from "./components/description-form";
+import { ImageForm } from "./components/image-form";
+import ModuleContainer from "./components/module-container";
+import NameForm from "./components/name-form";
+import TopSection from "./components/top-section";
 export default async function Academy({
   params,
 }: {
@@ -21,6 +20,8 @@ export default async function Academy({
       params.academyId,
     { cache: "no-store" }
   );
+
+  if (data.status === 404) notFound();
 
   const academyResponse = await data.json();
   const academy = academyResponse.data as Academy;
