@@ -15,7 +15,7 @@ export async function middleware(request: NextRequest) {
     }
 
     // fetch to api to check if token is valid
-    const data = await fetch('http://localhost:3000/auth/verify-token', {
+    const data = await fetch((process.env.NEXT_PUBLIC_API_BASE_URL as string) + '/auth/verify-token', {
         headers: {
             'Authorization': `Bearer ${accessToken}`
         }
@@ -30,7 +30,7 @@ export async function middleware(request: NextRequest) {
 
     if (checkTokenResponse.data.username) {
         // fetch to api to get user role
-        const data = await fetch(`http://localhost:3000/users/${checkTokenResponse.data.username}/role`, {
+        const data = await fetch((process.env.NEXT_PUBLIC_API_BASE_URL as string) + `/users/${checkTokenResponse.data.username}/role`, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`
             }

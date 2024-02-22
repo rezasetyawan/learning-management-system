@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 
 async function getData(accessToken: string) {
   try {
-    const data = await fetch(`http://localhost:3000/profile`, {
+    const data = await fetch((process.env.NEXT_PUBLIC_API_BASE_URL as string) + `/profile`, {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
     const userData = data.json();

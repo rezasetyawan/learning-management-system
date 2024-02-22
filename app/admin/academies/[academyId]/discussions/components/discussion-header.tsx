@@ -5,9 +5,12 @@ import { cookies } from "next/headers";
 
 async function getData(accessToken: string) {
   try {
-    const data = await fetch(`http://localhost:3000/profile`, {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    });
+    const data = await fetch(
+      (process.env.NEXT_PUBLIC_API_BASE_URL as string) + `/profile`,
+      {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      }
+    );
     const userData = data.json();
     return userData;
   } catch (error) {
@@ -22,14 +25,13 @@ export default async function DiscussionHeader() {
   if (accessToken) {
     user = await getData(accessToken);
   }
- 
+
   return (
     <header className="flex items-center p-3 font-rubik border-b max-md:h-14 lg:px-8 w-full justify-between sticky top-0 z-[1000] bg-white">
       <div className="flex gap-2 lg:gap-10">
         <h1 className="text-lg lg:text-2xl font-semibold">
           <Link href={"/"}>LMS</Link>
         </h1>
-        
       </div>
       {!user && (
         <div className="flex gap-2">
