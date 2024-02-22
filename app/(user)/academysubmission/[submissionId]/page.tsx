@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import SubmissionInfo from "./components/submission-info";
 import SubmissionResult from "./components/submission-result";
+import { notFound } from "next/navigation";
 interface Reviewer {
   fullname: string;
   username: string;
@@ -71,6 +72,8 @@ export default async function AcademySubmissionDetail({
       },
     }
   );
+
+  if (data.status === 404) notFound()
 
   const userSubmissionDetailResponse =
     (await data.json()) as UserSubmissionDetailResponse;
