@@ -14,19 +14,25 @@ export default async function Academy({
 }: {
   params: { academyId: string };
 }) {
+  const cookieStore = cookies();
+  const accessToken = cookieStore.get("accessToken")?.value || "";
+
   const data = await fetch(
     (process.env.NEXT_PUBLIC_API_BASE_URL as string) +
       "/academies/" +
       params.academyId,
-    { cache: "no-store" }
+    {
+      cache: "no-store",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
   );
 
   if (data.status === 404) notFound();
 
   const academyResponse = await data.json();
   const academy = academyResponse.data as Academy;
-  const cookieStore = cookies();
-  const accessToken = cookieStore.get("accessToken")?.value || "";
 
   return (
     <>
