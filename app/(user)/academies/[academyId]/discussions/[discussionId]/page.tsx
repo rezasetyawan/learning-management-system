@@ -3,6 +3,7 @@ import DiscussionHeader from "../components/discussion-header";
 import DiscussionDetailContent from "./discussion-detail";
 import ReplySection from "./reply-section";
 import { Toaster } from "react-hot-toast";
+import { notFound } from "next/navigation";
 
 interface Discussion {
   id: string;
@@ -45,17 +46,24 @@ export default async function DiscussionDetail({
 }: {
   params: { academyId: string; discussionId: string };
 }) {
+  const cookieStore = cookies();
+  const accessToken = cookieStore.get("accessToken")?.value || "";
   const discussion = await fetch(
     (process.env.NEXT_PUBLIC_API_BASE_URL as string) +
       `/module-discussions/${params.discussionId}`,
-    { cache: "no-store" }
+    {
+      cache: "no-store",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
   );
 
+  if (discussion.status === 404) {
+    notFound();
+  }
   const discussionResponse = await discussion.json();
   const currentDiscussion = discussionResponse.data as Discussion;
-
-  const cookieStore = cookies();
-  const accessToken = cookieStore.get("accessToken")?.value || "";
 
   const user = await fetch(
     (process.env.NEXT_PUBLIC_API_BASE_URL as string) + `/profile`,
