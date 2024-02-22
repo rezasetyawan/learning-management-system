@@ -24,6 +24,8 @@ export async function middleware(request: NextRequest) {
 
     const checkTokenResponse = await data.json()
 
+    console.log((process.env.NEXT_PUBLIC_API_BASE_URL as string) + '/auth/verify-token')
+    console.log(checkTokenResponse)
     if (!checkTokenResponse.data.is_token_valid) {
         return NextResponse.redirect(new URL('/login', request.url))
     }
