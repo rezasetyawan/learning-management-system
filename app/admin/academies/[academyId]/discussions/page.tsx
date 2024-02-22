@@ -3,6 +3,7 @@ import DiscussionContent from "./components/discussion-content";
 import DiscussionHeader from "./components/discussion-header";
 import DiscussionHero from "./components/discussion-hero";
 import { Toaster } from "react-hot-toast";
+import { notFound } from "next/navigation";
 
 interface Module {
   id: string;
@@ -83,6 +84,10 @@ export default async function ModuleDiscussions({
     (process.env.NEXT_PUBLIC_API_BASE_URL as string) + endpoint,
     { cache: "no-store" }
   );
+
+  if (discussions.status === 404) {
+    notFound()
+  }
 
   const discussionsResponse = await discussions.json();
   const currentDiscussions = discussionsResponse.data as Discussion[];
