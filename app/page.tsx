@@ -13,7 +13,10 @@ import {
 
 const fetchAcademies = async () => {
   const data = await fetch(
-    (process.env.NEXT_PUBLIC_API_BASE_URL as string) + "/academies"
+    (process.env.NEXT_PUBLIC_API_BASE_URL as string) + "/academies",
+    {
+      cache: "no-store",
+    }
   );
 
   return data.json();
