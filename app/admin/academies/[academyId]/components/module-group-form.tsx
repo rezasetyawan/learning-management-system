@@ -193,10 +193,10 @@ export const ModuleGroupForm = ({
         );
       });
       sortModuleGroups(updateData);
-      toast.success("Module Group reordered");
+      toast.success("Modul group berhasil diurutkan");
       //   router.refresh();
     } catch {
-      toast.error("Something went wrong");
+      toast.error("Modul group gagal diurutkan");
     } finally {
       setIsUpdating(false);
     }
@@ -218,11 +218,11 @@ export const ModuleGroupForm = ({
         }
       );
 
-      toast.success("Module group deleted");
+      toast.success("Modul group berhasil dihapus");
       deleteModuleGroup(moduleGroupId);
       toggleEdit();
     } catch {
-      toast.error("Something went wrong");
+      toast.error("Modul group gagal dihapus");
     } finally {
       setIsLoading(false);
     }
@@ -320,7 +320,7 @@ export const ModuleGroupForm = ({
               </Button>
               <ConfirmModal
                 onConfirm={() => onDelete(currentEditModuleGroup.id)}
-                message="Are you want to delete this module group?"
+                message="Apakah anda yakin ingin menghapus module group ini?"
               >
                 <Button size="sm" disabled={isLoading}>
                   <Trash className="h-4 w-4" />
