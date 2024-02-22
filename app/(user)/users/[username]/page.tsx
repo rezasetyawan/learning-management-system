@@ -3,6 +3,7 @@ import { Academy } from "@/types";
 import { Pencil } from "lucide-react";
 import { cookies } from "next/headers";
 import AcademyItem from "./components/academy-item";
+import { notFound } from "next/navigation";
 
 interface UserProfile {
   id: string;
@@ -34,8 +35,10 @@ export default async function ProfilePage({
     }
   );
 
+  if (profileData.status === 404) notFound();
+
   const userProfile: UserProfile = await profileData.json();
-  console.log(userProfile);
+
   const userAcademiesData = await fetch(
     (process.env.NEXT_PUBLIC_API_BASE_URL as string) +
       `/profile/${params.username}/academies`,
