@@ -8,10 +8,7 @@ import { cookies } from "next/headers";
 import Link from "next/link";
 import ActionsSection from "./components/actions-section";
 
-const cookieStore = cookies();
-const accessToken = cookieStore.get("accessToken")?.value || "";
-
-const fetchAcademies = async (searchKey: string) => {
+const fetchAcademies = async (searchKey: string, accessToken: string) => {
   const data = await fetch(
     `${process.env.NEXT_PUBLIC_API_BASE_URL as string}/academies?search=${
       searchKey || ""
@@ -32,8 +29,10 @@ export default async function Academies({
 }: {
   searchParams?: { [key: string]: string | string[] | undefined };
 }) {
+  const cookieStore = cookies();
+  const accessToken = cookieStore.get("accessToken")?.value || "";
   const academies = (await fetchAcademies(
-    searchParams?.search as string
+    searchParams?.search as string, accessToken
   )) as Academy[];
   return (
     <div className="my-5 mx-3 md:mx-5 xl:my-10 xl:mx-20">
