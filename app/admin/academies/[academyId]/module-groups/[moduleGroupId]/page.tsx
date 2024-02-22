@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import ModuleGroupModal from "./components/module-group-modal";
+import { notFound } from "next/navigation";
 interface ModuleGroup {
   id: string;
   name: string;
@@ -52,6 +53,8 @@ export default async function ModuleGroupDetailPage({
       cache: "no-store",
     }
   );
+
+  if (moduleGroupData.status === 404) notFound()
 
   const moduleGroupResponse =
     (await moduleGroupData.json()) as ModuleGroupResponse;
