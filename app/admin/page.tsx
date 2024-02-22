@@ -108,10 +108,10 @@ export default async function Home() {
                   <BookText className="w-7 h-7 stroke-red-500" />
                 </div>
                 <div>
-                  <p className="text-xl font-semibold">{data.userCounts}</p>
-                  <p className={`text-sm`}>
-                    {data.unReviewedSubmissionCounts} belum direview
+                  <p className="text-xl font-semibold">
+                    {data.unReviewedSubmissionCounts}
                   </p>
+                  <p className={`text-sm`}>belum direview</p>
                 </div>
               </div>
             </div>
