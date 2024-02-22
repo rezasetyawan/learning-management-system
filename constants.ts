@@ -1,0 +1,1 @@
+export const MODULE_TYPES = ["LESSON", "QUIZZ", "SUBMISSION"]
