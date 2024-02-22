@@ -30,40 +30,40 @@ export async function middleware(request: NextRequest) {
     //     return NextResponse.redirect(new URL('/login', request.url))
     // }
 
-    if (checkTokenResponse.data.username) {
-        // fetch to api to get user role
-        const data = await fetch((process.env.NEXT_PUBLIC_API_BASE_URL as string) + `/users/${checkTokenResponse.data.username}/role`, {
-            headers: {
-                'Authorization': `Bearer ${accessToken}`
-            }
-        })
+    // if (checkTokenResponse.data.username) {
+    //     // fetch to api to get user role
+    //     const data = await fetch((process.env.NEXT_PUBLIC_API_BASE_URL as string) + `/users/${checkTokenResponse.data.username}/role`, {
+    //         headers: {
+    //             'Authorization': `Bearer ${accessToken}`
+    //         }
+    //     })
 
-        const getRoleResponse = await data.json()
+    //     const getRoleResponse = await data.json()
 
-        if (getRoleResponse.role === 'admin') {
-            if (!request.nextUrl.pathname.startsWith('/admin')) {
-                console.log("Redirect admin")
-                return NextResponse.redirect(new URL('/admin', request.url));
-            } else {
-                console.log("Admin next")
-                return NextResponse.next();
-            }
-        } else if (getRoleResponse.role === 'superadmin') {
-            if (!request.nextUrl.pathname.startsWith('/admin') && !request.nextUrl.pathname.startsWith('/superadmin')) {
-                return NextResponse.redirect(new URL('/admin', request.url));
-            } else {
-                return NextResponse.next();
-            }
-        }
-        else {
-            if (request.nextUrl.pathname.startsWith('/admin') || request.nextUrl.pathname.startsWith('/superadmin')) {
-                return NextResponse.redirect(new URL('/', request.url));
-            }
-            else {
-                return NextResponse.next();
-            }
-        }
-    }
+    //     if (getRoleResponse.role === 'admin') {
+    //         if (!request.nextUrl.pathname.startsWith('/admin')) {
+    //             console.log("Redirect admin")
+    //             return NextResponse.redirect(new URL('/admin', request.url));
+    //         } else {
+    //             console.log("Admin next")
+    //             return NextResponse.next();
+    //         }
+    //     } else if (getRoleResponse.role === 'superadmin') {
+    //         if (!request.nextUrl.pathname.startsWith('/admin') && !request.nextUrl.pathname.startsWith('/superadmin')) {
+    //             return NextResponse.redirect(new URL('/admin', request.url));
+    //         } else {
+    //             return NextResponse.next();
+    //         }
+    //     }
+    //     else {
+    //         if (request.nextUrl.pathname.startsWith('/admin') || request.nextUrl.pathname.startsWith('/superadmin')) {
+    //             return NextResponse.redirect(new URL('/', request.url));
+    //         }
+    //         else {
+    //             return NextResponse.next();
+    //         }
+    //     }
+    // }
 }
 
 // See "Matching Paths" below to learn more
