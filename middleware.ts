@@ -3,11 +3,6 @@ import type { NextRequest } from 'next/server'
 import { cookies } from 'next/headers'
 
 export async function middleware(request: NextRequest) {
-    const publicUrl = ['/login', '/register', '/not-found.svg']
-    if (publicUrl.includes(request.nextUrl.pathname)) {
-        return NextResponse.next();
-    }
-
     const accessToken = cookies().get('accessToken')?.value || ""
 
     if (!accessToken) {
@@ -21,11 +16,8 @@ export async function middleware(request: NextRequest) {
         }
     })
 
-
     const checkTokenResponse = await data.json()
 
-    console.log((process.env.NEXT_PUBLIC_API_BASE_URL as string) + '/auth/verify-token')
-    console.log(checkTokenResponse)
     if (!checkTokenResponse.data.is_token_valid) {
         return NextResponse.redirect(new URL('/login', request.url))
     }
@@ -42,10 +34,8 @@ export async function middleware(request: NextRequest) {
 
         if (getRoleResponse.role === 'admin') {
             if (!request.nextUrl.pathname.startsWith('/admin')) {
-                console.log("Redirect admin")
                 return NextResponse.redirect(new URL('/admin', request.url));
             } else {
-                console.log("Admin next")
                 return NextResponse.next();
             }
         } else if (getRoleResponse.role === 'superadmin') {
@@ -66,18 +56,12 @@ export async function middleware(request: NextRequest) {
     }
 }
 
-// See "Matching Paths" below to learn more
 export const config = {
     matcher: [
-        {
-            source: '/((?!api|_next/static|_next/image|favicon.ico).*)',
-            missing: [
-                { type: 'header', key: 'next-router-prefetch' },
-                { type: 'header', key: 'purpose', value: 'prefetch' },
-            ],
-        },
-        '/login',
-        '/register',
-        '/'
+        '/academies/:academyId/module-groups/:moduleGroupId/modules/:path*',
+        '/adememies/:academyId/discussions/:path*',
+        '/academiessubmission/:path*',
+        '/admin/:path*',
+        '/superadmin/:path*',
     ]
 }
