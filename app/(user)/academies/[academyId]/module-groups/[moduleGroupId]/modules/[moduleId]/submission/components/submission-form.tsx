@@ -43,7 +43,7 @@ export default function SubmissionForm({
   const onSubmitHandler = async (event: FormEvent) => {
     try {
       event.preventDefault();
-      setIsLoading(true)
+      setIsLoading(true);
       if (selectedFile) {
         const formData = new FormData();
         formData.append("submissionFile", selectedFile);
@@ -60,16 +60,16 @@ export default function SubmissionForm({
           timeout: 30000,
         });
       }
-      toast.success("Submission berhasil dikirim")
+      toast.success("Submission berhasil dikirim");
     } catch (error) {
-        toast.error("Gagal mengirim submission")
+      toast.error("Gagal mengirim submission");
     } finally {
-        setIsLoading(false)
+      setIsLoading(false);
     }
   };
   return (
     <form onSubmit={onSubmitHandler}>
-      <div className="flex flex-col items-center justify-center border border-dashed rounded-md">
+      <div className="flex flex-col items-center justify-center border border-dashed rounded-md p-4">
         <label
           className={`flex flex-col items-center justify-center cursor-pointer`}
         >
@@ -99,7 +99,7 @@ export default function SubmissionForm({
           />
         </label>
 
-        <ul className="list-disc text-sm">
+        <ul className="list-disc text-sm pl-4">
           <li>
             Pastikan berkas telah sesuai dengan ketentuan tugas submission.
           </li>
@@ -124,13 +124,13 @@ export default function SubmissionForm({
           dapat memasukkannya pada kolom di atas ini.
         </p>
       </div>
-      <div className="flex items-center justify-end mt-4">
+      <div className="flex items-center justify-end mt-4 gap-2 mb-40">
         <Link href={moduleUrl}>
-          <Button variant="ghost" type="button">
+          <Button variant="ghost" type="button" size="sm">
             Batal
           </Button>
         </Link>
-        <Button type="submit" disabled={!selectedFile || isLoading}>
+        <Button type="submit" disabled={!selectedFile || isLoading} size="sm">
           Lanjut
         </Button>
       </div>
