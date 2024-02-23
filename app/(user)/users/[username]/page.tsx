@@ -53,6 +53,20 @@ export default async function ProfilePage({
     await userAcademiesData.json();
 
   const joinDate = new Date(+userProfile.createdAt);
+
+  const currentUserData = await fetch(
+    (process.env.NEXT_PUBLIC_API_BASE_URL as string) +
+      `/profile`,
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
+
+  const isUserValid = currentUserData.status === 200;
+  const currentUser: UserProfile = await currentUserData.json();
+
   return (
     <>
       <div className="bg-[url('/users/profile-bg.png')] px-8 py-16 bg-no-repeat bg-cover md:flex items-center gap-5 text-white md:p-10 md:py-14 md:px-40 lg:py-14">
@@ -110,23 +124,14 @@ export default async function ProfilePage({
         {!!userAcademies.length ? (
           <div className="grid grid-cols-1 gap-6 mt-6 md:grid-cols-2 xl:grid-cols-2">
             {userAcademies.map(async (academy) => {
-              const userProgressData = await fetch(
-                (process.env.NEXT_PUBLIC_API_BASE_URL as string) +
-                  `/user-progress?academyId=${academy.id}`,
-                {
-                  headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                  },
-                }
-              );
-
-              const { data }: { data: { userProgressPercentage: number } } =
-                await userProgressData.json();
               return (
                 <AcademyItem
                   key={academy.id}
                   academy={academy}
-                  userProgressPercentage={data.userProgressPercentage}
+                  isUserValid={isUserValid}
+                  currentUserId={currentUser.id ? currentUser.id : undefined}
+                  academyUserId={userProfile.id}
+                  accessToken={accessToken}
                 />
               );
             })}

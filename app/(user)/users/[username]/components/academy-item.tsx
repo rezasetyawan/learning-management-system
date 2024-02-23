@@ -1,19 +1,24 @@
 /* eslint-disable @next/next/no-img-element */
-import { Progress } from "@/components/ui/progress";
 import { Academy } from "@/types";
 import { Newspaper, Users } from "lucide-react";
 import Link from "next/link";
+import AcademyProgress from "./academy-progress";
 
 interface AcademyItemProps {
   academy: Academy;
-  userProgressPercentage: number;
+  currentUserId?: string;
+  isUserValid: boolean;
+  academyUserId: string;
+  accessToken: string;
 }
 
 export default function AcademyItem({
   academy,
-  userProgressPercentage
+  currentUserId,
+  isUserValid,
+  academyUserId,
+  accessToken,
 }: AcademyItemProps) {
-  
   return (
     <Link
       href={"/academies/" + academy.id}
@@ -42,12 +47,11 @@ export default function AcademyItem({
           <p className="line-clamp-3 text-sm">{academy.description}</p>
         </div>
       </div>
-      <div className="mt-2.5">
-        <Progress className="h-2 mt-2" value={userProgressPercentage} />
-        <div className={"font-medium mt-2 text-sky-700 text-sm"}>
-          {userProgressPercentage}% Terselesaikan
+      {isUserValid && currentUserId === academyUserId ? (
+        <div className="mt-2.5">
+          <AcademyProgress accessToken={accessToken} academyId={academy.id} />
         </div>
-      </div>
+      ) : null}
     </Link>
   );
 }
