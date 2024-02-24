@@ -1,8 +1,8 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
+import { create } from "@/actions/cookies";
 import { Button } from "@/components/ui/button";
-import { ChangeEvent, useEffect, useState } from "react";
-import * as z from "zod";
 import {
   Form,
   FormControl,
@@ -11,14 +11,15 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { axiosInstance } from "@/lib/axios";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { create, deleteCookies } from "@/actions/cookies";
+import { ChangeEvent, useState } from "react";
+import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import * as z from "zod";
 
 interface UserProfile {
   id: string;
@@ -32,7 +33,6 @@ interface UserProfile {
     profileImageUrl: string;
   };
 }
-/* eslint-disable @next/next/no-img-element */
 interface ProfileImageFormProps {
   userProfile: UserProfile;
   accessToken: string;
@@ -79,8 +79,9 @@ export default function ProfileForm({
           })
           .then((result) => {
             if (result.status === 200 && result.data.status === "success") {
-              console.log(result.data.data.accessToken)
+              console.log(result.data.data.accessToken);
               create(result.data.data.accessToken);
+              toast.success("Profile berhasil diperbarui")
               router.refresh();
             }
           })
@@ -103,9 +104,10 @@ export default function ProfileForm({
         })
         .then((result) => {
           if (result.status === 200 && result.data.status === "success") {
-            console.log(result.data.data.accessToken)
+            console.log(result.data.data.accessToken);
             create(result.data.data.accessToken);
-            router.refresh()
+            toast.success("Profile berhasil diperbarui")
+            router.refresh();
           }
         })
         .catch((error) => {
@@ -117,7 +119,7 @@ export default function ProfileForm({
         });
       return;
     } catch (error) {
-      console.log(error);
+      toast.error("Profile gagal diperbarui")
     }
   };
 
@@ -135,24 +137,26 @@ export default function ProfileForm({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmitHandler)}>
-        <div className="flex gap-2">
+        <div className="mt-2">
           <div>
-            <p className="font-medium mb-2">Foto Profil</p>
+            <FormLabel className="font-medium mb-2">Foto Profil</FormLabel>
             {profileImageFile && (
               <img
                 src={URL.createObjectURL(profileImageFile)}
                 alt={userProfile.username}
+                className="w-28 h-28 rounded-md object-cover"
               />
             )}
             {userProfile.profile.profileImageUrl && !profileImageFile ? (
               <img
                 src={userProfile.profile.profileImageUrl}
                 alt={userProfile.username}
+                className="w-28 h-28 rounded-md object-cover"
               />
             ) : null}
           </div>
 
-          <div className="self-end">
+          <div className="self-end mt-2">
             <Button size="sm" className="mb-2" type="button">
               <label>
                 <input
@@ -172,7 +176,7 @@ export default function ProfileForm({
           control={form.control}
           name="fullname"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="mt-2">
               <FormLabel className="font-medium">Nama Lengkap</FormLabel>
               <FormControl>
                 <Input
@@ -190,7 +194,7 @@ export default function ProfileForm({
           control={form.control}
           name="username"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="mt-2">
               <FormLabel className="font-medium">Username</FormLabel>
               <FormControl>
                 <Input
@@ -208,7 +212,7 @@ export default function ProfileForm({
           control={form.control}
           name="about"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="mt-2">
               <FormLabel className="font-medium">Tentang saya</FormLabel>
               <FormControl>
                 <Textarea
@@ -222,9 +226,11 @@ export default function ProfileForm({
             </FormItem>
           )}
         />
-        <Button type="submit" size="sm" disabled={!isValid || isSubmitting}>
-          Simpan
-        </Button>
+        <div className="mt-2 flex justify-end">
+          <Button type="submit" size="sm" disabled={!isValid || isSubmitting}>
+            Simpan
+          </Button>
+        </div>
       </form>
     </Form>
   );
