@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import JoinRequestAlert from "./join-request-alert";
 import { Newspaper, Users } from "lucide-react";
+import NotLoginAlert from "./not-login-alert";
 
 interface AcademyApplication {
   id: string;
@@ -27,11 +28,13 @@ interface AcademyContentProps {
   academy: Academy;
   academyApplication: AcademyApplication | undefined;
   accessToken: string;
+  isUserValid: boolean;
 }
 export default function AcademyContent({
   academy,
   academyApplication,
   accessToken,
+  isUserValid,
 }: AcademyContentProps) {
   return (
     <div>
@@ -85,11 +88,13 @@ export default function AcademyContent({
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
-          ) : (
+          ) : isUserValid ? (
             <JoinRequestAlert
               accessToken={accessToken}
               academyId={academy.id}
             />
+          ) : (
+            <NotLoginAlert />
           )}
           <Button variant="outline">Informasi kelas</Button>
           <Button variant="outline">
