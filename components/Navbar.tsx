@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { cookies } from "next/headers";
@@ -45,9 +46,15 @@ export default async function Navbar() {
   ];
   return (
     <header className="flex items-center p-3 font-rubik border-b max-md:h-14 lg:px-8 w-full justify-between sticky top-0 z-[1000] bg-white">
-      <div className="flex gap-2 lg:gap-10 max-lg:hidden">
-        <h1 className="text-lg lg:text-2xl font-semibold">
-          <Link href={"/"}>LMS</Link>
+      <div className="flex gap-2 lg:gap-5 max-lg:hidden">
+        <h1>
+          <Link
+            href={"/"}
+            className="text-sm font-semibold flex items-center"
+          >
+            <img src="/logo.svg" alt="logo" className="w-10 h-10" />{" "}
+            Learningspace
+          </Link>
         </h1>
         <nav className="flex justify-between">
           <div className="gap-5 items-center hidden lg:flex">
