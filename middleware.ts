@@ -61,6 +61,7 @@ export const config = {
         '/academies/:academyId/module-groups/:moduleGroupId/modules/:path*',
         '/adememies/:academyId/discussions/:path*',
         '/academiessubmission/:path*',
+        '/settings/:path*',
         '/admin/:path*',
         '/superadmin/:path*',
     ]
