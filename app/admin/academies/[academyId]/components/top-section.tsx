@@ -5,7 +5,7 @@ import { Actions } from "./actions";
 import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { BookText, FileClock } from "lucide-react";
+import { BookText, FileClock, Users } from "lucide-react";
 
 interface TopSectionLabel {
   academyId: string;
@@ -84,6 +84,15 @@ export default function TopSection({
                   ></path>
                 </svg>
                 Diskusi
+              </Button>
+            </Link>
+            <Link href={`/admin/academies/${academyId}/students`}>
+              <Button
+                variant="link"
+                className="flex items-center gap-1 p-0 m-0"
+              >
+                <Users className="w-4 h-4" />
+                Murid
               </Button>
             </Link>
           </div>
