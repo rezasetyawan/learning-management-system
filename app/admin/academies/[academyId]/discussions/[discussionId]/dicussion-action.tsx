@@ -40,7 +40,7 @@ export default function DiscussionAction({
   };
   return (
     <AlertDialog>
-      <AlertDialogTrigger>
+      <AlertDialogTrigger asChild>
         <Button variant="destructive" size="sm">
           Hapus
         </Button>
