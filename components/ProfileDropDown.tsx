@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { deleteCookies } from "@/actions/cookies";
@@ -20,6 +21,9 @@ type Props = {
     fullname: string;
     role: string;
     email: string;
+    profile: {
+      profileImageUrl: string;
+    };
   };
 };
 
@@ -35,12 +39,16 @@ export default function ProfileDropDownMenu({ user }: Props) {
         <NavigationMenuItem>
           <NavigationMenuTrigger>
             <div className="overflow-hidden rounded-[50%] w-5 h-5 flex justify-center lg:w-6 lg:h-6">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                <path
-                  fill="#d1d5db"
-                  d="M224 256a128 128 0 1 0 0-256 128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3 0 498.7 13.3 512 29.7 512h388.6c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3h-91.4z"
-                ></path>
-              </svg>
+              {user.profile.profileImageUrl ? (
+                <img src={user.profile.profileImageUrl} alt={user.username} />
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                  <path
+                    fill="#d1d5db"
+                    d="M224 256a128 128 0 1 0 0-256 128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3 0 498.7 13.3 512 29.7 512h388.6c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3h-91.4z"
+                  ></path>
+                </svg>
+              )}
             </div>
           </NavigationMenuTrigger>
           <NavigationMenuContent className="py-4 px-4 w-full flex flex-col justify-center text-sm right-16 md:w-max">
