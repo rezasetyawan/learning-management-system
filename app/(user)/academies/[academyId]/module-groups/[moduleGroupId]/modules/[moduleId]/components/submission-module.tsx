@@ -73,7 +73,7 @@ export default function SubmissionModule({
               </h3>
             </div>
           ) : (
-            <div>
+            <div className="max-md:py-5">
               <h3 className="text-center font-semibold">Aktivitas Terbaru</h3>
 
               <div className="flex justify-center pt-6 pb-10">
@@ -134,7 +134,9 @@ export default function SubmissionModule({
                   </li>
                   <li className="flex items-center">
                     <div className="relative">
-                      {submission.status === "REVIEW" ? (
+                      {submission.status === "REVIEW" ||
+                      (submission.status === "PENDING" &&
+                        !submission.result.length) ? (
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           viewBox="0 0 24 24"
@@ -149,8 +151,7 @@ export default function SubmissionModule({
                           <line x1="12" x2="15" y1="14" y2="11" />
                           <circle cx="12" cy="14" r="8" />
                         </svg>
-                      ) : !submission.result[0] ? null : submission.result[0]
-                          .isPassed ? (
+                      ) : submission.result[0].isPassed ? (
                         <svg
                           className="w-7 h-7 text-blue-600"
                           aria-hidden="true"
@@ -174,11 +175,12 @@ export default function SubmissionModule({
                           ></path>
                         </svg>
                       )}
-                      <span className="absolute top-10 left-1/2 -translate-x-1/2 whitespace-nowrap text-sm">
-                        {submission.status === "REVIEW"
+                      <span className="absolute top-10 left-1/2 -translate-x-1/2 text-sm whitespace-nowrap">
+                        {submission.status === "REVIEW" ||
+                        (submission.status === "PENDING" &&
+                          !submission.result.length)
                           ? "Menunggu hasil review"
-                          : submission.result.length &&
-                            submission.result[0].isPassed
+                          : submission.result[0].isPassed
                           ? "Diterima"
                           : "Ditolak"}
                       </span>
@@ -186,6 +188,7 @@ export default function SubmissionModule({
                   </li>
                 </ol>
 
+                {/* VERTICAL PROGRESS LINE FOR BELOW MEDIUM SCREEN SIZE */}
                 <ol className="relative text-gray-500 border-s-[3px] border-gray-200 sm:hidden">
                   <li className="mb-10 ms-6">
                     <span className="absolute flex items-center justify-center w-8 h-8 rounded-full -start-4 bg-white ">
@@ -243,7 +246,9 @@ export default function SubmissionModule({
                   </li>
                   <li className="ms-6">
                     <span className="absolute flex items-center justify-center w-8 h-8 rounded-full -start-4 bg-white ">
-                      {submission.status === "REVIEW" ? (
+                      {submission.status === "REVIEW" ||
+                      (submission.status === "PENDING" &&
+                        !submission.result.length) ? (
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           viewBox="0 0 24 24"
@@ -258,8 +263,7 @@ export default function SubmissionModule({
                           <line x1="12" x2="15" y1="14" y2="11" />
                           <circle cx="12" cy="14" r="8" />
                         </svg>
-                      ) : !submission.result[0] ? null : submission.result[0]
-                          .isPassed ? (
+                      ) : submission.result[0].isPassed ? (
                         <svg
                           className="w-6 h-6 text-blue-600"
                           aria-hidden="true"
@@ -286,7 +290,9 @@ export default function SubmissionModule({
                     </span>
                     <span className="font-medium leading-tight text-sm">
                       {" "}
-                      {submission.status === "REVIEW"
+                      {submission.status === "REVIEW" ||
+                      (submission.status === "PENDING" &&
+                        !submission.result.length)
                         ? "Menunggu hasil review"
                         : submission.result[0].isPassed
                         ? "Diterima"
@@ -399,7 +405,9 @@ export default function SubmissionModule({
               Klik lanjut untuk mengirimkan submission yang sudah Anda kerjakan.
             </p>
           </div>
-          {submission && submission.result[0].isPassed !== undefined ? (
+          {submission &&
+          submission.result.length &&
+          submission.result[0].isPassed !== undefined ? (
             <Link href={`/academysubmission/${submission.id}`}>
               <Button size="sm" className="m-3">
                 Lihat Detail Review
