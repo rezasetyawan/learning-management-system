@@ -38,9 +38,9 @@ export default function ProfileDropDownMenu({ user }: Props) {
       <NavigationMenuList>
         <NavigationMenuItem>
           <NavigationMenuTrigger>
-            <div className="overflow-hidden rounded-[50%] w-5 h-5 flex justify-center lg:w-6 lg:h-6">
+            <div className="overflow-hidden rounded-[50%] w-5 h-5 flex justify-center lg:w-8 lg:h-8">
               {user.profile.profileImageUrl ? (
-                <img src={user.profile.profileImageUrl} alt={user.username} />
+                <img src={user.profile.profileImageUrl} alt={user.username} className="block w-full h-full"/>
               ) : (
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                   <path
