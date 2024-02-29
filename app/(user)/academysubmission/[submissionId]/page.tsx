@@ -80,7 +80,7 @@ export default async function AcademySubmissionDetail({
 
   return (
     <>
-      <div className="mx-60 mb-40">
+      <div className="mb-40 mx-3 md:mx-10 lg:mx-40 xl:mx-60">
         <div className="my-5">
           <h2 className="text-xl font-semibold">
             Submission: {userSubmissionDetailResponse.data.module.name}
