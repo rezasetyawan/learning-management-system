@@ -117,7 +117,9 @@ export default function SubmissionInfo({ submission }: SubmissionInfoProps) {
               </li>
               <li className="flex items-center">
                 <div className="relative">
-                  {submission.status === "REVIEW" ? (
+                  {submission.status === "REVIEW" ||
+                  (submission.status === "PENDING" &&
+                    !submission.result.length) ? (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
@@ -132,8 +134,7 @@ export default function SubmissionInfo({ submission }: SubmissionInfoProps) {
                       <line x1="12" x2="15" y1="14" y2="11" />
                       <circle cx="12" cy="14" r="8" />
                     </svg>
-                  ) : !submission.result[0] ? null : submission.result[0]
-                      .isPassed ? (
+                  ) : submission.result[0].isPassed ? (
                     <svg
                       className="w-7 h-7 text-blue-600"
                       aria-hidden="true"
@@ -158,7 +159,9 @@ export default function SubmissionInfo({ submission }: SubmissionInfoProps) {
                     </svg>
                   )}
                   <span className="absolute top-10 left-1/2 -translate-x-1/2 whitespace-nowrap text-sm">
-                    {submission.status === "REVIEW"
+                    {submission.status === "REVIEW" ||
+                    (submission.status === "PENDING" &&
+                      !submission.result.length)
                       ? "Menunggu hasil review"
                       : submission.result[0].isPassed
                       ? "Diterima"
@@ -168,6 +171,7 @@ export default function SubmissionInfo({ submission }: SubmissionInfoProps) {
               </li>
             </ol>
 
+            {/* VERTICAL PROGRESS LINE FOR BELOW MEDIUM SCREEN SIZE */}
             <ol className="relative text-gray-500 border-s-[3px] border-gray-200 sm:hidden">
               <li className="mb-10 ms-6">
                 <span className="absolute flex items-center justify-center w-8 h-8 rounded-full -start-4 bg-white ">
@@ -225,7 +229,9 @@ export default function SubmissionInfo({ submission }: SubmissionInfoProps) {
               </li>
               <li className="ms-6">
                 <span className="absolute flex items-center justify-center w-8 h-8 rounded-full -start-4 bg-white ">
-                  {submission.status === "REVIEW" ? (
+                  {submission.status === "REVIEW" ||
+                  (submission.status === "PENDING" &&
+                    !submission.result.length) ? (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
@@ -240,8 +246,7 @@ export default function SubmissionInfo({ submission }: SubmissionInfoProps) {
                       <line x1="12" x2="15" y1="14" y2="11" />
                       <circle cx="12" cy="14" r="8" />
                     </svg>
-                  ) : !submission.result[0] ? null : submission.result[0]
-                      .isPassed ? (
+                  ) : submission.result[0].isPassed ? (
                     <svg
                       className="w-6 h-6 text-blue-600"
                       aria-hidden="true"
@@ -268,7 +273,8 @@ export default function SubmissionInfo({ submission }: SubmissionInfoProps) {
                 </span>
                 <span className="font-medium leading-tight text-sm">
                   {" "}
-                  {submission.status === "REVIEW"
+                  {submission.status === "REVIEW" ||
+                  (submission.status === "PENDING" && !submission.result.length)
                     ? "Menunggu hasil review"
                     : submission.result[0].isPassed
                     ? "Diterima"
@@ -351,13 +357,15 @@ export default function SubmissionInfo({ submission }: SubmissionInfoProps) {
               </p>
               <p>{submission.note}</p>
             </div>
-            {submission.result[0] && !submission.result[0].isPassed ? <div className="mt-4 flex justify-end">
-              <Link
-                href={`/academies/${submission.academyId}/module-groups/${submission.module.group.id}/modules/${submission.moduleId}/submission`}
-              >
-                <Button size="sm">Submit ulang</Button>
-              </Link>
-            </div> : null}
+            {submission.result[0] && !submission.result[0].isPassed ? (
+              <div className="mt-4 flex justify-end">
+                <Link
+                  href={`/academies/${submission.academyId}/module-groups/${submission.module.group.id}/modules/${submission.moduleId}/submission`}
+                >
+                  <Button size="sm">Submit ulang</Button>
+                </Link>
+              </div>
+            ) : null}
           </div>
         </div>
       </div>
