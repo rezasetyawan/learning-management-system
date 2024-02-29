@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { formatTimestampToShortDate } from "@/utils";
 import { BookCopy } from "lucide-react";
 import DiscussionStatusBadge from "../components/dicussion-status-badge";
@@ -11,6 +12,9 @@ interface Discussion {
   user: {
     fullname: string;
     username: string;
+    profile: {
+      profileImageUrl: string;
+    };
   };
   createdAt: string;
   isSolved: boolean;
@@ -52,13 +56,20 @@ export default function DiscussionDetailContent({
       <div className="border-b-[1.5px] pb-4 border-[#3F3F46]/30">
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-5">
-            <div className="overflow-hidden rounded-[50%] w-7 h-7 flex justify-center lg:w-6 lg:h-6">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                <path
-                  fill="#d1d5db"
-                  d="M224 256a128 128 0 1 0 0-256 128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3 0 498.7 13.3 512 29.7 512h388.6c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3h-91.4z"
-                ></path>
-              </svg>
+            <div className="overflow-hidden rounded-[50%] w-7 h-7 flex justify-center lg:w-8 lg:h-8">
+              {discussion.user.profile.profileImageUrl ? (
+                <img
+                  src={discussion.user.profile.profileImageUrl}
+                  alt={discussion.user.username}
+                />
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                  <path
+                    fill="#d1d5db"
+                    d="M224 256a128 128 0 1 0 0-256 128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3 0 498.7 13.3 512 29.7 512h388.6c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3h-91.4z"
+                  ></path>
+                </svg>
+              )}
             </div>
             <div className="flex items-center gap-2 text-sm">
               <p className="font-semibold">{discussion.user.fullname}</p>

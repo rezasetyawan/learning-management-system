@@ -43,6 +43,9 @@ interface Discussion {
   user: {
     username: string;
     fullname: string;
+    profile: {
+      profileImageUrl: string;
+    }
   };
   createdAt: string;
   isSolved: boolean;
@@ -94,7 +97,7 @@ export default async function ModuleDiscussions({
   return (
     <>
       <Toaster position="top-center" reverseOrder={false} />
-      <DiscussionHeader />
+      {/* <DiscussionHeader /> */}
       <DiscussionHero />
       <div className="flex justify-center mt-5 xl:mt-10">
         <DiscussionContent
