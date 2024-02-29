@@ -257,7 +257,7 @@ export default function SubmissionModule({
                           stroke-width="2"
                           stroke-linecap="round"
                           stroke-linejoin="round"
-                          className="lucide lucide-timer w-6 h-6 text-blue-600"
+                          className="lucide lucide-timer w-6 h-6"
                         >
                           <line x1="10" x2="14" y1="2" y2="2" />
                           <line x1="12" x2="15" y1="14" y2="11" />
