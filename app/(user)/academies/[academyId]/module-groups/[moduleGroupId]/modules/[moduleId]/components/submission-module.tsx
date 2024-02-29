@@ -408,7 +408,11 @@ export default function SubmissionModule({
           ) : (
             <Link href={`${pathname}/submission`}>
               <Button size="sm" className="m-3">
-                {!submission?.result[0].isPassed ? "Submit Ulang" : "Lanjut"}
+                {!submission?.result.length
+                  ? "Lanjut"
+                  : !submission.result[0].isPassed
+                  ? "Submit Ulang"
+                  : "Lanjut"}
               </Button>
             </Link>
           )}
