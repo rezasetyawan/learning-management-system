@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { axiosInstance } from "@/lib/axios";
 import { File } from "lucide-react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -18,6 +18,7 @@ export default function SubmissionForm({
   accessToken,
   moduleUrl,
 }: SubmissionFormProps) {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const params = useParams<{
@@ -52,15 +53,20 @@ export default function SubmissionForm({
         formData.append("moduleId", params.moduleId);
         formData.append("academyId", params.academyId);
 
-        await axiosInstance.post("/user-submissions", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${accessToken}`,
-          },
-          timeout: 30000,
-        });
+        const { data } = await axiosInstance.post(
+          "/user-submissions",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${accessToken}`,
+            },
+            timeout: 30000,
+          }
+        );
+        toast.success("Submission berhasil dikirim");
+        router.push(`/academysubmission/${data.data.submissionId}`);
       }
-      toast.success("Submission berhasil dikirim");
     } catch (error) {
       toast.error("Gagal mengirim submission");
     } finally {
