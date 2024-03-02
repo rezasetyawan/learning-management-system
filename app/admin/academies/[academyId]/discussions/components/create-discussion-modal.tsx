@@ -153,7 +153,7 @@ export default function CreateDiscussionModal({
                     {modules.map((item) => (
                       <CommandItem
                         key={item.value}
-                        value={item.value}
+                        value={item.label}
                         onSelect={() => {
                           setModuleId(item.value);
                           console.log(item.value);
