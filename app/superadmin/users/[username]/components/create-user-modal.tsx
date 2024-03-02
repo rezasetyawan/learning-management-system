@@ -105,7 +105,7 @@ export default function CreateUserModal({ accessToken }: CreateUserProps) {
   return (
     <Dialog onOpenChange={setOpenDialog} open={openDialog}>
       <DialogTrigger asChild>
-        <Button onClick={() => setOpenDialog(true)}>Tambah user</Button>
+        <Button onClick={() => setOpenDialog(true)} size={"sm"}>Tambah user</Button>
       </DialogTrigger>
       <DialogContent className="xl:max-w-3xl z-[1001]">
         <DialogHeader>
