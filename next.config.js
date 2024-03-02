@@ -8,7 +8,15 @@ const nextConfig = {
             pathname: '/storage/v1/object/public/**'
 
         }]
-    }
+    },
+    async rewrites() {
+        return [
+          {
+            source: '/api/:path*',
+            destination: 'https://learningspaceapi-rezasetyawan.vercel.app/:path*',
+          },
+        ]
+    },
 }
 
 module.exports = nextConfig
