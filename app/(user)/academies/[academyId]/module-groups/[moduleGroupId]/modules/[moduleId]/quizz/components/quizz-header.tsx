@@ -7,11 +7,13 @@ interface QuizzHeaderProps {
   moduleURL: string;
   quizzDuration: number;
   moduleName: string;
+  finishCountdown: () => void
 }
 export default function QuizzHeader({
   quizzDuration,
   moduleURL,
-  moduleName
+  moduleName,
+  finishCountdown
 }: QuizzHeaderProps) {
   const router = useRouter();
 
@@ -19,27 +21,23 @@ export default function QuizzHeader({
   const { secondsLeft, start } = useCountdown();
 
   useEffect(() => {
-    console.log(quizzDuration)
     if (quizzDuration > 0) {
-        start(quizzDuration);
-        console.log(secondsLeft)
+        start(quizzDuration);    
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const myfunction = () => {
-    console.log(isInitialRender.current);
     if (!isInitialRender.current) {
-      console.log("helpp mee");
-
       if (secondsLeft <= 0) {
         console.log('test')
+        finishCountdown()
       }
     }
   };
+
   useEffect(() => {
-    console.log(secondsLeft)
     if (!isInitialRender.current) {
       if (secondsLeft <= 0) {
         myfunction();

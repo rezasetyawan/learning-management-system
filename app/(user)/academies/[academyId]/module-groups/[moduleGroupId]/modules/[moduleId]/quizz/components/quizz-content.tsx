@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { formatTimestamp } from "@/utils";
 import { Check, X } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import QuestionContainer from "./question-container";
 import QuizzQuestionsIndicator from "./quizz-questions-indicator";
 import Link from "next/link";
@@ -41,13 +41,14 @@ interface QuizzContentProps {
   quizz: Quizz;
   moduleURL: string;
   accessToken: string;
+  isCountdownFinished: boolean;
 }
 export default function QuizzContent({
   quizz,
   moduleURL,
   accessToken,
+  isCountdownFinished,
 }: QuizzContentProps) {
-  console.log(accessToken);
   const [showFinishConfimation, setShowFinishConfimation] = useState(false);
   const [showQuizzResult, setShowQuizzResult] = useState(false);
   const [quizzResult, setQuizzResult] = useState<{
@@ -99,7 +100,7 @@ export default function QuizzContent({
     return selectedAnswer ? selectedAnswer.answerId === answerId : false;
   };
 
-  const calculateQuizzScore = async () => {
+  const calculateQuizzScore = useCallback(async () => {
     const questions = quizz.questions;
     console.log(userAnswers);
     const reviewedUserAnswers = questions.map((question, index) => {
@@ -141,7 +142,7 @@ export default function QuizzContent({
         Authorization: `Bearer ${accessToken}`,
       },
     });
-  };
+  },[accessToken, quizz.moduleId, quizz.questions, userAnswers]);
 
   const capitalLetters = [
     "A",
@@ -190,8 +191,15 @@ export default function QuizzContent({
   };
 
   const isTheresUnasweredQuestion = useMemo(() => {
-    return userAnswers.filter(answer => answer.answerId === null).length > 0
-  },[userAnswers])
+    return userAnswers.filter((answer) => answer.answerId === null).length > 0;
+  }, [userAnswers]);
+
+  useEffect(() => {
+    if (isCountdownFinished) {
+      console.log("ini pasti ke run bang? insert cihuy")
+      calculateQuizzScore();
+    }
+  }, [calculateQuizzScore, isCountdownFinished]);
 
   const correctAndUncorrectMarker = (isCorrect: boolean) => {
     return isCorrect ? (
