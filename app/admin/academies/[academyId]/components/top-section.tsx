@@ -50,7 +50,7 @@ export default function TopSection({
                 className="flex items-center gap-1 p-0 m-0"
               >
                 <BookText className="w-4 h-4" />
-                Submission pengguna
+                Submission Murid
               </Button>
             </Link>
             <Link href={`/admin/academies/${academyId}/discussions`}>
