@@ -57,9 +57,11 @@ interface AdminDashboardData {
 }
 
 interface PopularAcademy {
-  name: string;
   id: string;
+  name: string;
   coverImageUrl: string;
+  joinedUserCount: number;
+  moduleCount: number;
 }
 
 interface CurrentYearUser {
@@ -160,15 +162,14 @@ export default async function Home() {
                 className="w-28 rounded-sm aspect-video object-cover"
               />
               <div>
-                <h3 className="font-medium line-clamp-1">
-                  {academy.name} oufoiudf dofidufodfu odfudof
-                </h3>
+                <h3 className="font-medium line-clamp-1">{academy.name}</h3>
                 <div className="flex gap-1 mt-2 items-center">
-                  <BookOpenText className="w-4 h-4 stroke-[#3f3f46]" /> 12 modul
+                  <BookOpenText className="w-4 h-4 stroke-[#3f3f46]" />{" "}
+                  {academy.moduleCount} modul
                 </div>
                 <div className="flex gap-1 items-center">
-                  <Users className="w-4 h-4 stroke-[#3f3f46]" /> 7 pengguna
-                  terdaftar
+                  <Users className="w-4 h-4 stroke-[#3f3f46]" />{" "}
+                  {academy.joinedUserCount} pengguna terdaftar
                 </div>
               </div>
             </Link>

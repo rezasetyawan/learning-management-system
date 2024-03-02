@@ -96,9 +96,9 @@ export default function SubmissionInfo({ submission }: SubmissionInfoProps) {
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                       className="lucide lucide-timer w-7 h-7"
                     >
                       <line x1="10" x2="14" y1="2" y2="2" />
@@ -117,23 +117,24 @@ export default function SubmissionInfo({ submission }: SubmissionInfoProps) {
               </li>
               <li className="flex items-center">
                 <div className="relative">
-                  {submission.status === "REVIEW" ? (
+                  {submission.status === "REVIEW" ||
+                  (submission.status === "PENDING" &&
+                    !submission.result.length) ? (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                       className="lucide lucide-timer w-7 h-7"
                     >
                       <line x1="10" x2="14" y1="2" y2="2" />
                       <line x1="12" x2="15" y1="14" y2="11" />
                       <circle cx="12" cy="14" r="8" />
                     </svg>
-                  ) : !submission.result[0] ? null : submission.result[0]
-                      .isPassed ? (
+                  ) : submission.result[0].isPassed ? (
                     <svg
                       className="w-7 h-7 text-blue-600"
                       aria-hidden="true"
@@ -151,14 +152,16 @@ export default function SubmissionInfo({ submission }: SubmissionInfoProps) {
                       xmlns="http://www.w3.org/2000/svg"
                     >
                       <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
+                        fillRule="evenodd"
+                        clipRule="evenodd"
                         d="M13.6668 7.00065C13.6668 10.6825 10.6821 13.6673 7.00016 13.6673C3.31826 13.6673 0.333496 10.6825 0.333496 7.00065C0.333496 3.31875 3.31826 0.333984 7.00016 0.333984C10.6821 0.333984 13.6668 3.31875 13.6668 7.00065ZM7.00016 3.66732C7.36835 3.66732 7.66683 3.96579 7.66683 4.33398V7.66732C7.66683 8.03551 7.36835 8.33398 7.00016 8.33398C6.63197 8.33398 6.3335 8.03551 6.3335 7.66732V4.33398C6.3335 3.96579 6.63197 3.66732 7.00016 3.66732ZM7.00016 10.334C7.36835 10.334 7.66683 10.0355 7.66683 9.66732C7.66683 9.29913 7.36835 9.00065 7.00016 9.00065C6.63197 9.00065 6.3335 9.29913 6.3335 9.66732C6.3335 10.0355 6.63197 10.334 7.00016 10.334Z"
                       ></path>
                     </svg>
                   )}
                   <span className="absolute top-10 left-1/2 -translate-x-1/2 whitespace-nowrap text-sm">
-                    {submission.status === "REVIEW"
+                    {submission.status === "REVIEW" ||
+                    (submission.status === "PENDING" &&
+                      !submission.result.length)
                       ? "Menunggu hasil review"
                       : submission.result[0].isPassed
                       ? "Diterima"
@@ -168,6 +171,7 @@ export default function SubmissionInfo({ submission }: SubmissionInfoProps) {
               </li>
             </ol>
 
+            {/* VERTICAL PROGRESS LINE FOR BELOW MEDIUM SCREEN SIZE */}
             <ol className="relative text-gray-500 border-s-[3px] border-gray-200 sm:hidden">
               <li className="mb-10 ms-6">
                 <span className="absolute flex items-center justify-center w-8 h-8 rounded-full -start-4 bg-white ">
@@ -204,9 +208,9 @@ export default function SubmissionInfo({ submission }: SubmissionInfoProps) {
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                       className="lucide lucide-timer w-6 h-6"
                     >
                       <line x1="10" x2="14" y1="2" y2="2" />
@@ -225,23 +229,24 @@ export default function SubmissionInfo({ submission }: SubmissionInfoProps) {
               </li>
               <li className="ms-6">
                 <span className="absolute flex items-center justify-center w-8 h-8 rounded-full -start-4 bg-white ">
-                  {submission.status === "REVIEW" ? (
+                  {submission.status === "REVIEW" ||
+                  (submission.status === "PENDING" &&
+                    !submission.result.length) ? (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      className="lucide lucide-timer w-6 h-6 text-blue-600"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="lucide lucide-timer w-6 h-6"
                     >
                       <line x1="10" x2="14" y1="2" y2="2" />
                       <line x1="12" x2="15" y1="14" y2="11" />
                       <circle cx="12" cy="14" r="8" />
                     </svg>
-                  ) : !submission.result[0] ? null : submission.result[0]
-                      .isPassed ? (
+                  ) : submission.result[0].isPassed ? (
                     <svg
                       className="w-6 h-6 text-blue-600"
                       aria-hidden="true"
@@ -259,8 +264,8 @@ export default function SubmissionInfo({ submission }: SubmissionInfoProps) {
                       xmlns="http://www.w3.org/2000/svg"
                     >
                       <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
+                        fillRule="evenodd"
+                        clipRule="evenodd"
                         d="M13.6668 7.00065C13.6668 10.6825 10.6821 13.6673 7.00016 13.6673C3.31826 13.6673 0.333496 10.6825 0.333496 7.00065C0.333496 3.31875 3.31826 0.333984 7.00016 0.333984C10.6821 0.333984 13.6668 3.31875 13.6668 7.00065ZM7.00016 3.66732C7.36835 3.66732 7.66683 3.96579 7.66683 4.33398V7.66732C7.66683 8.03551 7.36835 8.33398 7.00016 8.33398C6.63197 8.33398 6.3335 8.03551 6.3335 7.66732V4.33398C6.3335 3.96579 6.63197 3.66732 7.00016 3.66732ZM7.00016 10.334C7.36835 10.334 7.66683 10.0355 7.66683 9.66732C7.66683 9.29913 7.36835 9.00065 7.00016 9.00065C6.63197 9.00065 6.3335 9.29913 6.3335 9.66732C6.3335 10.0355 6.63197 10.334 7.00016 10.334Z"
                       ></path>
                     </svg>
@@ -268,7 +273,8 @@ export default function SubmissionInfo({ submission }: SubmissionInfoProps) {
                 </span>
                 <span className="font-medium leading-tight text-sm">
                   {" "}
-                  {submission.status === "REVIEW"
+                  {submission.status === "REVIEW" ||
+                  (submission.status === "PENDING" && !submission.result.length)
                     ? "Menunggu hasil review"
                     : submission.result[0].isPassed
                     ? "Diterima"
@@ -280,7 +286,7 @@ export default function SubmissionInfo({ submission }: SubmissionInfoProps) {
         </div>
         <div className="p-4 mt-5">
           <h2 className="font-semibold">Submission Info</h2>
-          <div className="grid grid-cols-2 text-sm mt-4">
+          <div className="grid grid-cols-1 text-sm mt-4 md:grid-cols-2">
             <div>
               <div className="flex gap-2">
                 <span className="w-24 font-semibold text-slate-500">
@@ -316,7 +322,7 @@ export default function SubmissionInfo({ submission }: SubmissionInfoProps) {
                 <span className="w-24 font-semibold text-slate-500">
                   Id Submission
                 </span>
-                <span>{submission.id}</span>
+                <span className="break-all">{submission.id}</span>
               </div>
               <div className="flex gap-2">
                 <span className="w-24 font-semibold text-slate-500">
@@ -349,15 +355,17 @@ export default function SubmissionInfo({ submission }: SubmissionInfoProps) {
               <p className="font-semibold text-slate-500">
                 Catatan dari pengirim
               </p>
-              <p>{submission.note}</p>
+              <p>{submission.note || "tidak ada catatan"}</p>
             </div>
-            {submission.result[0] && !submission.result[0].isPassed ? <div className="mt-4 flex justify-end">
-              <Link
-                href={`/academies/${submission.academyId}/module-groups/${submission.module.group.id}/modules/${submission.moduleId}/submission`}
-              >
-                <Button size="sm">Submit ulang</Button>
-              </Link>
-            </div> : null}
+            {submission.result[0] && !submission.result[0].isPassed ? (
+              <div className="mt-4 flex justify-end">
+                <Link
+                  href={`/academies/${submission.academyId}/module-groups/${submission.module.group.id}/modules/${submission.moduleId}/submission`}
+                >
+                  <Button size="sm">Submit ulang</Button>
+                </Link>
+              </div>
+            ) : null}
           </div>
         </div>
       </div>

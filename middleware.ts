@@ -3,12 +3,7 @@ import type { NextRequest } from 'next/server'
 import { cookies } from 'next/headers'
 
 export async function middleware(request: NextRequest) {
-    const publicUrl = ['/login', '/register', '/not-found.svg']
-    if (publicUrl.includes(request.nextUrl.pathname)) {
-        return NextResponse.next();
-    }
-
-    const accessToken = cookies().get('accessToken')?.value
+    const accessToken = cookies().get('accessToken')?.value || ""
 
     if (!accessToken) {
         return NextResponse.redirect(new URL('/login', request.url))
@@ -20,7 +15,6 @@ export async function middleware(request: NextRequest) {
             'Authorization': `Bearer ${accessToken}`
         }
     })
-
 
     const checkTokenResponse = await data.json()
 
@@ -40,10 +34,8 @@ export async function middleware(request: NextRequest) {
 
         if (getRoleResponse.role === 'admin') {
             if (!request.nextUrl.pathname.startsWith('/admin')) {
-                console.log("Redirect admin")
                 return NextResponse.redirect(new URL('/admin', request.url));
             } else {
-                console.log("Admin next")
                 return NextResponse.next();
             }
         } else if (getRoleResponse.role === 'superadmin') {
@@ -64,18 +56,13 @@ export async function middleware(request: NextRequest) {
     }
 }
 
-// See "Matching Paths" below to learn more
 export const config = {
     matcher: [
-        {
-            source: '/((?!api|_next/static|_next/image|favicon.ico).*)',
-            missing: [
-                { type: 'header', key: 'next-router-prefetch' },
-                { type: 'header', key: 'purpose', value: 'prefetch' },
-            ],
-        },
-        '/login',
-        '/register',
-        '/'
+        '/academies/:academyId/module-groups/:moduleGroupId/modules/:path*',
+        '/adememies/:academyId/discussions/:path*',
+        '/academiessubmission/:path*',
+        '/settings/:path*',
+        '/admin/:path*',
+        '/superadmin/:path*',
     ]
 }

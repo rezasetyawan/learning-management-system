@@ -12,6 +12,9 @@ interface Discussion {
   user: {
     fullname: string;
     username: string;
+    profile: {
+      profileImageUrl: string;
+    };
   };
   createdAt: string;
   isSolved: boolean;
@@ -30,6 +33,9 @@ interface DiscussionReply {
   user: {
     fullname: string;
     username: string;
+    profile: {
+      profileImageUrl: string;
+    };
   };
   userId: string;
 }
@@ -39,6 +45,9 @@ interface User {
   fullname: string;
   username: string;
   email: string;
+  profile: {
+    profileImageUrl: string;
+  };
 }
 
 export default async function DiscussionDetail({

@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import QuizzContent from "./components/quizz-content";
 import QuizzHeader from "./components/quizz-header";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 type Module = {
   id: string;
@@ -44,6 +44,16 @@ type Answer = {
   isCorrect: boolean;
 };
 
+interface AcademyApplication {
+  id: string;
+  academyId: string;
+  status: "PENDING" | "APPROVED" | "REJECTED";
+  message: string;
+}
+interface AcademyApplicationResponse {
+  data: AcademyApplication | undefined;
+}
+
 export default async function ModuleQuizz({
   params,
 }: {
@@ -69,16 +79,19 @@ export default async function ModuleQuizz({
   const moduleResponse = await moduleData.json();
   const currentModule = moduleResponse.data as Module;
 
-  // const quizzModuleData = await fetch(
-  //   (process.env.NEXT_PUBLIC_API_BASE_URL as string) +
-  //     `/academies/modules/${params.moduleId}/quizz`,
-  //   { cache: "no-store" }
-  // );
+  const academyApplicationResponse = await fetch(
+    (process.env.NEXT_PUBLIC_API_BASE_URL as string) +
+      "/academy-applications?academyId=" +
+      params.academyId,
+    { cache: "no-store", headers: { Authorization: `Bearer ${accessToken}` } }
+  );
 
-  // const quizzModuleResponse = await quizzModuleData.json();
-  // const currentQuizz = quizzModuleResponse.data as Quizz;
+  const academyApplicationData =
+    (await academyApplicationResponse.json()) as AcademyApplicationResponse;
 
-  // console.log(currentQuizz.duration);
+  if (academyApplicationData.data?.status !== "APPROVED")
+    redirect(`/academies/${params.academyId}`);
+
   return (
     <>
       <QuizzHeader

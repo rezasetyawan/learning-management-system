@@ -1,15 +1,17 @@
 "use client";
 
-import { getTimeGap } from "@/utils";
-import ReplyForm from "./reply-form";
-import DiscussionReplyItem from "./dicussion-reply-item";
 import { useState } from "react";
+import DiscussionReplyItem from "./dicussion-reply-item";
+import ReplyForm from "./reply-form";
 
 interface User {
   id: string;
   fullname: string;
   username: string;
   email: string;
+  profile: {
+    profileImageUrl: string;
+  };
 }
 
 interface DiscussionReply {
@@ -20,6 +22,9 @@ interface DiscussionReply {
   user: {
     fullname: string;
     username: string;
+    profile: {
+      profileImageUrl: string;
+    };
   };
   userId: string;
 }

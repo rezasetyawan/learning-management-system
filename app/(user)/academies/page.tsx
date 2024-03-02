@@ -5,6 +5,11 @@ import Link from "next/link";
 import AcademyFilter from "./components/academy-filter";
 
 const fetchAcademies = async (searchKey: string) => {
+  console.log(
+    `${process.env.NEXT_PUBLIC_API_BASE_URL as string}/academies?search=${
+      searchKey || ""
+    }`
+  );
   const data = await fetch(
     `${process.env.NEXT_PUBLIC_API_BASE_URL as string}/academies?search=${
       searchKey || ""

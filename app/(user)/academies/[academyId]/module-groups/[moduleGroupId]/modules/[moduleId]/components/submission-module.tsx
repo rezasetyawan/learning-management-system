@@ -73,7 +73,7 @@ export default function SubmissionModule({
               </h3>
             </div>
           ) : (
-            <div>
+            <div className="max-md:py-5">
               <h3 className="text-center font-semibold">Aktivitas Terbaru</h3>
 
               <div className="flex justify-center pt-6 pb-10">
@@ -113,9 +113,9 @@ export default function SubmissionModule({
                           viewBox="0 0 24 24"
                           fill="none"
                           stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
                           className="lucide lucide-timer w-7 h-7"
                         >
                           <line x1="10" x2="14" y1="2" y2="2" />
@@ -134,23 +134,24 @@ export default function SubmissionModule({
                   </li>
                   <li className="flex items-center">
                     <div className="relative">
-                      {submission.status === "REVIEW" ? (
+                      {submission.status === "REVIEW" ||
+                      (submission.status === "PENDING" &&
+                        !submission.result.length) ? (
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           viewBox="0 0 24 24"
                           fill="none"
                           stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
                           className="lucide lucide-timer w-7 h-7"
                         >
                           <line x1="10" x2="14" y1="2" y2="2" />
                           <line x1="12" x2="15" y1="14" y2="11" />
                           <circle cx="12" cy="14" r="8" />
                         </svg>
-                      ) : !submission.result[0] ? null : submission.result[0]
-                          .isPassed ? (
+                      ) : submission.result[0].isPassed ? (
                         <svg
                           className="w-7 h-7 text-blue-600"
                           aria-hidden="true"
@@ -168,17 +169,18 @@ export default function SubmissionModule({
                           xmlns="http://www.w3.org/2000/svg"
                         >
                           <path
-                            fill-rule="evenodd"
-                            clip-rule="evenodd"
+                            fillRule="evenodd"
+                            clipRule="evenodd"
                             d="M13.6668 7.00065C13.6668 10.6825 10.6821 13.6673 7.00016 13.6673C3.31826 13.6673 0.333496 10.6825 0.333496 7.00065C0.333496 3.31875 3.31826 0.333984 7.00016 0.333984C10.6821 0.333984 13.6668 3.31875 13.6668 7.00065ZM7.00016 3.66732C7.36835 3.66732 7.66683 3.96579 7.66683 4.33398V7.66732C7.66683 8.03551 7.36835 8.33398 7.00016 8.33398C6.63197 8.33398 6.3335 8.03551 6.3335 7.66732V4.33398C6.3335 3.96579 6.63197 3.66732 7.00016 3.66732ZM7.00016 10.334C7.36835 10.334 7.66683 10.0355 7.66683 9.66732C7.66683 9.29913 7.36835 9.00065 7.00016 9.00065C6.63197 9.00065 6.3335 9.29913 6.3335 9.66732C6.3335 10.0355 6.63197 10.334 7.00016 10.334Z"
                           ></path>
                         </svg>
                       )}
-                      <span className="absolute top-10 left-1/2 -translate-x-1/2 whitespace-nowrap text-sm">
-                        {submission.status === "REVIEW"
+                      <span className="absolute top-10 left-1/2 -translate-x-1/2 text-sm whitespace-nowrap">
+                        {submission.status === "REVIEW" ||
+                        (submission.status === "PENDING" &&
+                          !submission.result.length)
                           ? "Menunggu hasil review"
-                          : submission.result.length &&
-                            submission.result[0].isPassed
+                          : submission.result[0].isPassed
                           ? "Diterima"
                           : "Ditolak"}
                       </span>
@@ -186,6 +188,7 @@ export default function SubmissionModule({
                   </li>
                 </ol>
 
+                {/* VERTICAL PROGRESS LINE FOR BELOW MEDIUM SCREEN SIZE */}
                 <ol className="relative text-gray-500 border-s-[3px] border-gray-200 sm:hidden">
                   <li className="mb-10 ms-6">
                     <span className="absolute flex items-center justify-center w-8 h-8 rounded-full -start-4 bg-white ">
@@ -222,9 +225,9 @@ export default function SubmissionModule({
                           viewBox="0 0 24 24"
                           fill="none"
                           stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
                           className="lucide lucide-timer w-6 h-6"
                         >
                           <line x1="10" x2="14" y1="2" y2="2" />
@@ -243,23 +246,24 @@ export default function SubmissionModule({
                   </li>
                   <li className="ms-6">
                     <span className="absolute flex items-center justify-center w-8 h-8 rounded-full -start-4 bg-white ">
-                      {submission.status === "REVIEW" ? (
+                      {submission.status === "REVIEW" ||
+                      (submission.status === "PENDING" &&
+                        !submission.result.length) ? (
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           viewBox="0 0 24 24"
                           fill="none"
                           stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          className="lucide lucide-timer w-6 h-6 text-blue-600"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="lucide lucide-timer w-6 h-6"
                         >
                           <line x1="10" x2="14" y1="2" y2="2" />
                           <line x1="12" x2="15" y1="14" y2="11" />
                           <circle cx="12" cy="14" r="8" />
                         </svg>
-                      ) : !submission.result[0] ? null : submission.result[0]
-                          .isPassed ? (
+                      ) : submission.result[0].isPassed ? (
                         <svg
                           className="w-6 h-6 text-blue-600"
                           aria-hidden="true"
@@ -277,8 +281,8 @@ export default function SubmissionModule({
                           xmlns="http://www.w3.org/2000/svg"
                         >
                           <path
-                            fill-rule="evenodd"
-                            clip-rule="evenodd"
+                            fillRule="evenodd"
+                            clipRule="evenodd"
                             d="M13.6668 7.00065C13.6668 10.6825 10.6821 13.6673 7.00016 13.6673C3.31826 13.6673 0.333496 10.6825 0.333496 7.00065C0.333496 3.31875 3.31826 0.333984 7.00016 0.333984C10.6821 0.333984 13.6668 3.31875 13.6668 7.00065ZM7.00016 3.66732C7.36835 3.66732 7.66683 3.96579 7.66683 4.33398V7.66732C7.66683 8.03551 7.36835 8.33398 7.00016 8.33398C6.63197 8.33398 6.3335 8.03551 6.3335 7.66732V4.33398C6.3335 3.96579 6.63197 3.66732 7.00016 3.66732ZM7.00016 10.334C7.36835 10.334 7.66683 10.0355 7.66683 9.66732C7.66683 9.29913 7.36835 9.00065 7.00016 9.00065C6.63197 9.00065 6.3335 9.29913 6.3335 9.66732C6.3335 10.0355 6.63197 10.334 7.00016 10.334Z"
                           ></path>
                         </svg>
@@ -286,7 +290,9 @@ export default function SubmissionModule({
                     </span>
                     <span className="font-medium leading-tight text-sm">
                       {" "}
-                      {submission.status === "REVIEW"
+                      {submission.status === "REVIEW" ||
+                      (submission.status === "PENDING" &&
+                        !submission.result.length)
                         ? "Menunggu hasil review"
                         : submission.result[0].isPassed
                         ? "Diterima"
@@ -399,7 +405,9 @@ export default function SubmissionModule({
               Klik lanjut untuk mengirimkan submission yang sudah Anda kerjakan.
             </p>
           </div>
-          {submission && submission.result[0].isPassed !== undefined ? (
+          {submission &&
+          submission.result.length &&
+          submission.result[0].isPassed !== undefined ? (
             <Link href={`/academysubmission/${submission.id}`}>
               <Button size="sm" className="m-3">
                 Lihat Detail Review
@@ -408,7 +416,11 @@ export default function SubmissionModule({
           ) : (
             <Link href={`${pathname}/submission`}>
               <Button size="sm" className="m-3">
-                {!submission?.result[0].isPassed ? "Submit Ulang" : "Lanjut"}
+                {!submission?.result.length
+                  ? "Lanjut"
+                  : !submission.result[0].isPassed
+                  ? "Submit Ulang"
+                  : "Lanjut"}
               </Button>
             </Link>
           )}

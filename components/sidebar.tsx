@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import Link from "next/link";
@@ -26,7 +27,11 @@ const Sidebar = () => {
   ];
   return (
     <div className="h-full border-r flex flex-col overflow-y-auto bg-white shadow-sm">
-      <h1 className="p-6 font-semibold text-xl">LMS</h1>
+      <h1>
+        <Link href={"/"} className="py-2 px-2 text-sm font-semibold flex items-center gap-2">
+          <img src="/logo.svg" alt="logo" className="w-10 h-10" /> Learningspace
+        </Link>
+      </h1>
 
       <div className="flex flex-col w-full">
         {routes.map((route) => {

@@ -45,6 +45,16 @@ export default async function Academy({
   const academyApplicationData =
     (await academyApplicationResponse.json()) as AcademyApplicationResponse;
 
+  const currentUserData = await fetch(
+    (process.env.NEXT_PUBLIC_API_BASE_URL as string) + `/profile`,
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
+
+  const isUserValid = currentUserData.status === 200
   return (
     <>
       <Toaster position="top-center" reverseOrder={false} />
@@ -52,6 +62,7 @@ export default async function Academy({
         academy={academy}
         academyApplication={academyApplicationData.data}
         accessToken={accessToken}
+        isUserValid={isUserValid}
       />
     </>
   );

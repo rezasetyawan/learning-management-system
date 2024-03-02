@@ -1,7 +1,7 @@
 import { Academy } from "@/types";
 import ModuleContent from "./components/module-content";
 import { cookies } from "next/headers";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 type Module = {
   id: string;
@@ -65,6 +65,17 @@ type QuizzHistory = {
   createdAt: string;
   score: number;
 };
+
+interface AcademyApplication {
+  id: string;
+  academyId: string;
+  status: "PENDING" | "APPROVED" | "REJECTED";
+  message: string;
+}
+interface AcademyApplicationResponse {
+  data: AcademyApplication | undefined;
+}
+
 export default async function ModuleDetail({
   params,
 }: {
@@ -114,7 +125,19 @@ export default async function ModuleDetail({
   const quizzHistoriesResponse = await quizzHistoriesData.json();
   const quizzHistories = quizzHistoriesResponse.data as QuizzHistory[];
 
-  console.log(quizzHistories);
+  const academyApplicationResponse = await fetch(
+    (process.env.NEXT_PUBLIC_API_BASE_URL as string) +
+      "/academy-applications?academyId=" +
+      params.academyId,
+    { cache: "no-store", headers: { Authorization: `Bearer ${accessToken}` } }
+  );
+
+  const academyApplicationData =
+    (await academyApplicationResponse.json()) as AcademyApplicationResponse;
+
+  if (academyApplicationData.data?.status !== "APPROVED")
+    redirect(`/academies/${params.academyId}`);
+
   return (
     <>
       <ModuleContent

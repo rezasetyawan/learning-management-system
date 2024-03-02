@@ -308,7 +308,7 @@ export default function QuizzContent({
       </div>
     </div>
   ) : (
-    <div className="mt-14">
+    <div>
       <QuizzQuestionsIndicator
         questionIds={questionIds}
         userAnswers={userAnswers}

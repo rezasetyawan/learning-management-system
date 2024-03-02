@@ -4,6 +4,7 @@ import { Pencil } from "lucide-react";
 import { cookies } from "next/headers";
 import AcademyItem from "./components/academy-item";
 import { notFound } from "next/navigation";
+import Link from "next/link";
 
 interface UserProfile {
   id: string;
@@ -53,6 +54,20 @@ export default async function ProfilePage({
     await userAcademiesData.json();
 
   const joinDate = new Date(+userProfile.createdAt);
+
+  const currentUserData = await fetch(
+    (process.env.NEXT_PUBLIC_API_BASE_URL as string) + `/profile`,
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
+
+  const isUserValid = currentUserData.status === 200;
+  const currentUser: UserProfile = await currentUserData.json();
+  const currentUserId = currentUser.id ? currentUser.id : undefined;
+
   return (
     <>
       <div className="bg-[url('/users/profile-bg.png')] px-8 py-16 bg-no-repeat bg-cover md:flex items-center gap-5 text-white md:p-10 md:py-14 md:px-40 lg:py-14">
@@ -62,9 +77,11 @@ export default async function ProfilePage({
             alt={userProfile.username}
             className="w-40 h-40 rounded-full"
           />
-          <div className="bg-white rounded-full border absolute bottom-3 right-1 p-1.5">
-            <Pencil className="w-4 h-4 stroke-black" />
-          </div>
+          {isUserValid && currentUserId === userProfile.id ? (
+            <Link href={'/settings/profile'} className="block bg-white rounded-full border absolute bottom-3 right-1 p-1.5">
+              <Pencil className="w-4 h-4 stroke-black" />
+            </Link>
+          ) : null}
         </div>
         <div className="max-md:mt-2">
           <h2 className="text-xl font-medium">{userProfile.fullname}</h2>
@@ -110,23 +127,14 @@ export default async function ProfilePage({
         {!!userAcademies.length ? (
           <div className="grid grid-cols-1 gap-6 mt-6 md:grid-cols-2 xl:grid-cols-2">
             {userAcademies.map(async (academy) => {
-              const userProgressData = await fetch(
-                (process.env.NEXT_PUBLIC_API_BASE_URL as string) +
-                  `/user-progress?academyId=${academy.id}`,
-                {
-                  headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                  },
-                }
-              );
-
-              const { data }: { data: { userProgressPercentage: number } } =
-                await userProgressData.json();
               return (
                 <AcademyItem
                   key={academy.id}
                   academy={academy}
-                  userProgressPercentage={data.userProgressPercentage}
+                  isUserValid={isUserValid}
+                  currentUserId={currentUserId}
+                  academyUserId={userProfile.id}
+                  accessToken={accessToken}
                 />
               );
             })}

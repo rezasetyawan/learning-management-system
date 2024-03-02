@@ -43,6 +43,9 @@ interface Discussion {
   user: {
     username: string;
     fullname: string;
+    profile: {
+      profileImageUrl: string;
+    }
   };
   createdAt: string;
   isSolved: boolean;

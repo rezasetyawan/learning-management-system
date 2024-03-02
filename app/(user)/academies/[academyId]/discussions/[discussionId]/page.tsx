@@ -12,6 +12,9 @@ interface Discussion {
   user: {
     fullname: string;
     username: string;
+    profile: {
+      profileImageUrl: string;
+    };
   };
   createdAt: string;
   isSolved: boolean;
@@ -30,6 +33,9 @@ interface DiscussionReply {
   user: {
     fullname: string;
     username: string;
+    profile: {
+      profileImageUrl: string;
+    };
   };
   userId: string;
 }
@@ -39,6 +45,9 @@ interface User {
   fullname: string;
   username: string;
   email: string;
+  profile: {
+    profileImageUrl: string;
+  };
 }
 
 export default async function DiscussionDetail({
@@ -79,7 +88,7 @@ export default async function DiscussionDetail({
   return (
     <>
       <Toaster position="top-center" reverseOrder={false} />
-      <DiscussionHeader />
+      {/* <DiscussionHeader /> */}
       <div className="mx-5 my-10 md:mx-10 lg:mx-40 xl:mx-64">
         <DiscussionDetailContent
           discussion={currentDiscussion}

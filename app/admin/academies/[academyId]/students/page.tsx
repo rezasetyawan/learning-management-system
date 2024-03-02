@@ -4,42 +4,29 @@ import Link from "next/link";
 import { columns } from "./columns";
 import { DataTable } from "./data-table";
 
-interface UserSubmission {
-  id: string;
-  createdAt: string;
-  note: string;
+interface AcademyStudent {
+  fullname: string;
+  username: string;
+  userProgressPercentage: number;
+  lastActivity: string;
+  academyName: string;
   academyId: string;
-  moduleId: string;
-  fileUrl: string;
-  status: "PENDING" | "REVIEW" | "REVIEWED";
-  user: {
-    fullname: string;
-  };
-  module: {
-    name: string;
-    id: string;
-  };
-  academy: {
-    name: string;
-    id: string;
-  };
 }
 
-interface UserSubmissionResponse {
-  data: UserSubmission[];
+interface AcademyStudentsData {
+  data: AcademyStudent[];
 }
 
-export default async function AcademySubmission({
+export default async function AcademyStudents({
   params,
 }: {
   params: { academyId: string };
 }) {
   const cookieStore = cookies();
   const accessToken = cookieStore.get("accessToken")?.value || "";
-  const data = await fetch(
+  const academyStudentsResponse = await fetch(
     (process.env.NEXT_PUBLIC_API_BASE_URL as string) +
-      "/user-submissions?academyId=" +
-      params.academyId,
+      `/academy-applications/joined?academyId=${params.academyId}`,
     {
       cache: "no-store",
       headers: {
@@ -48,8 +35,9 @@ export default async function AcademySubmission({
     }
   );
 
-  const userSubmissionResponse = (await data.json()) as UserSubmissionResponse;
-  console.log(userSubmissionResponse);
+  const academyStudentsData =
+    (await academyStudentsResponse.json()) as AcademyStudentsData;
+
   return (
     <div className={"p-5 space-y-5"}>
       <div className="relative w-full">
@@ -60,13 +48,13 @@ export default async function AcademySubmission({
           <ArrowLeft className="w-6 h-6" />
         </Link>
         <h2 className="font-bold text-lg text-center xl:text-2xl">
-          Daftar Submission Murid
+          Daftar Murid
         </h2>
       </div>
       <div className={"p-5"}>
         <DataTable
           columns={columns}
-          data={userSubmissionResponse.data}
+          data={academyStudentsData.data}
           accessToken={accessToken}
         />
       </div>

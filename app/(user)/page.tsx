@@ -26,7 +26,6 @@ export default async function Home() {
   const academies = (await fetchAcademies()) as Academy[];
   return (
     <>
-      <Navbar />
       <div className="m-3 xl:m-10">
         <div className="flex justify-center items-center flex-col-reverse gap-4 md:flex-row xl:mx-40 xl:gap-20">
           <div className="md:max-w-[40%]">
@@ -51,7 +50,7 @@ export default async function Home() {
 
         <div className="gap-4 bg-slate-100 p-4 rounded-lg mt-6 md:mt-10 md:flex md:mx-10 lg:mt-16 lg:mx-20 xl:mt-20 xl:mx-40">
           <div className="md:w-2/5">
-            <h3 className="pb-1 border-b w-full text-lg font-semibold">
+            <h3 className="pb-1 border-b w-full text-lg font-semibold mb-2">
               Temukan beragam kelas
             </h3>
             <p className="text-xs lg:text-sm">

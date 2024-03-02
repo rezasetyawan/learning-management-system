@@ -1,6 +1,6 @@
 "use client";
 
-import { BookCopy, LayoutGrid, LogIn, LogOut, UsersRound } from "lucide-react";
+import { BookCopy, BookText, LayoutGrid, LogIn, LogOut, UsersRound } from "lucide-react";
 import SidebarItem from "./sidebar-item";
 import { useRouter } from "next/navigation";
 import { deleteCookies } from "@/actions/cookies";
@@ -25,6 +25,11 @@ const SidebarRoutes = ({ userRole }: SidebarRoutesProps) => {
       label: "Academy Applications",
       href: "/admin/academyapplications",
     },
+    {
+      icon: BookText,
+      label: "Submissions",
+      href: "/admin/academysubmission"
+    }
   ];
 
   if (userRole === "superadmin") {

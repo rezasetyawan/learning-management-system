@@ -37,7 +37,7 @@ export default async function UsersPage() {
     <div className={"p-5 space-y-5"}>
       <div className="relative w-full">
         <h2 className="font-bold text-lg text-center xl:text-2xl">
-          List Pengguna
+          Daftar Pengguna
         </h2>
       </div>
       <div className={"p-5"}>
