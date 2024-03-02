@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { formatTimestamp } from "@/utils";
 import { Check, X } from "lucide-react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import QuestionContainer from "./question-container";
 import QuizzQuestionsIndicator from "./quizz-questions-indicator";
 import Link from "next/link";
@@ -189,6 +189,10 @@ export default function QuizzContent({
     )[0];
   };
 
+  const isTheresUnasweredQuestion = useMemo(() => {
+    return userAnswers.filter(answer => answer.answerId === null).length > 0
+  },[userAnswers])
+
   const correctAndUncorrectMarker = (isCorrect: boolean) => {
     return isCorrect ? (
       <div className="text-green-500 flex items-center gap-2 p-2 text-sm rounded-md bg-emerald-100 border border-emerald-400">
@@ -321,6 +325,7 @@ export default function QuizzContent({
           isAnswerChecked={isAnswerChecked}
           onAnswerChange={onAnswerChange}
           toggleFinishConfirmation={toggleFinishConfirmation}
+          isThereUnasweredQuestion={isTheresUnasweredQuestion}
         />
       </div>
     </div>

@@ -25,12 +25,14 @@ interface QuestionContainerProps {
   isAnswerChecked: (questionId: string, answerId: string) => boolean;
   onAnswerChange: (questionId: string, answerId: string) => void;
   toggleFinishConfirmation: () => void;
+  isThereUnasweredQuestion: boolean;
 }
 export default function QuestionContainer({
   questions,
   isAnswerChecked,
   onAnswerChange,
-  toggleFinishConfirmation
+  toggleFinishConfirmation,
+  isThereUnasweredQuestion,
 }: QuestionContainerProps) {
   const capitalLetters = [
     "A",
@@ -71,7 +73,10 @@ export default function QuestionContainer({
           </div>
           <div>
             {question.answers.map((answer, index) => (
-              <div key={answer.id} className="flex items-center gap-4 mt-4 text-sm lg:text-base">
+              <div
+                key={answer.id}
+                className="flex items-center gap-4 mt-4 text-sm lg:text-base"
+              >
                 <label
                   className={`w-8 h-8 flex items-center justify-center border font-medium bg-white text-black rounded-[4px] ${
                     isAnswerChecked(question.id, answer.id) &&
@@ -95,7 +100,13 @@ export default function QuestionContainer({
         </div>
       ))}
       <div className="flex justify-end mt-5">
-        <Button onClick={toggleFinishConfirmation} size="sm">Selesaikan</Button>
+        <Button
+          onClick={toggleFinishConfirmation}
+          size="sm"
+          disabled={isThereUnasweredQuestion}
+        >
+          Selesaikan
+        </Button>
       </div>
     </div>
   );
