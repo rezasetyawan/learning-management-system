@@ -10,7 +10,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
-import { LogOut, UserRound } from "lucide-react";
+import { LogOut, Settings, UserRound } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -34,13 +34,17 @@ export default function ProfileDropDownMenu({ user }: Props) {
     router.push("/login");
   };
   return (
-    <NavigationMenu className="mr-10">
+    <NavigationMenu className="">
       <NavigationMenuList>
         <NavigationMenuItem>
           <NavigationMenuTrigger>
-            <div className="overflow-hidden rounded-[50%] w-5 h-5 flex justify-center lg:w-8 lg:h-8">
+            <div className="overflow-hidden rounded-[50%] w-7 h-7 flex justify-center lg:w-8 lg:h-8">
               {user.profile.profileImageUrl ? (
-                <img src={user.profile.profileImageUrl} alt={user.username} className="block w-full h-full"/>
+                <img
+                  src={user.profile.profileImageUrl}
+                  alt={user.username}
+                  className="block w-full h-full"
+                />
               ) : (
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                   <path
@@ -51,20 +55,29 @@ export default function ProfileDropDownMenu({ user }: Props) {
               )}
             </div>
           </NavigationMenuTrigger>
-          <NavigationMenuContent className="py-4 px-4 w-full flex flex-col justify-center text-sm right-16 md:w-max">
+          <NavigationMenuContent className="w-full py-2 flex flex-col justify-center text-sm">
             <NavigationMenuLink>
               <Link
                 href={`/users/${user.username}`}
-                className="flex items-center gap-2"
+                className="flex items-center gap-2 px-4 py-1.5 mb-1 mx-2 hover:bg-slate-100 rounded-md"
               >
                 {" "}
                 <UserRound className="w-4 h-4 stroke-[#3f3f46]" />
                 Profil
               </Link>
             </NavigationMenuLink>
+            <NavigationMenuLink>
+              <Link
+                href={`/settings/profile`}
+                className="flex items-center gap-2 px-4 py-1.5 mb-1 mx-2 hover:bg-slate-100 rounded-md"
+              >
+                <Settings className="w-4 h-4 stroke-[#3f3f46]" />
+                Pengaturan
+              </Link>
+            </NavigationMenuLink>
             <NavigationMenuLink className="mt-2">
               <p
-                className="text-red-600 cursor-pointer flex items-center gap-2"
+                className="text-red-600 cursor-pointer flex items-center gap-2 px-4 py-1.5 mb-1 mx-2 hover:bg-slate-100 rounded-md"
                 onClick={logoutHandler}
               >
                 <LogOut className="w-4 h-4 stroke-red-600" />
