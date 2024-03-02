@@ -44,7 +44,7 @@ export default function Login() {
         .then((result) => {
           if (result.status === 201 && result.data.status === "success") {
             create(result.data.access_token);
-            router.push("/");
+            router.push("/admin");
           }
         })
         .catch((error) => {

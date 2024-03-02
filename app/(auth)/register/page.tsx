@@ -47,7 +47,7 @@ export default function Register() {
         .then((result) => {
           if (result.status === 200 && result.data.status === "success") {
             create(result.data.access_token);
-            router.push("/");
+            router.push("/admin");
           }
         })
         .catch((error) => {
