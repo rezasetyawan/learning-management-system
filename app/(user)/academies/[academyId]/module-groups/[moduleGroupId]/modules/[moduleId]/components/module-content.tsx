@@ -103,7 +103,8 @@ type QuizzResult = {
       text: string;
       answers: { id: string; text: string }[];
     };
-    answer: { id: string; text: string; isCorrect: boolean };
+    // answer could be undefined, because there's a case when quiz is quizz finished automatically so there's a possibility if there's a quetion not answered yet
+    answer?: { id: string; text: string; isCorrect: boolean };
   }[];
 };
 
@@ -282,7 +283,6 @@ export default function ModuleContent({
     );
   };
 
-  console.log(currentModule.type);
   const addUserProgress = async () => {
     try {
       await axiosInstance.patch(
@@ -300,6 +300,7 @@ export default function ModuleContent({
       );
     } catch (error) {}
   };
+
   return displayQuizzResult && currentQuizzResult?.answers ? (
     <div className="relative w-full h-screen">
       <div className="w-full bg-white absolute inset-0 z-[1000] grid">
@@ -329,7 +330,7 @@ export default function ModuleContent({
                 <p className="text-3xl xl:text-5x;">
                   {
                     currentQuizzResult.answers.filter(
-                      (item) => item.answer.isCorrect
+                      (item) => item.answer && item.answer.isCorrect
                     ).length
                   }
                 </p>
@@ -359,12 +360,12 @@ export default function ModuleContent({
                 <div>
                   {item.question.answers.map((answer, index) => (
                     <div
-                      key={answer.id}
+                      key={index}
                       className="flex items-center gap-4 mt-4 text-sm lg:text-base"
                     >
                       <div
                         className={`w-8 h-8 flex items-center justify-center border font-medium bg-white text-black rounded-[4px] ${
-                          item.answer.id === answer.id
+                          item.answer && item.answer.id === answer.id
                             ? item.answer.isCorrect
                               ? "!bg-emerald-100 border-emerald-400"
                               : "!bg-red-100 border-red-400"
@@ -378,7 +379,9 @@ export default function ModuleContent({
                   ))}
                 </div>
                 <div className="mt-8">
-                  {correctAndUncorrectMarker(item.answer.isCorrect)}
+                  {correctAndUncorrectMarker(
+                    item.answer ? item.answer.isCorrect : false
+                  )}
                 </div>
               </div>
             ))}
