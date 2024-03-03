@@ -20,7 +20,13 @@ export default function ModuleContainer({
   accessToken,
 }: ModuleContainerProps) {
   const [moduleGroups, setModuleGroups] = useState(initialData.moduleGroups);
-  const [filteredModuleGroups, setFilteredModuleGroups] = useState(initialData.moduleGroups)
+  const [filteredModuleGroups, setFilteredModuleGroups] = useState(
+    initialData.moduleGroups
+  );
+  const [
+    filteredModuleGroupsByModuleName,
+    setFilteredModuleGroupsByModuleName,
+  ] = useState(initialData.moduleGroups);
 
   const sortModuleGroups = (updateData: { id: string; order: number }[]) => {
     const currentModuleGroups = [...moduleGroups];
@@ -97,8 +103,23 @@ export default function ModuleContainer({
       moduleGroups.name.toLowerCase().includes(name.toLowerCase())
     );
 
-    setFilteredModuleGroups(filteredModuleGroups)
+    setFilteredModuleGroups(filteredModuleGroups);
   };
+
+  const handleModuleSearch = (moduleName: string) => {
+    const currentModuleGroups = [...moduleGroups];
+
+    if (moduleName === "") {
+      setFilteredModuleGroupsByModuleName(currentModuleGroups)
+      return
+    }
+  
+    const filteredModuleGroups = currentModuleGroups.filter((moduleGroup) => {
+      return moduleGroup.modules.some((module) => module.name.toLowerCase().includes(moduleName.toLowerCase()));
+    });
+    setFilteredModuleGroupsByModuleName(filteredModuleGroups);
+  };
+
   return (
     <>
       <div className="flex items-center gap-x-2">
@@ -121,10 +142,11 @@ export default function ModuleContainer({
       />
 
       <ModuleForm
-        initialData={{ moduleGroups }}
+        initialData={{ moduleGroups: filteredModuleGroupsByModuleName }}
         academyId={academyId}
         addModule={addModule}
         accessToken={accessToken}
+        handleModuleSearch={handleModuleSearch}
       />
     </>
   );
