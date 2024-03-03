@@ -11,15 +11,16 @@ interface ModuleContainerProps {
     moduleGroups: ModuleGroup[];
   };
   academyId: string;
-  accessToken:string
+  accessToken: string;
 }
 
 export default function ModuleContainer({
   initialData,
   academyId,
-  accessToken
+  accessToken,
 }: ModuleContainerProps) {
   const [moduleGroups, setModuleGroups] = useState(initialData.moduleGroups);
+  const [filteredModuleGroups, setFilteredModuleGroups] = useState(initialData.moduleGroups)
 
   const sortModuleGroups = (updateData: { id: string; order: number }[]) => {
     const currentModuleGroups = [...moduleGroups];
@@ -89,22 +90,34 @@ export default function ModuleContainer({
   //   );
   //   currentModuleGroups[index].modules.slice(1, moduleIndex);
   // };
+
+  const handleModuleGroupSearch = (name: string) => {
+    const currentModuleGroups = [...moduleGroups];
+    const filteredModuleGroups = currentModuleGroups.filter((moduleGroups) =>
+      moduleGroups.name.toLowerCase().includes(name.toLowerCase())
+    );
+
+    setFilteredModuleGroups(filteredModuleGroups)
+  };
   return (
     <>
       <div className="flex items-center gap-x-2">
         <div className="rounded-full flex items-center justify-center bg-sky-100 text-sky-700 p-1.5">
           <ListChecks className="w-6 h-6" />
         </div>
-        <h2 className="text-base font-semibold lg:text-lg">Modul Group & Modul Kelas</h2>
+        <h2 className="text-base font-semibold lg:text-lg">
+          Modul Group & Modul Kelas
+        </h2>
       </div>
       <ModuleGroupForm
-        initialData={{ moduleGroups }}
+        initialData={{ moduleGroups: filteredModuleGroups }}
         academyId={academyId}
         sortModuleGroups={sortModuleGroups}
         addModuleGroups={addModuleGroups}
         updateModuleGroup={updateModuleGroup}
         deleteModuleGroup={deleteModuleGroup}
         accessToken={accessToken}
+        handleModuleGroupSearch={handleModuleGroupSearch}
       />
 
       <ModuleForm
