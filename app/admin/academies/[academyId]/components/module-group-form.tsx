@@ -38,6 +38,7 @@ interface ModuleGroupFormProps {
   deleteModuleGroup: (moduleGroupId: string) => void;
   academyId: string;
   accessToken: string;
+  handleModuleGroupSearch: (name: string) => void;
 }
 
 const formSchema = z.object({
@@ -58,6 +59,7 @@ export const ModuleGroupForm = ({
   updateModuleGroup,
   deleteModuleGroup,
   accessToken,
+  handleModuleGroupSearch,
 }: ModuleGroupFormProps) => {
   const [isCreating, setIsCreating] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
@@ -143,38 +145,38 @@ export const ModuleGroupForm = ({
   };
 
   const onSubmitEdit = async (values: z.infer<typeof editFormSchema>) => {
-   try {
-    if (!currentEditModuleGroup) return;
+    try {
+      if (!currentEditModuleGroup) return;
 
-    const payload = {
-      ...values,
-      updatedAt: Date.now().toString(),
-    };
-
-    await axiosInstance.patch(
-      `/academies/${academyId}/module-groups/${currentEditModuleGroup.id}`,
-      payload,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
-
-    updateModuleGroup(
-      {
-        ...currentEditModuleGroup,
+      const payload = {
         ...values,
-      },
-      currentEditModuleGroup.id
-    );
+        updatedAt: Date.now().toString(),
+      };
 
-    toast.success("Module Group berhasil diubah");
-    editForm.reset();
-    toggleEdit();
-   } catch (error) {
-    toast.error("Modul Group gagal diubah")
-   }
+      await axiosInstance.patch(
+        `/academies/${academyId}/module-groups/${currentEditModuleGroup.id}`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      updateModuleGroup(
+        {
+          ...currentEditModuleGroup,
+          ...values,
+        },
+        currentEditModuleGroup.id
+      );
+
+      toast.success("Module Group berhasil diubah");
+      editForm.reset();
+      toggleEdit();
+    } catch (error) {
+      toast.error("Modul Group gagal diubah");
+    }
   };
   const onReorder = async (updateData: { id: string; order: number }[]) => {
     try {
@@ -236,12 +238,14 @@ export const ModuleGroupForm = ({
         </div>
       )}
       <div className="font-medium flex items-center justify-between">
-        <p className="text-sm font-medium lg:text-base">
-          Modul Group Kelas
-        </p>
+        <p className="text-sm font-medium lg:text-base">Modul Group Kelas</p>
         <div className="flex items-center gap-4">
           {!isEditing && (
-            <Button onClick={toggleCreating} variant="ghost" className="p-0 m-0">
+            <Button
+              onClick={toggleCreating}
+              variant="ghost"
+              className="p-0 m-0"
+            >
               {isCreating ? (
                 <>Batal</>
               ) : (
@@ -376,29 +380,41 @@ export const ModuleGroupForm = ({
         </Form>
       )}
       {!isCreating && !isEditing ? (
-        <div>
-          <div
-            className={cn(
-              "text-sm mt-2",
-              !initialData.moduleGroups.length && "text-slate-500 italic"
-            )}
-          >
-            {!initialData.moduleGroups.length && "No module groups"}
-            <ModuleGroupList
-              onReorder={onReorder}
-              items={initialData.moduleGroups || []}
-              toggleEdit={toggleEdit}
-              setCurrentEditModuleGroup={setCurrentEditModuleGroup}
-              academyId={academyId}
+        <>
+          <div className="mt-2 mb-4">
+            <Input
+              onChange={(value) =>
+                handleModuleGroupSearch(value.currentTarget.value)
+              }
+              placeholder="Cari modul group"
+              className="bg-white"
             />
           </div>
-          <p className="text-xs text-muted-foreground mt-4">
-            {initialData.moduleGroups.length} module group
-          </p>
-          <p className="text-xs text-muted-foreground mt-4">
-            Drag and drop to reorder the module groups
-          </p>
-        </div>
+          <div>
+            <div
+              className={cn(
+                "text-sm mt-2",
+                !initialData.moduleGroups.length && "text-slate-500 italic"
+              )}
+            >
+              {!initialData.moduleGroups.length &&
+                "Tiak ada module group untuk ditampilkan"}
+              <ModuleGroupList
+                onReorder={onReorder}
+                items={initialData.moduleGroups || []}
+                toggleEdit={toggleEdit}
+                setCurrentEditModuleGroup={setCurrentEditModuleGroup}
+                academyId={academyId}
+              />
+            </div>
+            <p className="text-xs text-muted-foreground mt-4">
+              {initialData.moduleGroups.length} module group
+            </p>
+            <p className="text-xs text-muted-foreground mt-4">
+              Drag and drop to reorder the module groups
+            </p>
+          </div>
+        </>
       ) : null}
     </div>
   );

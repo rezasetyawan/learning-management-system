@@ -3,9 +3,7 @@ import { useEffect, useState } from "react";
 export default function useCountdown() {
     const [secondsLeft, setSecondsLeft] = useState(300)
     useEffect(() => {
-        console.log(secondsLeft)
         if (secondsLeft <= 0) {
-            console.log('dari if statement')
             return
         }
 
@@ -19,7 +17,6 @@ export default function useCountdown() {
     }, [secondsLeft])
 
     const start = (seconds: number) => {
-        console.log(seconds)
         if (seconds > 0) {
             setSecondsLeft(seconds);
         }

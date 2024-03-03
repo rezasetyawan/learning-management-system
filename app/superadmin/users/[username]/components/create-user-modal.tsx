@@ -204,7 +204,7 @@ export default function CreateUserModal({ accessToken }: CreateUserProps) {
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select a verified email to display" />
+                          <SelectValue placeholder="Pilih role pengguna" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent className="z-[1500]">

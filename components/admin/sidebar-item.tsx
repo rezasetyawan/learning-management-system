@@ -15,7 +15,10 @@ interface SidebarItemProps {
 const SidebarItem = ({ icon: Icon, label, href }: SidebarItemProps) => {
   const pathname = usePathname();
 
-  const isActive = pathname === href 
+  const isActive =
+    href === "/admin"
+      ? pathname === "/admin" && href === "/admin"
+      : pathname?.startsWith(href);
 
   return (
     <Link

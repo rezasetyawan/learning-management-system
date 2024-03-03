@@ -29,7 +29,7 @@ export default function TopSection({
       {!currentIsPublished && (
         <Banner label="Kelas ini tidak dipublish, ini akan membuat kelas tidak dapat diakses oleh pengguna." />
       )}
-      <div className="flex items-center justify-between p-4 lg:p-6">
+      <div className="flex flex-col gap-2 p-4 lg:p-6 lg:flex-row lg:justify-between lg:items-center">
         <div className="space-y-2">
           <h1 className="text-lg font-semibold lg:text-2xl">Pengaturan Kelas</h1>
           <div className="flex items-center gap-2">

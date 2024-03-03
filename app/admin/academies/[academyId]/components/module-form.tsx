@@ -19,7 +19,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { axiosInstance } from "@/lib/axios";
 import { cn } from "@/lib/utils";
 import { Module, ModuleGroup, createModule } from "@/types";
@@ -33,7 +32,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Grip, Pencil, PlusCircle } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useReducer, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import * as z from "zod";
@@ -45,6 +44,7 @@ interface ModuleFormProps {
   addModule: (newModule: Module, moduleGroupId: string) => void;
   academyId: string;
   accessToken: string;
+  handleModuleSearch: (moduleName: string) => void;
 }
 
 interface Row {
@@ -116,13 +116,13 @@ export default function ModuleForm({
   academyId,
   addModule,
   accessToken,
+  handleModuleSearch,
 }: ModuleFormProps) {
   const [isUpdating, setIsUpdating] = useState(false);
   const router = useRouter();
   const [isInitialRender, setIsInitialRender] = useState(true);
-  const oldModuleGroups = initialData.moduleGroups;
+  console.log(initialData.moduleGroups);
 
-  console.log("RERENDER");
   const [updateData, setUpdateData] = useState<
     {
       moduleId: string;
@@ -130,13 +130,6 @@ export default function ModuleForm({
       order: number;
     }[]
   >();
-
-  const onSubmit = async () => {
-    try {
-    } catch {
-      toast.error("Something went wrong");
-    }
-  };
 
   const onEdit = (moduleGroupId: string, moduleId: string) => {
     router.push(
@@ -172,6 +165,7 @@ export default function ModuleForm({
   };
 
   const [state, setState] = useState(getInitialData(initialData.moduleGroups));
+  console.log(state);
 
   function moveElement<T>(array: T[], fromIndex: number, toIndex: number): T[] {
     if (toIndex >= array.length) {
@@ -269,10 +263,11 @@ export default function ModuleForm({
     }
   };
 
-  // useEffect(() => {
-  //   // Update state whenever the initialData prop changes
-  //   setState(getInitialData(initialData.moduleGroups));
-  // }, [initialData.moduleGroups]);
+  // MY FUTURE SELF, IF YOU FACE A ORDER PROBLEM THE COMMENT THE USEEFFECT BELOW AND SACRIFICE THE SEARCH FILTER
+  useEffect(() => {
+    // Update state whenever the initialData prop changes
+    setState(getInitialData(initialData.moduleGroups));
+  }, [initialData.moduleGroups]);
 
   useEffect(() => {
     if (isInitialRender) {
@@ -330,12 +325,10 @@ export default function ModuleForm({
         <div className="flex flex-col w-full bg-slate-100 rounded-md p-4 border">
           <div className="flex flex-col">
             <div className="font-medium flex items-center justify-between mb-2">
-              <p className="text-sm font-medium lg:text-base">
-                Modul Kelas
-              </p>
+              <p className="text-sm font-medium lg:text-base">Modul Kelas</p>
               <div className="flex items-center gap-4">
                 <p className="text-xs text-muted-foreground">
-                  Total {totalModules} module
+                  Total {totalModules} modul
                 </p>
                 <Link href={`/admin/academies/${academyId}/modules/trash`}>
                   <Button variant="ghost" className="p-0 m-0">
@@ -355,23 +348,38 @@ export default function ModuleForm({
                 </Link>
               </div>
             </div>
-            {state.rowOrder.map((rowId) => {
-              const row = state.rows[rowId];
-              const module = row.moduleIds.map((id) => state.modules[id]);
+            <div className="mt-2 mb-4">
+              <Input
+                onChange={(value) =>
+                  handleModuleSearch(value.currentTarget.value)
+                }
+                placeholder="Cari modul"
+                className="bg-white"
+              />
+            </div>
+            {initialData.moduleGroups.length ? (
+              state.rowOrder.map((rowId) => {
+                const row = state.rows[rowId];
+                const module = row.moduleIds.map((id) => state.modules[id]);
 
-              return (
-                <Row
-                  key={row.id}
-                  row={row}
-                  modules={module}
-                  academyId={academyId}
-                  moduleGroupId={rowId}
-                  addModule={addModule}
-                  onEdit={onEdit}
-                  accessToken={accessToken}
-                />
-              );
-            })}
+                return (
+                  <Row
+                    key={row.id}
+                    row={row}
+                    modules={module}
+                    academyId={academyId}
+                    moduleGroupId={rowId}
+                    addModule={addModule}
+                    onEdit={onEdit}
+                    accessToken={accessToken}
+                  />
+                );
+              })
+            ) : (
+              <div className="flex items-center justify-center p-4 text-sm">
+                Tidak ada modul untuk ditampilkan
+              </div>
+            )}
           </div>
         </div>
       </DragDropContext>

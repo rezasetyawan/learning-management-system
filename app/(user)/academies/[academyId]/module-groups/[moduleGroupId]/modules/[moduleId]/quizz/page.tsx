@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import QuizzContent from "./components/quizz-content";
 import QuizzHeader from "./components/quizz-header";
 import { notFound, redirect } from "next/navigation";
+import QuizzModuleWrapper from "./components/quizz-module-wrapper";
 
 type Module = {
   id: string;
@@ -93,19 +94,6 @@ export default async function ModuleQuizz({
     redirect(`/academies/${params.academyId}`);
 
   return (
-    <>
-      <QuizzHeader
-        quizzDuration={10}
-        moduleURL={`/academies/${params.academyId}/module-groups/${params.moduleGroupId}/modules/${params.moduleId}`}
-        moduleName={currentModule.name}
-      />
-      {currentModule.quizz && (
-        <QuizzContent
-          quizz={currentModule.quizz}
-          moduleURL={`/academies/${params.academyId}/module-groups/${params.moduleGroupId}/modules/${params.moduleId}`}
-          accessToken={accessToken}
-        />
-      )}
-    </>
+    <QuizzModuleWrapper module={currentModule} accessToken={accessToken} />
   );
 }
