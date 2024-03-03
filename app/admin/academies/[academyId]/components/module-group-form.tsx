@@ -386,7 +386,7 @@ export const ModuleGroupForm = ({
               onChange={(value) =>
                 handleModuleGroupSearch(value.currentTarget.value)
               }
-              placeholder="Cari module group"
+              placeholder="Cari modul group"
               className="bg-white"
             />
           </div>
