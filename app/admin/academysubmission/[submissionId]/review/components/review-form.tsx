@@ -33,7 +33,7 @@ import toast from "react-hot-toast";
 import * as z from "zod";
 
 const formSchema = z.object({
-  reviewerNote: z.string().min(500, {
+  reviewerNote: z.string().min(3, {
     message: "Catatan minimal memilik 500 karater (± 100 kata)",
   }),
   isPassed: z.boolean(),
@@ -159,7 +159,6 @@ export default function ReviewForm({
         }
       );
       toast.success("Submission berhasil direview");
-      router.push(`/admin/academies/${submission.academyId}/submission`);
     } catch {
       toast.error("Submission gagal direview");
     } finally {
