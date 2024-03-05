@@ -119,8 +119,8 @@ export default function ReviewForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       reviewerNote: "",
-      isPassed: false,
-      score: 0,
+      isPassed: submission.fileUrl ? true: false,
+      score: submission.fileUrl ? 100 : 0,
     },
   });
 
