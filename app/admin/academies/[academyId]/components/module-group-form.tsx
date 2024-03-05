@@ -1,12 +1,8 @@
 "use client";
 
-import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { Loader2, PlusCircle, Trash } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
-import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
+import { ConfirmModal } from "@/components/modals/confirmation-modal";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -15,15 +11,19 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
-import { ModuleGroupList } from "./module-group-list";
 import { axiosInstance } from "@/lib/axios";
+import { cn } from "@/lib/utils";
 import { ModuleGroup, createModuleGroup } from "@/types";
-import { Checkbox } from "@/components/ui/checkbox";
-import { ConfirmModal } from "@/components/modals/confirmation-modal";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2, PlusCircle, Trash } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import * as z from "zod";
+import { ModuleGroupList } from "./module-group-list";
 
 interface ModuleGroupFormProps {
   initialData: {
@@ -138,7 +138,7 @@ export const ModuleGroupForm = ({
       toast.success("Modul Group berhasil ditambahkan");
       form.reset();
       toggleCreating();
-      //   router.refresh();
+      router.refresh();
     } catch {
       toast.error("Modul Group gagal ditambahkan");
     }
@@ -178,6 +178,7 @@ export const ModuleGroupForm = ({
       toast.error("Modul Group gagal diubah");
     }
   };
+
   const onReorder = async (updateData: { id: string; order: number }[]) => {
     try {
       setIsUpdating(true);
@@ -223,6 +224,7 @@ export const ModuleGroupForm = ({
       toast.success("Modul group berhasil dihapus");
       deleteModuleGroup(moduleGroupId);
       toggleEdit();
+      router.refresh()
     } catch {
       toast.error("Modul group gagal dihapus");
     } finally {
