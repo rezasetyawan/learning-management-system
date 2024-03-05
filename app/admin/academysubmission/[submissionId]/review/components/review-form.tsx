@@ -51,51 +51,51 @@ const formSchema = z.object({
 });
 
 interface Reviewer {
-    fullname: string;
-    username: string;
+  fullname: string;
+  username: string;
 }
 
 interface Result {
-    id: string;
-    reviewer: Reviewer;
-    createdAt: string;
-    reviewerNote: string;
-    score: number;
-    isPassed: boolean;
-    submissionId: string;
+  id: string;
+  reviewer: Reviewer;
+  createdAt: string;
+  reviewerNote: string;
+  score: number;
+  isPassed: boolean;
+  submissionId: string;
 }
 
 interface Module {
-    name: string;
+  name: string;
+  id: string;
+  group: {
     id: string;
-    group: {
-        id: string;
-    };
+  };
 }
 
 interface Academy {
-    name: string;
-    id: string;
+  name: string;
+  id: string;
 }
 
 interface User {
-    fullname: string;
-    username: string;
+  fullname: string;
+  username: string;
 }
 
 interface UserSubmissionDetail {
-    id: string;
-    userId: string;
-    createdAt: string;
-    note: string;
-    academyId: string;
-    moduleId: string;
-    fileUrl: string;
-    status: string;
-    result: Result[];
-    module: Module;
-    academy: Academy;
-    user: User;
+  id: string;
+  userId: string;
+  createdAt: string;
+  note: string;
+  academyId: string;
+  moduleId: string;
+  fileUrl: string;
+  status: string;
+  result: Result[];
+  module: Module;
+  academy: Academy;
+  user: User;
 }
 
 interface ReviewFormProps {
@@ -118,8 +118,8 @@ export default function ReviewForm({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      reviewerNote: "",
-      isPassed: submission.fileUrl ? true: false,
+      reviewerNote: `kerja bagus ${submission.user.fullname}`,
+      isPassed: submission.fileUrl ? true : false,
       score: submission.fileUrl ? 100 : 0,
     },
   });
