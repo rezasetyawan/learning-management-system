@@ -119,9 +119,8 @@ export default function ModuleForm({
   handleModuleSearch,
 }: ModuleFormProps) {
   const [isUpdating, setIsUpdating] = useState(false);
-  const router = useRouter();
   const [isInitialRender, setIsInitialRender] = useState(true);
-  console.log(initialData.moduleGroups);
+  const router = useRouter();
 
   const [updateData, setUpdateData] = useState<
     {
@@ -165,7 +164,6 @@ export default function ModuleForm({
   };
 
   const [state, setState] = useState(getInitialData(initialData.moduleGroups));
-  console.log(state);
 
   function moveElement<T>(array: T[], fromIndex: number, toIndex: number): T[] {
     if (toIndex >= array.length) {
@@ -372,6 +370,7 @@ export default function ModuleForm({
                     addModule={addModule}
                     onEdit={onEdit}
                     accessToken={accessToken}
+                    refresh={() => router.refresh()}
                   />
                 );
               })
@@ -395,6 +394,7 @@ const Row = ({
   addModule,
   onEdit,
   accessToken,
+  refresh,
 }: {
   row: Row;
   modules: Module[];
@@ -403,6 +403,7 @@ const Row = ({
   addModule: (newModule: Module, moduleGroupId: string) => void;
   onEdit: (moduleGroupId: string, moduleId: string) => void;
   accessToken: string;
+  refresh: () => void;
 }) => {
   const [isCreating, setIsCreating] = useState(false);
   const toggleCreating = () => {
@@ -457,8 +458,11 @@ const Row = ({
         },
         moduleGroupId
       );
+
+      form.reset();
       toggleCreating();
       toast.success("Modul berhasil ditambahkan");
+      refresh();
     } catch (error) {
       toast.error("Modul gagal ditambahkan");
     }
