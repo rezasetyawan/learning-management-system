@@ -92,12 +92,12 @@ export default async function Home() {
                 <div>
                   <p className="text-xl font-semibold">{data.academyCounts}</p>
                   <div className="flex items-center gap-2">
-                    {data.activeAcademyCounts && (
+                    {!!data.activeAcademyCounts && (
                       <p className={`text-sm text-green-500`}>
                         {data.activeAcademyCounts} aktif
                       </p>
                     )}
-                    {data.unactiveAcademyCounts && (
+                    {!!data.unactiveAcademyCounts && (
                       <p className={`text-sm text-red-500`}>
                         {data.unactiveAcademyCounts} tidak aktif
                       </p>
