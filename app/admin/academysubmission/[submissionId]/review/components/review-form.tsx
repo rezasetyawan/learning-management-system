@@ -111,10 +111,11 @@ export default function ReviewForm({
   const params = useParams<{ submissionId: string }>();
   const [isLoading, setIsLoading] = useState(false);
   const [payload, setPayload] = useState({
-    reviewerNote: "",
-    isPassed: false,
-    score: 0,
+    reviewerNote: `kerja bagus ${submission.user.fullname}`,
+    isPassed: submission.fileUrl ? true : false,
+    score: submission.fileUrl ? 100 : 0,
   });
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
