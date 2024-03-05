@@ -320,12 +320,7 @@ export default function ReviewForm({
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                 <AlertDialogAction asChild>
-                  <Button
-                    disabled={!isValid || isLoading}
-                    onClick={onSaveButtonClickHandler}
-                  >
-                    Simpan
-                  </Button>
+                  <Button onClick={onSaveButtonClickHandler}>Simpan</Button>
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
