@@ -226,7 +226,7 @@ export default function ReviewForm({
         <div className="flex justify-end items-center">
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button size="sm" type="submit" disabled={!isValid}>
+              <Button size="sm" type="submit">
                 Simpan
               </Button>
             </AlertDialogTrigger>
